@@ -1,4 +1,4 @@
-package com.cornershop.counterstest.presentation.welcome
+package com.cornershop.counterstest.presentation.ui.welcome
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
