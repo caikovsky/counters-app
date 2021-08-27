@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_main.xml"
+    app:startDestination="@id/listCountersFragment">
+
+    <fragment
+        android:id="@+id/listCountersFragment"
+        android:name="com.cornershop.counterstest.presentation.ui.list.ListCountersFragment"
+        android:label="ListCountersFragment" />
+</navigation>
