@@ -1,17 +1,28 @@
 package com.cornershop.counterstest.data.repository
 
-import com.cornershop.counterstest.data.remote.CounterDataSource
+import com.cornershop.counterstest.data.CounterService
+import com.cornershop.counterstest.data.request.CreateCounterRequest
+import com.cornershop.counterstest.data.request.DecrementCounterRequest
+import com.cornershop.counterstest.data.request.DeleteCounterRequest
+import com.cornershop.counterstest.data.request.IncrementCounterRequest
 import com.cornershop.counterstest.domain.model.Counter
+import javax.inject.Inject
 
-class CounterRepository(private val dataSource: CounterDataSource) {
+class CounterRepository @Inject constructor(
+    private val counterService: CounterService
+) {
 
-    suspend fun getCounters(): List<Counter> = dataSource.getCounters()
+    suspend fun getCounters(): List<Counter> = counterService.getCounters()
 
-    suspend fun createCounter(title: String): Counter = dataSource.createCounter(title)
+    suspend fun createCounter(request: CreateCounterRequest): List<Counter> =
+        counterService.createCounter(request)
 
-    suspend fun deleteCounter(id: String): Counter = dataSource.deleteCounter(id)
+    suspend fun deleteCounter(request: DeleteCounterRequest): List<Counter> =
+        counterService.deleteCounter(request)
 
-    suspend fun incrementCounter(id: String): Counter = dataSource.incrementCounter(id)
+    suspend fun incrementCounter(request: IncrementCounterRequest): List<Counter> =
+        counterService.incrementCounter(request)
 
-    suspend fun decrementCounter(id: String): Counter = dataSource.decrementCounter(id)
+    suspend fun decrementCounter(request: DecrementCounterRequest): List<Counter> =
+        counterService.decrementCounter(request)
 }
