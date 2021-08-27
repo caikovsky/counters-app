@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.cornershop.counterstest.presentation.ui.list.MainActivity"
+            android:name="com.cornershop.counterstest.presentation.ui.main.MainActivity"
             android:theme="@style/Theme.CountersNormal" />
     </application>
 

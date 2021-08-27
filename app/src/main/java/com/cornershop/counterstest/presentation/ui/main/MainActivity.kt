@@ -1,4 +1,4 @@
-package com.cornershop.counterstest.presentation.ui.list
+package com.cornershop.counterstest.presentation.ui.main
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

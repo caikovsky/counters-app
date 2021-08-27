@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.cornershop.counterstest.databinding.ActivityWelcomeBinding
-import com.cornershop.counterstest.presentation.ui.list.MainActivity
+import com.cornershop.counterstest.presentation.ui.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
