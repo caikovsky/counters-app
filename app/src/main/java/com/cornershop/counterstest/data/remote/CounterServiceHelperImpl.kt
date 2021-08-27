@@ -6,12 +6,13 @@ import com.cornershop.counterstest.data.request.DecrementCounterRequest
 import com.cornershop.counterstest.data.request.DeleteCounterRequest
 import com.cornershop.counterstest.data.request.IncrementCounterRequest
 import com.cornershop.counterstest.domain.model.Counter
+import retrofit2.Response
 import javax.inject.Inject
 
 class CounterServiceHelperImpl @Inject constructor(private val counterService: CounterService) :
     CounterServiceHelper {
 
-    override suspend fun getCounters(): List<Counter> = counterService.getCounters()
+    override suspend fun getCounters(): Response<List<Counter>> = counterService.getCounters()
 
     override suspend fun createCounter(title: CreateCounterRequest): List<Counter> =
         counterService.createCounter(title)

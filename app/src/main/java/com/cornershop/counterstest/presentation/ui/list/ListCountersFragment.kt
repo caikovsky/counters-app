@@ -1,13 +1,14 @@
 package com.cornershop.counterstest.presentation.ui.list
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.cornershop.counterstest.data.core.NetworkResult
 import com.cornershop.counterstest.databinding.FragmentListCountersBinding
+import com.cornershop.counterstest.util.logD
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -32,8 +33,12 @@ class ListCountersFragment : Fragment() {
     }
 
     private fun observeStates() {
-        viewModel.counters.observe(viewLifecycleOwner) {
-            Log.d("TAG", it.size.toString())
+        viewModel.counters.observe(viewLifecycleOwner) { counters ->
+            when (counters) {
+                is NetworkResult.Success -> logD("Success!")
+                is NetworkResult.Error -> logD("Error!")
+                is NetworkResult.Loading -> logD("Loading!")
+            }
         }
     }
 

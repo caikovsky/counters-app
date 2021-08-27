@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.cornershop.counterstest.data.core.NetworkResult
 import com.cornershop.counterstest.domain.model.Counter
 import com.cornershop.counterstest.domain.usecases.get.GetCounterUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,8 +17,8 @@ class ListCounterViewModel @Inject constructor(
 ) :
     ViewModel() {
 
-    private val _counters = MutableLiveData<List<Counter>>()
-    val counters: LiveData<List<Counter>> get() = _counters
+    private val _counters = MutableLiveData<NetworkResult<List<Counter>>>()
+    val counters: LiveData<NetworkResult<List<Counter>>> get() = _counters
 
     init {
         getCounters()

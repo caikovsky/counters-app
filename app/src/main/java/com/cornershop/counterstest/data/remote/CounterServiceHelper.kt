@@ -5,10 +5,11 @@ import com.cornershop.counterstest.data.request.DecrementCounterRequest
 import com.cornershop.counterstest.data.request.DeleteCounterRequest
 import com.cornershop.counterstest.data.request.IncrementCounterRequest
 import com.cornershop.counterstest.domain.model.Counter
+import retrofit2.Response
 
 interface CounterServiceHelper {
 
-    suspend fun getCounters(): List<Counter>
+    suspend fun getCounters(): Response<List<Counter>>
 
     suspend fun createCounter(title: CreateCounterRequest): List<Counter>
 
