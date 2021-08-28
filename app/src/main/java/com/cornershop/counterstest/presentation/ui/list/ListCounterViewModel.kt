@@ -25,6 +25,8 @@ class ListCounterViewModel @Inject constructor(
     }
 
     private fun getCounters() {
+        _counters.value = NetworkResult.Loading()
+
         viewModelScope.launch {
             getCounterUseCase().let {
                 _counters.value = it

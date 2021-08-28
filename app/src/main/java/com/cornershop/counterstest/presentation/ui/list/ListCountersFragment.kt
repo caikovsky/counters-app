@@ -18,6 +18,8 @@ class ListCountersFragment : Fragment() {
     private val binding: FragmentListCountersBinding get() = _binding!!
     private val viewModel: ListCounterViewModel by viewModels()
 
+    private val counterAdapter = ListCounterAdapter()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -29,17 +31,41 @@ class ListCountersFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setRecyclerView()
         observeStates()
+    }
+
+    private fun setRecyclerView() {
+        binding.counterRecycler?.run {
+            setHasFixedSize(true)
+            adapter = counterAdapter
+        }
     }
 
     private fun observeStates() {
         viewModel.counters.observe(viewLifecycleOwner) { counters ->
             when (counters) {
-                is NetworkResult.Success -> logD("Success!")
-                is NetworkResult.Error -> logD("Error!")
-                is NetworkResult.Loading -> logD("Loading!")
+                is NetworkResult.Success -> {
+                    dismissProgressDialog()
+                    counterAdapter.submitList(counters.data)
+                }
+                is NetworkResult.Error -> {
+                    dismissProgressDialog()
+                    logD("Error!")
+                }
+                is NetworkResult.Loading -> showProgressDialog()
             }
         }
+    }
+
+    private fun showProgressDialog() {
+        binding.counterRecycler!!.visibility = View.GONE
+        binding.progressDialog!!.visibility = View.VISIBLE
+    }
+
+    private fun dismissProgressDialog() {
+        binding.counterRecycler!!.visibility = View.VISIBLE
+        binding.progressDialog!!.visibility = View.GONE
     }
 
     override fun onDestroyView() {
