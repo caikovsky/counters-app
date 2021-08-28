@@ -6,8 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.navigation.fragment.findNavController
+import com.cornershop.counterstest.R
 import com.cornershop.counterstest.data.core.NetworkResult
 import com.cornershop.counterstest.databinding.FragmentListCountersBinding
+import com.cornershop.counterstest.domain.model.Counter
+import com.cornershop.counterstest.util.Constants.COUNTER_KEY
 import com.cornershop.counterstest.util.logD
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -34,12 +40,17 @@ class ListCountersFragment : Fragment() {
         setRecyclerView()
         setListeners()
         observeStates()
+        observeNavigationBackStack()
         showProgressDialog()
         viewModel.getCounters()
     }
 
     private fun setListeners() {
         with(binding) {
+            listContent?.createCounterButton!!.setOnClickListener {
+                findNavController().navigate(R.id.action_listCountersFragment_to_createCounterFragment)
+            }
+
             swipeLayout.setOnRefreshListener {
                 viewModel.getCounters()
                 binding.swipeLayout.isRefreshing = false
@@ -67,6 +78,33 @@ class ListCountersFragment : Fragment() {
                     logD("Error!")
                 }
             }
+        }
+    }
+
+    private fun observeNavigationBackStack() {
+        findNavController().run {
+            val navBackStackEntry = getBackStackEntry(R.id.listCountersFragment)
+            val savedStateHandle = navBackStackEntry.savedStateHandle
+            val observer = LifecycleEventObserver { _, event ->
+                if (event == Lifecycle.Event.ON_RESUME && savedStateHandle.contains(COUNTER_KEY)) {
+                    val product = savedStateHandle.get<Counter>(COUNTER_KEY)
+                    val oldList = counterAdapter.currentList
+                    val newList = oldList.toMutableList().apply {
+                        add(product)
+                    }
+                    counterAdapter.submitList(newList)
+                    binding.listContent?.counterRecycler?.smoothScrollToPosition(newList.size - 1)
+                    savedStateHandle.remove<Counter>(COUNTER_KEY)
+                }
+            }
+
+            navBackStackEntry.lifecycle.addObserver(observer)
+
+            viewLifecycleOwner.lifecycle.addObserver(LifecycleEventObserver { _, event ->
+                if (event == Lifecycle.Event.ON_DESTROY) {
+                    navBackStackEntry.lifecycle.removeObserver(observer)
+                }
+            })
         }
     }
 

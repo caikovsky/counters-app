@@ -7,5 +7,13 @@
     <fragment
         android:id="@+id/listCountersFragment"
         android:name="com.cornershop.counterstest.presentation.ui.list.ListCountersFragment"
-        android:label="ListCountersFragment" />
+        android:label="ListCountersFragment" >
+        <action
+            android:id="@+id/action_listCountersFragment_to_createCounterFragment"
+            app:destination="@id/createCounterFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createCounterFragment"
+        android:name="com.cornershop.counterstest.presentation.ui.create.CreateCounterFragment"
+        android:label="CreateCounterFragment" />
 </navigation>

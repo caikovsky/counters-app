@@ -19,6 +19,7 @@
         tools:listItem="@layout/item_counter" />
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/createCounterButton"
         style="CreateCounterButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
