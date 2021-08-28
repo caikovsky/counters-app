@@ -32,7 +32,19 @@ class ListCountersFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setRecyclerView()
+        setListeners()
         observeStates()
+        showProgressDialog()
+        viewModel.getCounters()
+    }
+
+    private fun setListeners() {
+        with(binding) {
+            swipeLayout.setOnRefreshListener {
+                viewModel.getCounters()
+                binding.swipeLayout.isRefreshing = false
+            }
+        }
     }
 
     private fun setRecyclerView() {
@@ -47,13 +59,13 @@ class ListCountersFragment : Fragment() {
             when (counters) {
                 is NetworkResult.Success -> {
                     dismissProgressDialog()
+                    binding.swipeLayout.isRefreshing = false
                     counterAdapter.submitList(counters.data)
                 }
                 is NetworkResult.Error -> {
                     dismissProgressDialog()
                     logD("Error!")
                 }
-                is NetworkResult.Loading -> showProgressDialog()
             }
         }
     }

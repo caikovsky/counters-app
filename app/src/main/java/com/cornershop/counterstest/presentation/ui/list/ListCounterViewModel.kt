@@ -20,11 +20,7 @@ class ListCounterViewModel @Inject constructor(
     private val _counters = MutableLiveData<NetworkResult<List<Counter>>>()
     val counters: LiveData<NetworkResult<List<Counter>>> get() = _counters
 
-    init {
-        getCounters()
-    }
-
-    private fun getCounters() {
+    fun getCounters() {
         _counters.value = NetworkResult.Loading()
 
         viewModelScope.launch {
