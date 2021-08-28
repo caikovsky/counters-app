@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="Theme.CountersNormal" parent="Theme.MaterialComponents.DayNight.NoActionBar.Bridge">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/orange</item>
@@ -19,4 +20,12 @@
         <item name="android:windowBackground">@color/welcome_background</item>
     </style>
 
+    <style name="Theme.MainApplication" parent="Theme.CountersNormal">
+        <item name="android:windowBackground">@color/welcome_background</item>
+    </style>
+
+    <style name="Theme.ProgressDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/orange</item>
+        <item name="android:indeterminateTint">@color/orange</item>
+    </style>
 </resources>
