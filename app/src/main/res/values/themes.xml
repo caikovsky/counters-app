@@ -26,4 +26,14 @@
         <item name="colorAccent">?attr/colorPrimary</item>
         <item name="android:indeterminateTint">?attr/colorPrimary</item>
     </style>
+
+    <style name="ShapeAppearanceOverlay.MyApp.Button.Rounded" parent="Theme.CountersNormal">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="CreateCounterButton" parent="Theme.CountersNormal">
+        <item name="backgroundTint">?attr/colorPrimary</item>
+
+    </style>
 </resources>

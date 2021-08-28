@@ -48,7 +48,7 @@ class ListCountersFragment : Fragment() {
     }
 
     private fun setRecyclerView() {
-        binding.counterRecycler?.run {
+        binding.listContent?.counterRecycler?.run {
             setHasFixedSize(true)
             adapter = counterAdapter
         }
@@ -71,12 +71,12 @@ class ListCountersFragment : Fragment() {
     }
 
     private fun showProgressDialog() {
-        binding.counterRecycler!!.visibility = View.GONE
+        binding.listContent?.container!!.visibility = View.GONE
         binding.progressDialog!!.visibility = View.VISIBLE
     }
 
     private fun dismissProgressDialog() {
-        binding.counterRecycler!!.visibility = View.VISIBLE
+        binding.listContent?.container!!.visibility = View.VISIBLE
         binding.progressDialog!!.visibility = View.GONE
     }
 
