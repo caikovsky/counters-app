@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.cornershop.counterstest.data.core.NetworkResult
 import com.cornershop.counterstest.databinding.FragmentCreateCounterBinding
+import com.cornershop.counterstest.util.logD
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -29,6 +31,40 @@ class CreateCounterFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setListeners()
+        observeStates()
+    }
+
+    private fun observeStates() {
+        viewModel.save.observe(viewLifecycleOwner) { counters ->
+            when (counters) {
+                is NetworkResult.Success -> {
+                    dismissProgressDialog()
+                    // TODO: finish modal
+                }
+                is NetworkResult.Error -> {
+                    dismissProgressDialog()
+                    logD("Error!")
+                }
+                is NetworkResult.Loading -> showProgressDialog()
+            }
+        }
+    }
+
+    private fun setListeners() {
+        binding.saveButton?.setOnClickListener {
+            viewModel.saveCounter(binding.contentLayout?.textField?.editText?.text.toString())
+        }
+    }
+
+    private fun showProgressDialog() {
+        binding.saveButton!!.visibility = View.GONE
+        binding.progressDialog!!.visibility = View.VISIBLE
+    }
+
+    private fun dismissProgressDialog() {
+        binding.saveButton!!.visibility = View.VISIBLE
+        binding.progressDialog!!.visibility = View.GONE
     }
 
     // FIXME

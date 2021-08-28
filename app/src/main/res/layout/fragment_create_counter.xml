@@ -19,6 +19,15 @@
         app:title="@string/create_counter"
         tools:title="@string/create_counter">
 
+        <ProgressBar
+            android:id="@+id/progressDialog"
+            style="@style/Theme.ProgressDialog"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="end"
+            android:background="@android:color/transparent"
+            android:visibility="gone" />
+
         <Button
             android:id="@+id/saveButton"
             android:layout_width="wrap_content"
