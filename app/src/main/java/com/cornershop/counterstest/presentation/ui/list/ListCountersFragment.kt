@@ -46,6 +46,7 @@ class ListCountersFragment : Fragment() {
         observeNavigationBackStack()
         showProgressDialog()
         viewModel.getCounters()
+        updateItemCount(counterAdapter.itemCount)
     }
 
     private fun decrementOnClick(counter: Counter) {
@@ -73,11 +74,11 @@ class ListCountersFragment : Fragment() {
         }
     }
 
-    private fun updateItemCount() {
+    private fun updateItemCount(itemCount: Int) {
         binding.listContent!!.itemCountTotal.text =
             String.format(
                 resources.getString(R.string.n_items),
-                counterAdapter.itemCount
+                itemCount
             )
     }
 
@@ -110,7 +111,7 @@ class ListCountersFragment : Fragment() {
                     dismissProgressDialog()
                     binding.swipeLayout.isRefreshing = false
                     counterAdapter.submitList(counters.data)
-                    updateItemCount()
+                    updateItemCount(counters.data!!.size)
                     updateCountTimes()
                 }
                 is NetworkResult.Error -> {
