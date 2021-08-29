@@ -17,7 +17,7 @@ interface CounterService {
     suspend fun getCounters(): Response<List<Counter>>
 
     @POST("counter")
-    suspend fun createCounter(@Body title: CreateCounterRequest): List<Counter>
+    suspend fun createCounter(@Body title: CreateCounterRequest): Response<List<Counter>>
 
     @DELETE("counter")
     suspend fun deleteCounter(@Body id: DeleteCounterRequest): List<Counter>

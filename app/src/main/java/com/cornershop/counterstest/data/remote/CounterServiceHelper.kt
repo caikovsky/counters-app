@@ -11,7 +11,7 @@ interface CounterServiceHelper {
 
     suspend fun getCounters(): Response<List<Counter>>
 
-    suspend fun createCounter(title: CreateCounterRequest): List<Counter>
+    suspend fun createCounter(title: CreateCounterRequest): Response<List<Counter>>
 
     suspend fun deleteCounter(id: DeleteCounterRequest): List<Counter>
 

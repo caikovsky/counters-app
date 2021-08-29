@@ -62,7 +62,7 @@ class ListCountersFragment : Fragment() {
 
     private fun setListeners() {
         with(binding) {
-            listContent?.createCounterButton!!.setOnClickListener {
+            listContent!!.createCounterButton.setOnClickListener {
                 findNavController().navigate(R.id.action_listCountersFragment_to_createCounterFragment)
             }
 

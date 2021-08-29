@@ -23,7 +23,6 @@
     </style>
 
     <style name="Theme.ProgressDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="colorAccent">?attr/colorPrimary</item>
         <item name="android:indeterminateTint">?attr/colorPrimary</item>
     </style>
 
@@ -34,6 +33,12 @@
 
     <style name="CreateCounterButton" parent="Theme.CountersNormal">
         <item name="backgroundTint">?attr/colorPrimary</item>
+    </style>
 
+    <style name="TextInputLayout" parent="Base.Widget.MaterialComponents.TextInputLayout">
+        <item name="android:textColorHint">?attr/colorPrimary</item>
+        <item name="colorAccent">?attr/colorPrimary</item>
+        <item name="colorControlNormal">?attr/colorPrimary</item>
+        <item name="colorControlActivated">?attr/colorPrimary</item>
     </style>
 </resources>
