@@ -99,7 +99,7 @@ class ListCountersFragment : Fragment() {
     private fun calculateCountTimes(): Int {
         var total = 0
 
-        for (counter in counterAdapter.currentList) {
+        for (counter in counterAdapter.counterListFiltered) {
             total += counter.count
         }
 
