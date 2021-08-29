@@ -20,16 +20,40 @@
         android:orientation="vertical"
         app:layout_constraintGuide_end="24dp" />
 
+
+    <TextView
+        android:id="@+id/itemCountTotal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="?attr/colorOnPrimary"
+        android:textSize="17sp"
+        app:layout_constraintStart_toStartOf="@id/left_guideline"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="5 items" />
+
+    <TextView
+        android:id="@+id/itemTimesTotal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="7dp"
+        android:textColor="?attr/colorOnSecondary"
+        android:textSize="17sp"
+        app:layout_constraintStart_toEndOf="@id/itemCountTotal"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="20 times" />
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/counterRecycler"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="19dp"
         android:orientation="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/right_guideline"
         app:layout_constraintStart_toStartOf="@id/left_guideline"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/itemTimesTotal"
         tools:listItem="@layout/item_counter" />
 
     <com.google.android.material.button.MaterialButton

@@ -24,7 +24,9 @@ class ListCountersFragment : Fragment() {
     private val binding: FragmentListCountersBinding get() = _binding!!
     private val viewModel: ListCounterViewModel by viewModels()
 
-    private lateinit var counterAdapter: ListCounterAdapter
+    private val counterAdapter: ListCounterAdapter = ListCounterAdapter(
+        { counter -> decrementOnClick(counter) },
+        { counter -> incrementOnClick(counter) })
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,10 +34,6 @@ class ListCountersFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentListCountersBinding.inflate(inflater, container, false)
-        counterAdapter = ListCounterAdapter(
-            { counter -> decrementOnClick(counter) },
-            { counter -> incrementOnClick(counter) })
-
         return binding.root
     }
 
@@ -75,6 +73,29 @@ class ListCountersFragment : Fragment() {
         }
     }
 
+    private fun updateItemCount() {
+        binding.listContent!!.itemCountTotal.text =
+            String.format(
+                resources.getString(R.string.n_items),
+                counterAdapter.itemCount
+            )
+    }
+
+    private fun calculateCountTimes(): Int {
+        var total = 0
+
+        for (counter in counterAdapter.currentList) {
+            total += counter.count
+        }
+
+        return total
+    }
+
+    private fun updateCountTimes() {
+        binding.listContent!!.itemTimesTotal.text =
+            String.format(resources.getString(R.string.n_times), calculateCountTimes())
+    }
+
     private fun setRecyclerView() {
         binding.listContent?.counterRecycler?.run {
             setHasFixedSize(true)
@@ -89,6 +110,8 @@ class ListCountersFragment : Fragment() {
                     dismissProgressDialog()
                     binding.swipeLayout.isRefreshing = false
                     counterAdapter.submitList(counters.data)
+                    updateItemCount()
+                    updateCountTimes()
                 }
                 is NetworkResult.Error -> {
                     dismissProgressDialog()
@@ -102,6 +125,7 @@ class ListCountersFragment : Fragment() {
             when (counters) {
                 is NetworkResult.Success -> {
                     counterAdapter.submitList(counters.data)
+                    updateCountTimes()
                 }
                 is NetworkResult.Error -> {
                     //TODO: add dialog
@@ -114,6 +138,7 @@ class ListCountersFragment : Fragment() {
             when (counters) {
                 is NetworkResult.Success -> {
                     counterAdapter.submitList(counters.data)
+                    updateCountTimes()
                 }
                 is NetworkResult.Error -> {
                     //TODO: add dialog
