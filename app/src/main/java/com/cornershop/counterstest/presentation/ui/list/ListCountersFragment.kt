@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -71,6 +72,19 @@ class ListCountersFragment : Fragment() {
                 viewModel.getCounters()
                 binding.swipeLayout.isRefreshing = false
             }
+
+            listContent.searchCounter.setOnQueryTextListener(object :
+                SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return false
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    counterAdapter.filter.filter(newText)
+                    return false
+                }
+
+            })
         }
     }
 
@@ -104,15 +118,20 @@ class ListCountersFragment : Fragment() {
         }
     }
 
+    private fun renderCounterList(counterList: List<Counter>) {
+        counterAdapter.addData(counterList)
+        counterAdapter.notifyDataSetChanged()
+        updateCountTimes()
+        updateItemCount(counterList.size)
+    }
+
     private fun observeStates() {
         viewModel.counters.observe(viewLifecycleOwner) { counters ->
             when (counters) {
                 is NetworkResult.Success -> {
                     dismissProgressDialog()
+                    renderCounterList(counters.data!!)
                     binding.swipeLayout.isRefreshing = false
-                    counterAdapter.submitList(counters.data)
-                    updateItemCount(counters.data!!.size)
-                    updateCountTimes()
                 }
                 is NetworkResult.Error -> {
                     dismissProgressDialog()
@@ -125,8 +144,7 @@ class ListCountersFragment : Fragment() {
         viewModel.incCounter.observe(viewLifecycleOwner) { counters ->
             when (counters) {
                 is NetworkResult.Success -> {
-                    counterAdapter.submitList(counters.data)
-                    updateCountTimes()
+                    renderCounterList(counters.data!!)
                 }
                 is NetworkResult.Error -> {
                     //TODO: add dialog
@@ -138,8 +156,7 @@ class ListCountersFragment : Fragment() {
         viewModel.decCounter.observe(viewLifecycleOwner) { counters ->
             when (counters) {
                 is NetworkResult.Success -> {
-                    counterAdapter.submitList(counters.data)
-                    updateCountTimes()
+                    renderCounterList(counters.data!!)
                 }
                 is NetworkResult.Error -> {
                     //TODO: add dialog

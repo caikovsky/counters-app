@@ -3,6 +3,8 @@ package com.cornershop.counterstest.presentation.ui.list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -13,7 +15,14 @@ class ListCounterAdapter(
     private val decrementOnClick: (Counter) -> Unit,
     private val incrementOnClick: (Counter) -> Unit,
 ) :
-    ListAdapter<Counter, ListCounterAdapter.CounterViewHolder>(DIFF_CALLBACK) {
+    Filterable, ListAdapter<Counter, ListCounterAdapter.CounterViewHolder>(DIFF_CALLBACK) {
+    var counterList: ArrayList<Counter> = ArrayList()
+    var counterListFiltered: ArrayList<Counter> = ArrayList()
+
+    init {
+        counterListFiltered = counterList
+    }
+
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Counter>() {
             override fun areItemsTheSame(oldItem: Counter, newItem: Counter): Boolean {
@@ -31,7 +40,40 @@ class ListCounterAdapter(
     }
 
     override fun onBindViewHolder(holder: CounterViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(counterListFiltered[position])
+    }
+
+    override fun getItemCount(): Int = counterListFiltered.size
+
+    fun addData(list: List<Counter>) {
+        counterList = list as ArrayList<Counter>
+        counterListFiltered = counterList
+        notifyDataSetChanged()
+    }
+
+    override fun getFilter(): Filter {
+        return object : Filter() {
+            override fun performFiltering(constraint: CharSequence?): FilterResults {
+                val charString = constraint?.toString() ?: ""
+                counterListFiltered = if (charString.isEmpty()) counterList else {
+                    val filteredList = ArrayList<Counter>()
+                    counterList
+                        .filter {
+                            it.title.contains(constraint!!)
+                        }
+                        .forEach { filteredList.add(it) }
+                    filteredList
+                }
+
+                return FilterResults().apply { values = counterListFiltered }
+            }
+
+            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+                counterListFiltered = results?.values as ArrayList<Counter>
+                notifyDataSetChanged()
+            }
+
+        }
     }
 
     class CounterViewHolder(
@@ -61,4 +103,5 @@ class ListCounterAdapter(
             }
         }
     }
+
 }

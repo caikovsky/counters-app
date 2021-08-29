@@ -41,4 +41,20 @@
         <item name="colorControlNormal">?attr/colorPrimary</item>
         <item name="colorControlActivated">?attr/colorPrimary</item>
     </style>
+
+    <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView">
+        <item name="searchIcon">@drawable/ic_search</item>
+        <item name="queryBackground">@android:color/transparent</item>
+        <item name="android:queryBackground">@android:color/transparent</item>
+        <item name="background">?attr/colorSecondary</item>
+        <item name="android:background">@color/white</item>
+        <item name="queryHint">@string/search_counters</item>
+        <item name="android:iconifiedByDefault">false</item>
+        <item name="iconifiedByDefault">false</item>
+        <item name="android:queryHint">@string/search_counters</item>
+        <item name="closeIcon">@drawable/ic_close</item>
+        <item name="android:closeIcon">@drawable/ic_close</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:textColorSecondary">?attr/colorOnSecondary</item>
+    </style>
 </resources>
