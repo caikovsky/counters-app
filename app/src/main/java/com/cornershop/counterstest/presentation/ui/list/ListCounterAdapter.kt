@@ -23,7 +23,6 @@ class ListCounterAdapter(
             override fun areContentsTheSame(oldItem: Counter, newItem: Counter): Boolean {
                 return oldItem == newItem
             }
-
         }
     }
 

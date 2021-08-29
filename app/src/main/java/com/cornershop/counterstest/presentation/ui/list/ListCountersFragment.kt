@@ -51,11 +51,11 @@ class ListCountersFragment : Fragment() {
     }
 
     private fun decrementOnClick(counter: Counter) {
-        logD("decrementOnClick clicked -- $counter")
+        viewModel.decrementCounter(counter)
     }
 
     private fun incrementOnClick(counter: Counter) {
-        logD("incrementOnClick clicked -- $counter")
+        viewModel.incrementCounter(counter)
     }
 
     private fun configureSwipeLayout() {
@@ -92,7 +92,32 @@ class ListCountersFragment : Fragment() {
                 }
                 is NetworkResult.Error -> {
                     dismissProgressDialog()
-                    logD("Error!")
+                    //TODO: change layout
+                    logD("counters Error!")
+                }
+            }
+        }
+
+        viewModel.incCounter.observe(viewLifecycleOwner) { counters ->
+            when (counters) {
+                is NetworkResult.Success -> {
+                    counterAdapter.submitList(counters.data)
+                }
+                is NetworkResult.Error -> {
+                    //TODO: add dialog
+                    logD("incCounter Error!")
+                }
+            }
+        }
+
+        viewModel.decCounter.observe(viewLifecycleOwner) { counters ->
+            when (counters) {
+                is NetworkResult.Success -> {
+                    counterAdapter.submitList(counters.data)
+                }
+                is NetworkResult.Error -> {
+                    //TODO: add dialog
+                    logD("decCounter Error!")
                 }
             }
         }

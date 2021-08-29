@@ -15,7 +15,7 @@ interface CounterServiceHelper {
 
     suspend fun deleteCounter(id: DeleteCounterRequest): List<Counter>
 
-    suspend fun incrementCounter(id: IncrementCounterRequest): List<Counter>
+    suspend fun incrementCounter(id: IncrementCounterRequest): Response<List<Counter>>
 
-    suspend fun decrementCounter(id: DecrementCounterRequest): List<Counter>
+    suspend fun decrementCounter(id: DecrementCounterRequest): Response<List<Counter>>
 }

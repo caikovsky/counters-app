@@ -23,8 +23,8 @@ interface CounterService {
     suspend fun deleteCounter(@Body id: DeleteCounterRequest): List<Counter>
 
     @POST("counter/inc")
-    suspend fun incrementCounter(@Body id: IncrementCounterRequest): List<Counter>
+    suspend fun incrementCounter(@Body id: IncrementCounterRequest): Response<List<Counter>>
 
     @POST("counter/dec")
-    suspend fun decrementCounter(@Body id: DecrementCounterRequest): List<Counter>
+    suspend fun decrementCounter(@Body id: DecrementCounterRequest): Response<List<Counter>>
 }

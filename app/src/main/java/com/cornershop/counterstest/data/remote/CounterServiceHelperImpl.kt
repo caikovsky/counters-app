@@ -20,9 +20,9 @@ class CounterServiceHelperImpl @Inject constructor(private val counterService: C
     override suspend fun deleteCounter(id: DeleteCounterRequest): List<Counter> =
         counterService.deleteCounter(id)
 
-    override suspend fun incrementCounter(id: IncrementCounterRequest): List<Counter> =
+    override suspend fun incrementCounter(id: IncrementCounterRequest): Response<List<Counter>> =
         counterService.incrementCounter(id)
 
-    override suspend fun decrementCounter(id: DecrementCounterRequest): List<Counter> =
+    override suspend fun decrementCounter(id: DecrementCounterRequest): Response<List<Counter>> =
         counterService.decrementCounter(id)
 }
