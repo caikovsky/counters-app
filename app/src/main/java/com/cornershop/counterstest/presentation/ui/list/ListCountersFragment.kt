@@ -81,6 +81,8 @@ class ListCountersFragment : Fragment() {
 
                 override fun onQueryTextChange(newText: String?): Boolean {
                     counterAdapter.filter.filter(newText)
+                    updateCountTimes()
+                    updateItemCount(counterAdapter.itemCount)
                     return false
                 }
 
