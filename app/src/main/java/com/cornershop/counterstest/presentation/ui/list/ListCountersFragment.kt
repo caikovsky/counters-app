@@ -24,7 +24,7 @@ class ListCountersFragment : Fragment() {
     private val binding: FragmentListCountersBinding get() = _binding!!
     private val viewModel: ListCounterViewModel by viewModels()
 
-    private val counterAdapter = ListCounterAdapter()
+    private lateinit var counterAdapter: ListCounterAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,6 +32,10 @@ class ListCountersFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentListCountersBinding.inflate(inflater, container, false)
+        counterAdapter = ListCounterAdapter(
+            { counter -> decrementOnClick(counter) },
+            { counter -> incrementOnClick(counter) })
+
         return binding.root
     }
 
@@ -39,10 +43,23 @@ class ListCountersFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setRecyclerView()
         setListeners()
+        configureSwipeLayout()
         observeStates()
         observeNavigationBackStack()
         showProgressDialog()
         viewModel.getCounters()
+    }
+
+    private fun decrementOnClick(counter: Counter) {
+        logD("decrementOnClick clicked -- $counter")
+    }
+
+    private fun incrementOnClick(counter: Counter) {
+        logD("incrementOnClick clicked -- $counter")
+    }
+
+    private fun configureSwipeLayout() {
+        binding.swipeLayout.setColorSchemeResources(R.color.orange)
     }
 
     private fun setListeners() {

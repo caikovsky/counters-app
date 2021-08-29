@@ -9,7 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.cornershop.counterstest.databinding.ItemCounterBinding
 import com.cornershop.counterstest.domain.model.Counter
 
-class ListCounterAdapter :
+class ListCounterAdapter(
+    private val decrementOnClick: (Counter) -> Unit,
+    private val incrementOnClick: (Counter) -> Unit,
+) :
     ListAdapter<Counter, ListCounterAdapter.CounterViewHolder>(DIFF_CALLBACK) {
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Counter>() {
@@ -25,27 +28,37 @@ class ListCounterAdapter :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CounterViewHolder {
-        return CounterViewHolder.create(parent)
+        return CounterViewHolder.create(parent, decrementOnClick, incrementOnClick)
     }
 
     override fun onBindViewHolder(holder: CounterViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-    class CounterViewHolder(private val itemBinding: ItemCounterBinding) :
-        RecyclerView.ViewHolder(itemBinding.root) {
+    class CounterViewHolder(
+        private val itemBinding: ItemCounterBinding,
+        private val decrementOnClick: (Counter) -> Unit,
+        private val incrementOnClick: (Counter) -> Unit
+    ) : RecyclerView.ViewHolder(itemBinding.root) {
 
         fun bind(counter: Counter) {
             itemBinding.run {
+                decrementCounter.setOnClickListener { decrementOnClick(counter) }
+                incrementCounter.setOnClickListener { incrementOnClick(counter) }
                 counterTitle.text = counter.title
+                counterValue.text = counter.count.toString()
             }
         }
 
         companion object {
-            fun create(parent: ViewGroup): CounterViewHolder {
+            fun create(
+                parent: ViewGroup,
+                decrementOnClick: (Counter) -> Unit,
+                incrementOnClick: (Counter) -> Unit
+            ): CounterViewHolder {
                 val itemBinding =
                     ItemCounterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                return CounterViewHolder(itemBinding)
+                return CounterViewHolder(itemBinding, decrementOnClick, incrementOnClick)
             }
         }
     }
