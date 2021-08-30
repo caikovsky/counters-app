@@ -48,6 +48,7 @@ class ListCountersFragment : Fragment() {
         showProgressDialog()
         viewModel.getCounters()
         updateItemCount(counterAdapter.itemCount)
+        binding.listViewModel = viewModel
     }
 
     private fun decrementOnClick(counter: Counter) {
@@ -64,7 +65,7 @@ class ListCountersFragment : Fragment() {
 
     private fun setListeners() {
         with(binding) {
-            listContent!!.createCounterButton.setOnClickListener {
+            listContent.createCounterButton.setOnClickListener {
                 findNavController().navigate(R.id.action_listCountersFragment_to_createCounterFragment)
             }
 
@@ -85,13 +86,12 @@ class ListCountersFragment : Fragment() {
                     updateItemCount(counterAdapter.itemCount)
                     return false
                 }
-
             })
         }
     }
 
     private fun updateItemCount(itemCount: Int) {
-        binding.listContent!!.itemCountTotal.text =
+        binding.listContent.itemCountTotal.text =
             String.format(
                 resources.getString(R.string.n_items),
                 itemCount
@@ -109,12 +109,12 @@ class ListCountersFragment : Fragment() {
     }
 
     private fun updateCountTimes() {
-        binding.listContent!!.itemTimesTotal.text =
+        binding.listContent.itemTimesTotal.text =
             String.format(resources.getString(R.string.n_times), calculateCountTimes())
     }
 
     private fun setRecyclerView() {
-        binding.listContent?.counterRecycler?.run {
+        binding.listContent.counterRecycler.run {
             setHasFixedSize(true)
             adapter = counterAdapter
         }
@@ -137,7 +137,6 @@ class ListCountersFragment : Fragment() {
                 }
                 is NetworkResult.Error -> {
                     dismissProgressDialog()
-                    //TODO: change layout
                     logD("counters Error!")
                 }
             }
@@ -180,7 +179,7 @@ class ListCountersFragment : Fragment() {
                         add(product)
                     }
                     counterAdapter.submitList(newList)
-                    binding.listContent?.counterRecycler?.smoothScrollToPosition(newList.size - 1)
+                    binding.listContent.counterRecycler.smoothScrollToPosition(newList.size - 1)
                     savedStateHandle.remove<Counter>(COUNTER_KEY)
                 }
             }
@@ -196,13 +195,13 @@ class ListCountersFragment : Fragment() {
     }
 
     private fun showProgressDialog() {
-        binding.listContent?.container!!.visibility = View.GONE
-        binding.progressDialog!!.visibility = View.VISIBLE
+        viewModel._isLoading.value = true
+        binding.listContent.container.visibility = View.GONE
     }
 
     private fun dismissProgressDialog() {
-        binding.listContent?.container!!.visibility = View.VISIBLE
-        binding.progressDialog!!.visibility = View.GONE
+        viewModel._isLoading.value = false
+        binding.listContent.container.visibility = View.VISIBLE
     }
 
     override fun onDestroyView() {
