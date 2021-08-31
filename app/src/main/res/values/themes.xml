@@ -57,4 +57,12 @@
         <item name="android:textColor">?attr/colorOnPrimary</item>
         <item name="android:textColorSecondary">?attr/colorOnSecondary</item>
     </style>
+
+    <style name="AlertDialogTheme" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+        <item name="colorPrimary">@color/orange</item>
+        <item name="android:colorPrimary">?attr/colorPrimary</item>
+        <item name="android:colorAccent">?attr/colorPrimary</item>
+        <item name="colorAccent">?attr/colorPrimary</item>
+    </style>
+
 </resources>
