@@ -32,6 +32,9 @@ class ListCounterViewModel @Inject constructor(
     val _isError = MutableLiveData<Boolean>()
     val isError: LiveData<Boolean> get() = _isError
 
+    val _noResults = MutableLiveData<Boolean>()
+    val noResults: LiveData<Boolean> get() = _noResults
+
     private val _counters = MutableLiveData<NetworkResult<List<Counter>>>()
     val counters: LiveData<NetworkResult<List<Counter>>> get() = _counters
 
@@ -79,6 +82,10 @@ class ListCounterViewModel @Inject constructor(
         _isError.value = showLayout
     }
 
+    fun renderNoResultsLayout(show: Boolean) {
+        _noResults.value = show
+    }
+
     fun retryButton() {
         toggleProgressDialog(true)
         renderErrorLayout(false)
@@ -94,4 +101,6 @@ class ListCounterViewModel @Inject constructor(
 
         return total
     }
+
+
 }

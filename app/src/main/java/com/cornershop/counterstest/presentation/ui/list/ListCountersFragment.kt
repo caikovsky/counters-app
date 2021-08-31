@@ -91,6 +91,14 @@ class ListCountersFragment : Fragment() {
 
                 override fun onQueryTextChange(newText: String?): Boolean {
                     counterAdapter.filter.filter(newText)
+
+                    // TODO: Improve logic
+                    if (counterAdapter.itemCount == 0) {
+                        viewModel.renderNoResultsLayout(true)
+                    } else {
+                        viewModel.renderNoResultsLayout(false)
+                    }
+
                     updateCountTimes()
                     updateItemCount(counterAdapter.itemCount)
                     return false
@@ -100,7 +108,7 @@ class ListCountersFragment : Fragment() {
     }
 
     private fun updateItemCount(itemCount: Int) {
-        binding.listContent.listBodyContent.itemCountTotal.text =
+        binding.listContent.listBodyContent.recyclerViewComponent.itemCountTotal.text =
             String.format(
                 resources.getString(R.string.n_items),
                 itemCount
@@ -108,7 +116,7 @@ class ListCountersFragment : Fragment() {
     }
 
     private fun updateCountTimes() {
-        binding.listContent.listBodyContent.itemTimesTotal.text =
+        binding.listContent.listBodyContent.recyclerViewComponent.itemTimesTotal.text =
             String.format(
                 resources.getString(R.string.n_times),
                 viewModel.calculateCountTimes(counterAdapter)
@@ -116,7 +124,7 @@ class ListCountersFragment : Fragment() {
     }
 
     private fun setRecyclerView() {
-        binding.listContent.listBodyContent.counterRecycler.run {
+        binding.listContent.listBodyContent.recyclerViewComponent.counterRecycler.run {
             setHasFixedSize(true)
             adapter = counterAdapter
         }
@@ -219,7 +227,7 @@ class ListCountersFragment : Fragment() {
                         add(product)
                     }
                     counterAdapter.submitList(newList)
-                    binding.listContent.listBodyContent.counterRecycler.smoothScrollToPosition(
+                    binding.listContent.listBodyContent.recyclerViewComponent.counterRecycler.smoothScrollToPosition(
                         newList.size - 1
                     )
                     savedStateHandle.remove<Counter>(COUNTER_KEY)

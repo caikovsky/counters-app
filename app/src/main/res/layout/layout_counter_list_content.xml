@@ -64,6 +64,7 @@
             android:layout_height="0dp"
             android:layout_marginTop="20dp"
             android:visibility="@{viewModel.isListEmpty || viewModel.isLoading || viewModel.isError ? View.GONE : View.VISIBLE}"
+            bind:viewModel="@{viewModel}"
             app:layout_constraintBottom_toTopOf="@+id/createCounterButton"
             app:layout_constraintEnd_toStartOf="@+id/right_guideline"
             app:layout_constraintStart_toStartOf="@id/left_guideline"
