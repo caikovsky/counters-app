@@ -2,9 +2,19 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.cornershop.counterstest.presentation.ui.list.ListCounterViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="@{viewModel.isError ? View.VISIBLE : View.GONE}">
 
         <TextView
             android:id="@+id/loadingErrorText"
@@ -47,6 +57,7 @@
             android:paddingEnd="@dimen/margin_normal_1"
             android:text="@string/retry"
             android:textColor="?attr/colorPrimary"
+            android:onClick="@{() -> viewModel.retryButton()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/loadingErrorDescription" />

@@ -70,4 +70,28 @@ class ListCounterViewModel @Inject constructor(
             }
         }
     }
+
+    fun toggleProgressDialog(show: Boolean) {
+        _isLoading.value = show
+    }
+
+    fun renderErrorLayout(showLayout: Boolean) {
+        _isError.value = showLayout
+    }
+
+    fun retryButton() {
+        toggleProgressDialog(true)
+        renderErrorLayout(false)
+        getCounters()
+    }
+
+    fun calculateCountTimes(adapter: ListCounterAdapter): Int {
+        var total = 0
+
+        for (counter in adapter.counterListFiltered) {
+            total += counter.count
+        }
+
+        return total
+    }
 }

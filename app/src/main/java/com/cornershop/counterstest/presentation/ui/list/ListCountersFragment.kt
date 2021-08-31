@@ -1,6 +1,5 @@
 package com.cornershop.counterstest.presentation.ui.list
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,8 +15,6 @@ import com.cornershop.counterstest.data.core.NetworkResult
 import com.cornershop.counterstest.databinding.FragmentListCountersBinding
 import com.cornershop.counterstest.domain.model.Counter
 import com.cornershop.counterstest.util.Constants.COUNTER_KEY
-import com.cornershop.counterstest.util.DialogButton
-import com.cornershop.counterstest.util.DialogUtil
 import com.cornershop.counterstest.util.logD
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -48,9 +45,15 @@ class ListCountersFragment : Fragment() {
         configureSwipeLayout()
         observeStates()
         observeNavigationBackStack()
-        viewModel.getCounters()
+        configureViewModel()
         updateItemCount(counterAdapter.itemCount)
-        binding.listViewModel = viewModel
+    }
+
+    private fun configureViewModel() {
+        with(viewModel) {
+            toggleProgressDialog(true)
+            getCounters()
+        }
     }
 
     private fun decrementOnClick(counter: Counter) {
@@ -70,6 +73,9 @@ class ListCountersFragment : Fragment() {
             listContent.createCounterButton.setOnClickListener {
                 findNavController().navigate(R.id.action_listCountersFragment_to_createCounterFragment)
             }
+
+            lifecycleOwner = viewLifecycleOwner
+            listViewModel = viewModel
 
             swipeLayout.setOnRefreshListener {
                 viewModel.getCounters()
@@ -100,19 +106,12 @@ class ListCountersFragment : Fragment() {
             )
     }
 
-    private fun calculateCountTimes(): Int {
-        var total = 0
-
-        for (counter in counterAdapter.counterListFiltered) {
-            total += counter.count
-        }
-
-        return total
-    }
-
     private fun updateCountTimes() {
         binding.listContent.listBodyContent.itemTimesTotal.text =
-            String.format(resources.getString(R.string.n_times), calculateCountTimes())
+            String.format(
+                resources.getString(R.string.n_times),
+                viewModel.calculateCountTimes(counterAdapter)
+            )
     }
 
     private fun setRecyclerView() {
@@ -133,8 +132,9 @@ class ListCountersFragment : Fragment() {
         viewModel.counters.observe(viewLifecycleOwner) { counters ->
             when (counters) {
                 is NetworkResult.Success -> {
-                    dismissProgressDialog()
-                    renderErrorLayout(false)
+                    viewModel.toggleProgressDialog(false)
+                    viewModel.renderErrorLayout(false)
+
                     if (counters.data.isNullOrEmpty()) {
                         viewModel._isListEmpty.value = true
                     } else {
@@ -143,8 +143,8 @@ class ListCountersFragment : Fragment() {
                     }
                 }
                 is NetworkResult.Error -> {
-                    dismissProgressDialog()
-                    renderErrorLayout(true)
+                    viewModel.toggleProgressDialog(false)
+                    viewModel.renderErrorLayout(true)
                 }
             }
         }
@@ -171,7 +171,19 @@ class ListCountersFragment : Fragment() {
                 }
             }
         }
+
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoadingLayoutBeingShown ->
+            binding.swipeLayout.isEnabled = !isLoadingLayoutBeingShown
+            binding.listContent.searchCounter.isEnabled = !isLoadingLayoutBeingShown
+            // TODO: Disable Search View
+        }
+
+        viewModel.isError.observe(viewLifecycleOwner) { isErrorLayoutBeingShown ->
+            binding.swipeLayout.isEnabled = !isErrorLayoutBeingShown
+            // TODO: Disable Search View
+        }
     }
+
 
     private fun observeNavigationBackStack() {
         findNavController().run {
@@ -200,18 +212,6 @@ class ListCountersFragment : Fragment() {
                 }
             })
         }
-    }
-
-    private fun showProgressDialog() {
-        viewModel._isLoading.value = true
-    }
-
-    private fun dismissProgressDialog() {
-        viewModel._isLoading.value = false
-    }
-
-    private fun renderErrorLayout(showLayout: Boolean) {
-        viewModel._isError.value = showLayout
     }
 
     override fun onDestroyView() {
