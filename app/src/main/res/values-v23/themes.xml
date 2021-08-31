@@ -28,4 +28,43 @@
         <item name="colorAccent">?attr/colorPrimary</item>
         <item name="android:indeterminateTint">?attr/colorPrimary</item>
     </style>
+
+    <style name="ShapeAppearanceOverlay.MyApp.Button.Rounded" parent="Theme.CountersNormal">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="CreateCounterButton" parent="Theme.CountersNormal">
+        <item name="backgroundTint">?attr/colorPrimary</item>
+    </style>
+
+    <style name="TextInputLayout" parent="Base.Widget.MaterialComponents.TextInputLayout">
+        <item name="android:textColorHint">?attr/colorPrimary</item>
+        <item name="colorAccent">?attr/colorPrimary</item>
+        <item name="colorControlNormal">?attr/colorPrimary</item>
+        <item name="colorControlActivated">?attr/colorPrimary</item>
+    </style>
+
+    <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView">
+        <item name="searchIcon">@drawable/ic_search</item>
+        <item name="queryBackground">@android:color/transparent</item>
+        <item name="android:queryBackground">@android:color/transparent</item>
+        <item name="background">?attr/colorSecondary</item>
+        <item name="android:background">@color/white</item>
+        <item name="queryHint">@string/search_counters</item>
+        <item name="android:iconifiedByDefault">false</item>
+        <item name="iconifiedByDefault">false</item>
+        <item name="android:queryHint">@string/search_counters</item>
+        <item name="closeIcon">@drawable/ic_close</item>
+        <item name="android:closeIcon">@drawable/ic_close</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:textColorSecondary">?attr/colorOnSecondary</item>
+    </style>
+
+    <style name="AlertDialogTheme" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+        <item name="colorPrimary">@color/orange</item>
+        <item name="android:colorPrimary">?attr/colorPrimary</item>
+        <item name="android:colorAccent">?attr/colorPrimary</item>
+        <item name="colorAccent">?attr/colorPrimary</item>
+    </style>
 </resources>
