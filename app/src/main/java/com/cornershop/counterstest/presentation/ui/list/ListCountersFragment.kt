@@ -135,6 +135,8 @@ class ListCountersFragment : Fragment() {
         counterAdapter.notifyDataSetChanged()
         updateCountTimes()
         updateItemCount(counterList.size)
+        viewModel.renderNoResultsLayout(false)
+        viewModel.renderEmptyLayout(false)
     }
 
     private fun observeStates() {
@@ -145,7 +147,7 @@ class ListCountersFragment : Fragment() {
                     viewModel.renderErrorLayout(false)
 
                     if (counters.data.isNullOrEmpty()) {
-                        viewModel._isListEmpty.value = true
+                        viewModel.renderEmptyLayout(true)
                     } else {
                         renderCounterList(counters.data)
                         binding.swipeLayout.isRefreshing = false

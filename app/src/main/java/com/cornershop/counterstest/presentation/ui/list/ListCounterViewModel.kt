@@ -86,6 +86,10 @@ class ListCounterViewModel @Inject constructor(
         _noResults.value = show
     }
 
+    fun renderEmptyLayout(show: Boolean) {
+        _isListEmpty.value = show
+    }
+
     fun retryButton() {
         toggleProgressDialog(true)
         renderErrorLayout(false)
