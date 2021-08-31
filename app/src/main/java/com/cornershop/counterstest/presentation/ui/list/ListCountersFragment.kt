@@ -15,7 +15,8 @@ import com.cornershop.counterstest.data.core.NetworkResult
 import com.cornershop.counterstest.databinding.FragmentListCountersBinding
 import com.cornershop.counterstest.domain.model.Counter
 import com.cornershop.counterstest.util.Constants.COUNTER_KEY
-import com.cornershop.counterstest.util.logD
+import com.cornershop.counterstest.util.DialogButton
+import com.cornershop.counterstest.util.DialogUtil
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -155,8 +156,18 @@ class ListCountersFragment : Fragment() {
                     renderCounterList(counters.data!!)
                 }
                 is NetworkResult.Error -> {
-                    //TODO: add dialog
-                    logD("incCounter Error!")
+                    DialogUtil.getDialog(
+                        requireActivity(),
+                        // TODO: Proper title
+                        title = "Couldnt update counter",
+                        message = resources.getString(R.string.connection_error_description),
+                        dialogButton = DialogButton(
+                            text = resources.getString(R.string.retry)
+                        ) { _, _ -> viewModel.retryButton() },
+                        negativeButton = DialogButton(
+                            "Dismiss"
+                        ) { dialogInterface, _ -> dialogInterface.dismiss() }
+                    ).show()
                 }
             }
         }
@@ -167,7 +178,18 @@ class ListCountersFragment : Fragment() {
                     renderCounterList(counters.data!!)
                 }
                 is NetworkResult.Error -> {
-                    logD("decCounter Error!")
+                    DialogUtil.getDialog(
+                        requireActivity(),
+                        // TODO: Proper title
+                        title = "Couldnt update counter",
+                        message = resources.getString(R.string.connection_error_description),
+                        dialogButton = DialogButton(
+                            text = resources.getString(R.string.retry)
+                        ) { _, _ -> viewModel.retryButton() },
+                        negativeButton = DialogButton(
+                            "Dismiss"
+                        ) { dialogInterface, _ -> dialogInterface.dismiss() }
+                    ).show()
                 }
             }
         }
