@@ -1,5 +1,6 @@
 package com.cornershop.counterstest.presentation.ui.list
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,8 @@ import com.cornershop.counterstest.data.core.NetworkResult
 import com.cornershop.counterstest.databinding.FragmentListCountersBinding
 import com.cornershop.counterstest.domain.model.Counter
 import com.cornershop.counterstest.util.Constants.COUNTER_KEY
+import com.cornershop.counterstest.util.DialogButton
+import com.cornershop.counterstest.util.DialogUtil
 import com.cornershop.counterstest.util.logD
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -45,7 +48,6 @@ class ListCountersFragment : Fragment() {
         configureSwipeLayout()
         observeStates()
         observeNavigationBackStack()
-        showProgressDialog()
         viewModel.getCounters()
         updateItemCount(counterAdapter.itemCount)
         binding.listViewModel = viewModel
@@ -91,7 +93,7 @@ class ListCountersFragment : Fragment() {
     }
 
     private fun updateItemCount(itemCount: Int) {
-        binding.listContent.itemCountTotal.text =
+        binding.listContent.listBodyContent.itemCountTotal.text =
             String.format(
                 resources.getString(R.string.n_items),
                 itemCount
@@ -109,12 +111,12 @@ class ListCountersFragment : Fragment() {
     }
 
     private fun updateCountTimes() {
-        binding.listContent.itemTimesTotal.text =
+        binding.listContent.listBodyContent.itemTimesTotal.text =
             String.format(resources.getString(R.string.n_times), calculateCountTimes())
     }
 
     private fun setRecyclerView() {
-        binding.listContent.counterRecycler.run {
+        binding.listContent.listBodyContent.counterRecycler.run {
             setHasFixedSize(true)
             adapter = counterAdapter
         }
@@ -132,12 +134,17 @@ class ListCountersFragment : Fragment() {
             when (counters) {
                 is NetworkResult.Success -> {
                     dismissProgressDialog()
-                    renderCounterList(counters.data!!)
-                    binding.swipeLayout.isRefreshing = false
+                    renderErrorLayout(false)
+                    if (counters.data.isNullOrEmpty()) {
+                        viewModel._isListEmpty.value = true
+                    } else {
+                        renderCounterList(counters.data)
+                        binding.swipeLayout.isRefreshing = false
+                    }
                 }
                 is NetworkResult.Error -> {
                     dismissProgressDialog()
-                    logD("counters Error!")
+                    renderErrorLayout(true)
                 }
             }
         }
@@ -160,7 +167,6 @@ class ListCountersFragment : Fragment() {
                     renderCounterList(counters.data!!)
                 }
                 is NetworkResult.Error -> {
-                    //TODO: add dialog
                     logD("decCounter Error!")
                 }
             }
@@ -179,7 +185,9 @@ class ListCountersFragment : Fragment() {
                         add(product)
                     }
                     counterAdapter.submitList(newList)
-                    binding.listContent.counterRecycler.smoothScrollToPosition(newList.size - 1)
+                    binding.listContent.listBodyContent.counterRecycler.smoothScrollToPosition(
+                        newList.size - 1
+                    )
                     savedStateHandle.remove<Counter>(COUNTER_KEY)
                 }
             }
@@ -196,12 +204,14 @@ class ListCountersFragment : Fragment() {
 
     private fun showProgressDialog() {
         viewModel._isLoading.value = true
-        binding.listContent.container.visibility = View.GONE
     }
 
     private fun dismissProgressDialog() {
         viewModel._isLoading.value = false
-        binding.listContent.container.visibility = View.VISIBLE
+    }
+
+    private fun renderErrorLayout(showLayout: Boolean) {
+        viewModel._isError.value = showLayout
     }
 
     override fun onDestroyView() {

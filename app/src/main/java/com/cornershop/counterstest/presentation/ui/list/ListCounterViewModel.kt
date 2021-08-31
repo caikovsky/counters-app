@@ -26,8 +26,11 @@ class ListCounterViewModel @Inject constructor(
     val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> get() = _isLoading
 
-    private val _isListEmpty = MutableLiveData<Boolean>()
+    val _isListEmpty = MutableLiveData<Boolean>()
     val isListEmpty: LiveData<Boolean> get() = _isListEmpty
+
+    val _isError = MutableLiveData<Boolean>()
+    val isError: LiveData<Boolean> get() = _isError
 
     private val _counters = MutableLiveData<NetworkResult<List<Counter>>>()
     val counters: LiveData<NetworkResult<List<Counter>>> get() = _counters
@@ -43,7 +46,6 @@ class ListCounterViewModel @Inject constructor(
 
         viewModelScope.launch {
             getCounterUseCase().let {
-                _isListEmpty.value = it.data.isNullOrEmpty()
                 _counters.value = it
             }
         }

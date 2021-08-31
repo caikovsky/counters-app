@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.cornershop.counterstest.presentation.ui.list.ListCounterViewModel" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container"
@@ -22,7 +30,6 @@
             android:orientation="vertical"
             app:layout_constraintGuide_end="24dp" />
 
-
         <androidx.appcompat.widget.SearchView
             android:id="@+id/searchCounter"
             style="SearchViewStyle"
@@ -38,42 +45,41 @@
             app:layout_constraintStart_toStartOf="@id/left_guideline"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/itemCountTotal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:textColor="?attr/colorOnPrimary"
-            android:textSize="17sp"
-            app:layout_constraintStart_toStartOf="@id/left_guideline"
-            app:layout_constraintTop_toBottomOf="@id/searchCounter"
-            tools:text="5 items" />
+        <ProgressBar
+            android:id="@+id/progressDialog"
+            style="@style/Theme.ProgressDialog"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:visibility="@{viewModel.isLoading ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/itemTimesTotal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="7dp"
-            android:layout_marginTop="20dp"
-            android:textColor="?attr/colorOnSecondary"
-            android:textSize="17sp"
-            app:layout_constraintStart_toEndOf="@id/itemCountTotal"
-            app:layout_constraintTop_toBottomOf="@id/searchCounter"
-            tools:text="20 times" />
-
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/counterRecycler"
+        // FIXME: loading not working properly
+        <include
+            android:id="@+id/listBodyContent"
+            layout="@layout/layout_counter_list_body"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="19dp"
-            android:orientation="vertical"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/right_guideline"
+            android:layout_marginTop="20dp"
+            android:visibility="@{viewModel.isListEmpty || viewModel.isLoading ? View.GONE : View.VISIBLE}"
+            app:layout_constraintBottom_toTopOf="@+id/createCounterButton"
+            app:layout_constraintEnd_toStartOf="@+id/right_guideline"
             app:layout_constraintStart_toStartOf="@id/left_guideline"
-            app:layout_constraintTop_toBottomOf="@+id/itemTimesTotal"
-            tools:listItem="@layout/item_counter" />
+            app:layout_constraintTop_toBottomOf="@+id/searchCounter" />
+
+        <include
+            android:id="@+id/listErrorContent"
+            layout="@layout/layout_load_error"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="20dp"
+            android:visibility="@{viewModel.isError ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toTopOf="@+id/createCounterButton"
+            app:layout_constraintEnd_toStartOf="@+id/right_guideline"
+            app:layout_constraintStart_toStartOf="@id/left_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/searchCounter" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/createCounterButton"

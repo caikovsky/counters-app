@@ -20,27 +20,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ProgressBar
-                android:id="@+id/progressDialog"
-                style="@style/Theme.ProgressDialog"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:visibility="@{listViewModel.isLoading ? View.GONE : View.VISIBLE}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <include
                 android:id="@+id/listContent"
                 layout="@layout/layout_counter_list_content"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:visibility="@{listViewModel.isListEmpty ? View.GONE : View.VISIBLE}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:viewModel="@{listViewModel}" />
 
             <include
                 android:id="@+id/emptyList"
