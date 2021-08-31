@@ -34,20 +34,28 @@ class CreateCounterFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setListeners()
         observeStates()
+        setBindings()
+    }
+
+    private fun setBindings() {
+        with(binding) {
+            lifecycleOwner = viewLifecycleOwner
+            createViewModel = viewModel
+        }
     }
 
     private fun observeStates() {
         viewModel.save.observe(viewLifecycleOwner) { counters ->
             when (counters) {
                 is NetworkResult.Success -> {
-                    dismissProgressDialog()
+                    viewModel.toggleProgressDialog(true)
                     findNavController().popBackStack()
                 }
                 is NetworkResult.Error -> {
-                    dismissProgressDialog()
+                    viewModel.toggleProgressDialog(false)
                     logD("Error!")
                 }
-                is NetworkResult.Loading -> showProgressDialog()
+                is NetworkResult.Loading -> viewModel.toggleProgressDialog(true)
             }
         }
     }
@@ -58,15 +66,6 @@ class CreateCounterFragment : Fragment() {
         }
     }
 
-    private fun showProgressDialog() {
-        binding.saveButton!!.visibility = View.GONE
-        binding.progressDialog!!.visibility = View.VISIBLE
-    }
-
-    private fun dismissProgressDialog() {
-        binding.saveButton!!.visibility = View.VISIBLE
-        binding.progressDialog!!.visibility = View.GONE
-    }
 
     // FIXME
     private fun showKeyboard(activity: Activity, view: View, textInputLayout: TextInputLayout) {

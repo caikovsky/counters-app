@@ -19,6 +19,9 @@ class CreateCounterViewModel @Inject constructor(private val createCounterUseCas
     private val _save = MutableLiveData<NetworkResult<List<Counter>>>()
     val save: LiveData<NetworkResult<List<Counter>>> get() = _save
 
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> get() = _isLoading
+
     fun saveCounter(title: String) {
         _save.value = NetworkResult.Loading()
 
@@ -27,6 +30,10 @@ class CreateCounterViewModel @Inject constructor(private val createCounterUseCas
                 _save.value = it
             }
         }
+    }
+
+    fun toggleProgressDialog(show: Boolean) {
+        _isLoading.value = show
     }
 
 }
