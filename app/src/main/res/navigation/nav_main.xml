@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/listCountersFragment"
         android:name="com.cornershop.counterstest.presentation.ui.list.ListCountersFragment"
-        android:label="ListCountersFragment" >
+        android:label="ListCountersFragment">
         <action
             android:id="@+id/action_listCountersFragment_to_createCounterFragment"
             app:destination="@id/createCounterFragment" />
@@ -15,7 +15,7 @@
     <fragment
         android:id="@+id/createCounterFragment"
         android:name="com.cornershop.counterstest.presentation.ui.create.CreateCounterFragment"
-        android:label="CreateCounterFragment" >
+        android:label="CreateCounterFragment">
         <action
             android:id="@+id/action_createCounterFragment_to_exampleCounterFragment"
             app:destination="@id/exampleCounterFragment" />
@@ -23,5 +23,9 @@
     <fragment
         android:id="@+id/exampleCounterFragment"
         android:name="com.cornershop.counterstest.presentation.ui.examples.ExampleCounterFragment"
-        android:label="ExampleCounterFragment" />
+        android:label="ExampleCounterFragment">
+        <action
+            android:id="@+id/action_exampleCounterFragment_to_listCountersFragment2"
+            app:destination="@id/listCountersFragment" />
+    </fragment>
 </navigation>

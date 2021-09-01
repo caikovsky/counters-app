@@ -5,8 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.cornershop.counterstest.R
+import com.cornershop.counterstest.data.core.NetworkResult
 import com.cornershop.counterstest.databinding.FragmentExampleCounterBinding
+import com.cornershop.counterstest.presentation.ui.create.CreateCounterViewModel
+import com.cornershop.counterstest.util.logE
 import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -15,6 +20,7 @@ class ExampleCounterFragment : Fragment() {
 
     private var _binding: FragmentExampleCounterBinding? = null
     private val binding: FragmentExampleCounterBinding get() = _binding!!
+    private val viewModel: CreateCounterViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,6 +34,21 @@ class ExampleCounterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         populateChips()
+        setObservers()
+    }
+
+    private fun setObservers() {
+        viewModel.save.observe(viewLifecycleOwner) { response ->
+            when (response) {
+                is NetworkResult.Success -> {
+                    findNavController().navigate(R.id.action_exampleCounterFragment_to_listCountersFragment2)
+                }
+
+                is NetworkResult.Error -> {
+                    logE("Error!")
+                }
+            }
+        }
     }
 
     private fun populateChips() {
@@ -42,6 +63,7 @@ class ExampleCounterFragment : Fragment() {
         for (misc in miscList) {
             val chip = Chip(binding.miscExamplesChipGroup.context)
             chip.text = misc
+            chip.setOnClickListener { viewModel.saveCounter(misc) }
             binding.miscExamplesChipGroup.addView(chip)
         }
     }
@@ -52,6 +74,7 @@ class ExampleCounterFragment : Fragment() {
         for (food in foodList) {
             val chip = Chip(binding.foodExamplesChipGroup.context)
             chip.text = food
+            chip.setOnClickListener { viewModel.saveCounter(food) }
             binding.foodExamplesChipGroup.addView(chip)
         }
     }
@@ -62,6 +85,7 @@ class ExampleCounterFragment : Fragment() {
         for (drink in drinkList) {
             val chip = Chip(binding.drinkExamplesChipGroup.context)
             chip.text = drink
+            chip.setOnClickListener { viewModel.saveCounter(drink) }
             binding.drinkExamplesChipGroup.addView(chip)
         }
     }
