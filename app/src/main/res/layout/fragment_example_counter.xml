@@ -8,11 +8,18 @@
         android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/left_guideline"
+            android:id="@+id/leftGuidelineHeaderText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_begin="21dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/leftGuidelineChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="17dp" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/right_guideline"
@@ -20,6 +27,13 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_end="21dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/rightGuidelineChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="17dp" />
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -37,80 +51,101 @@
 
         <TextView
             android:id="@+id/examplesDescription"
+            style="@style/ExampleDescriptionText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
             android:text="@string/examples_description"
-            android:textColor="?attr/colorOnSecondary"
             app:layout_constraintEnd_toStartOf="@+id/right_guideline"
-            app:layout_constraintStart_toStartOf="@+id/left_guideline"
+            app:layout_constraintStart_toStartOf="@+id/leftGuidelineHeaderText"
             app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
         <TextView
             android:id="@+id/drinkExamples"
+            style="@style/ExampleHeaderText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:text="Drinks"
-            android:textColor="?attr/colorOnSecondary"
+            android:text="@string/example_header_drink"
             app:layout_constraintEnd_toStartOf="@+id/right_guideline"
-            app:layout_constraintStart_toStartOf="@+id/left_guideline"
+            app:layout_constraintStart_toStartOf="@+id/leftGuidelineHeaderText"
             app:layout_constraintTop_toBottomOf="@+id/examplesDescription" />
 
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/drinkExamplesChipGroup"
+        <HorizontalScrollView
+            android:id="@+id/drinkExamplesHorizontalScroll"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:chipSpacing="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/left_guideline"
-            app:layout_constraintTop_toBottomOf="@+id/drinkExamples"
-            app:singleLine="true"
-            app:singleSelection="true" />
+            android:scrollbars="none"
+            app:layout_constraintEnd_toEndOf="@+id/rightGuidelineChip"
+            app:layout_constraintStart_toStartOf="@id/leftGuidelineChip"
+            app:layout_constraintTop_toBottomOf="@+id/drinkExamples">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/drinkExamplesChipGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:chipSpacing="16dp"
+                app:singleLine="true"
+                app:singleSelection="true" />
+        </HorizontalScrollView>
 
         <TextView
             android:id="@+id/foodExamples"
+            style="@style/ExampleHeaderText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
-            android:text="Foods"
-            android:textColor="?attr/colorOnSecondary"
+            android:text="@string/example_header_food"
             app:layout_constraintEnd_toStartOf="@+id/right_guideline"
-            app:layout_constraintStart_toStartOf="@+id/left_guideline"
-            app:layout_constraintTop_toBottomOf="@+id/drinkExamplesChipGroup" />
+            app:layout_constraintStart_toStartOf="@+id/leftGuidelineChip"
+            app:layout_constraintTop_toBottomOf="@+id/drinkExamplesHorizontalScroll" />
 
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/foodExamplesChipGroup"
+        <HorizontalScrollView
+            android:id="@+id/foodExamplesHorizontalScroll"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:chipSpacing="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/left_guideline"
-            app:layout_constraintTop_toBottomOf="@+id/foodExamples"
-            app:singleLine="true"
-            app:singleSelection="true" />
+            android:scrollbars="none"
+            app:layout_constraintEnd_toEndOf="@+id/rightGuidelineChip"
+            app:layout_constraintStart_toStartOf="@id/leftGuidelineChip"
+            app:layout_constraintTop_toBottomOf="@+id/foodExamples">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/foodExamplesChipGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:chipSpacing="16dp"
+                app:singleLine="true"
+                app:singleSelection="true" />
+        </HorizontalScrollView>
 
         <TextView
             android:id="@+id/miscExamples"
+            style="@style/ExampleHeaderText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
-            android:text="Misc"
-            android:textColor="?attr/colorOnSecondary"
+            android:text="@string/example_header_misc"
             app:layout_constraintEnd_toStartOf="@+id/right_guideline"
-            app:layout_constraintStart_toStartOf="@+id/left_guideline"
-            app:layout_constraintTop_toBottomOf="@+id/foodExamplesChipGroup" />
+            app:layout_constraintStart_toStartOf="@+id/leftGuidelineHeaderText"
+            app:layout_constraintTop_toBottomOf="@+id/foodExamplesHorizontalScroll" />
 
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/miscExamplesChipGroup"
+        <HorizontalScrollView
+            android:id="@+id/miscExamplesHorizontalScroll"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:chipSpacing="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/left_guideline"
-            app:layout_constraintTop_toBottomOf="@+id/miscExamples"
-            app:singleLine="true"
-            app:singleSelection="true" />
+            android:scrollbars="none"
+            app:layout_constraintEnd_toEndOf="@+id/rightGuidelineChip"
+            app:layout_constraintStart_toStartOf="@id/leftGuidelineChip"
+            app:layout_constraintTop_toBottomOf="@+id/miscExamples">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/miscExamplesChipGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:chipSpacing="16dp"
+                app:singleLine="true"
+                app:singleSelection="true" />
+        </HorizontalScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
