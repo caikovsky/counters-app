@@ -14,6 +14,7 @@ import com.cornershop.counterstest.domain.model.Counter
 class ListCounterAdapter(
     private val decrementOnClick: (Counter) -> Unit,
     private val incrementOnClick: (Counter) -> Unit,
+    private val selectOnLongPress: (Counter) -> Boolean
 ) :
     Filterable, ListAdapter<Counter, ListCounterAdapter.CounterViewHolder>(DIFF_CALLBACK) {
     var counterList: ArrayList<Counter> = ArrayList()
@@ -36,7 +37,7 @@ class ListCounterAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CounterViewHolder {
-        return CounterViewHolder.create(parent, decrementOnClick, incrementOnClick)
+        return CounterViewHolder.create(parent, decrementOnClick, incrementOnClick, selectOnLongPress)
     }
 
     override fun onBindViewHolder(holder: CounterViewHolder, position: Int) {
@@ -79,13 +80,18 @@ class ListCounterAdapter(
     class CounterViewHolder(
         private val itemBinding: ItemCounterBinding,
         private val decrementOnClick: (Counter) -> Unit,
-        private val incrementOnClick: (Counter) -> Unit
+        private val incrementOnClick: (Counter) -> Unit,
+        private val selectOnLongPress: (Counter) -> Boolean
     ) : RecyclerView.ViewHolder(itemBinding.root) {
 
         fun bind(counter: Counter) {
             itemBinding.run {
                 decrementCounter.setOnClickListener { decrementOnClick(counter) }
                 incrementCounter.setOnClickListener { incrementOnClick(counter) }
+                counterTitle.setOnLongClickListener {
+                    // TODO: layout change
+                    selectOnLongPress(counter)
+                }
                 counterTitle.text = counter.title
                 counterValue.text = counter.count.toString()
             }
@@ -95,11 +101,12 @@ class ListCounterAdapter(
             fun create(
                 parent: ViewGroup,
                 decrementOnClick: (Counter) -> Unit,
-                incrementOnClick: (Counter) -> Unit
+                incrementOnClick: (Counter) -> Unit,
+                selectOnLongPress: (Counter) -> Boolean
             ): CounterViewHolder {
                 val itemBinding =
                     ItemCounterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                return CounterViewHolder(itemBinding, decrementOnClick, incrementOnClick)
+                return CounterViewHolder(itemBinding, decrementOnClick, incrementOnClick, selectOnLongPress)
             }
         }
     }

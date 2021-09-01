@@ -28,7 +28,13 @@ class ListCountersFragment : Fragment() {
 
     private val counterAdapter: ListCounterAdapter = ListCounterAdapter(
         { counter -> decrementOnClick(counter) },
-        { counter -> incrementOnClick(counter) })
+        { counter -> incrementOnClick(counter) },
+        { counter -> selectCounterOnLongPress(counter) })
+
+    private fun selectCounterOnLongPress(counter: Counter): Boolean {
+        counter.selected = true
+        return false
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
