@@ -3,10 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/left_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="21dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/right_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="21dp" />
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -21,5 +34,83 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             app:title="@string/examples"
             tools:title="@string/examples" />
+
+        <TextView
+            android:id="@+id/examplesDescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:text="@string/examples_description"
+            android:textColor="?attr/colorOnSecondary"
+            app:layout_constraintEnd_toStartOf="@+id/right_guideline"
+            app:layout_constraintStart_toStartOf="@+id/left_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+        <TextView
+            android:id="@+id/drinkExamples"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Drinks"
+            android:textColor="?attr/colorOnSecondary"
+            app:layout_constraintEnd_toStartOf="@+id/right_guideline"
+            app:layout_constraintStart_toStartOf="@+id/left_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/examplesDescription" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/drinkExamplesChipGroup"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:chipSpacing="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/left_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/drinkExamples"
+            app:singleLine="true"
+            app:singleSelection="true" />
+
+        <TextView
+            android:id="@+id/foodExamples"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:text="Foods"
+            android:textColor="?attr/colorOnSecondary"
+            app:layout_constraintEnd_toStartOf="@+id/right_guideline"
+            app:layout_constraintStart_toStartOf="@+id/left_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/drinkExamplesChipGroup" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/foodExamplesChipGroup"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:chipSpacing="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/left_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/foodExamples"
+            app:singleLine="true"
+            app:singleSelection="true" />
+
+        <TextView
+            android:id="@+id/miscExamples"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:text="Misc"
+            android:textColor="?attr/colorOnSecondary"
+            app:layout_constraintEnd_toStartOf="@+id/right_guideline"
+            app:layout_constraintStart_toStartOf="@+id/left_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/foodExamplesChipGroup" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/miscExamplesChipGroup"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:chipSpacing="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/left_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/miscExamples"
+            app:singleLine="true"
+            app:singleSelection="true" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
