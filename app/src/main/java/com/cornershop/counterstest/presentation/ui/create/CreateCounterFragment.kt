@@ -121,8 +121,8 @@ class CreateCounterFragment : Fragment() {
     }
 
     private fun setListeners() {
-        binding.saveButton?.setOnClickListener {
-            viewModel.saveCounter(binding.contentLayout?.textField?.editText?.text.toString())
+        binding.saveButton.setOnClickListener {
+            viewModel.saveCounter(binding.contentLayout.textField.editText?.text.toString())
         }
     }
 
