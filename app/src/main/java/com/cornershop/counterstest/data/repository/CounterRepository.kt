@@ -1,6 +1,7 @@
 package com.cornershop.counterstest.data.repository
 
 import com.cornershop.counterstest.data.CounterService
+import com.cornershop.counterstest.data.local.LocalDataSource
 import com.cornershop.counterstest.data.request.CreateCounterRequest
 import com.cornershop.counterstest.data.request.DecrementCounterRequest
 import com.cornershop.counterstest.data.request.DeleteCounterRequest
@@ -10,6 +11,7 @@ import retrofit2.Response
 import javax.inject.Inject
 
 class CounterRepository @Inject constructor(
+    private val counterLocal: LocalDataSource,
     private val counterService: CounterService
 ) {
 
@@ -26,4 +28,8 @@ class CounterRepository @Inject constructor(
 
     suspend fun decrementCounter(request: DecrementCounterRequest): Response<List<Counter>> =
         counterService.decrementCounter(request)
+
+    fun getLocalCounters(): List<Counter> = counterLocal.getCounters()
+
+    suspend fun createLocalCounters(counters: List<Counter>): Unit = counterLocal.createCounters(counters)
 }

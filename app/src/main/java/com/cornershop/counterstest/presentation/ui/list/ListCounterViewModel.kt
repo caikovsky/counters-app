@@ -11,6 +11,7 @@ import com.cornershop.counterstest.domain.model.Counter
 import com.cornershop.counterstest.domain.usecases.dec.DecrementCounterUseCase
 import com.cornershop.counterstest.domain.usecases.get.GetCounterUseCase
 import com.cornershop.counterstest.domain.usecases.inc.IncrementCounterUseCase
+import com.cornershop.counterstest.util.logD
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -44,6 +45,10 @@ class ListCounterViewModel @Inject constructor(
     private val _decCounter = MutableLiveData<NetworkResult<List<Counter>>>()
     val decCounter: LiveData<NetworkResult<List<Counter>>> get() = _decCounter
 
+    private val _local = MutableLiveData<List<Counter>>()
+    val local: LiveData<List<Counter>> get() = _local
+
+
     fun getCounters() {
         _counters.value = NetworkResult.Loading()
 
@@ -53,6 +58,14 @@ class ListCounterViewModel @Inject constructor(
             }
         }
     }
+
+    fun getLocalCounters() {
+        viewModelScope.launch {
+            _local.value = getCounterUseCase.getLocalCounters()
+            logD(local.toString())
+        }
+    }
+
 
     fun incrementCounter(counter: Counter) {
         _incCounter.value = NetworkResult.Loading()

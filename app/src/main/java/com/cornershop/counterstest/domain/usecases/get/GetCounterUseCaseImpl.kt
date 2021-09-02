@@ -14,4 +14,8 @@ class GetCounterUseCaseImpl @Inject constructor(
     override suspend fun invoke(): NetworkResult<List<Counter>> {
         return safeApiCall { counterRepository.getCounters() }
     }
+
+    override suspend fun getLocalCounters(): List<Counter> {
+        return counterRepository.getLocalCounters()
+    }
 }

@@ -32,6 +32,12 @@ class CreateCounterViewModel @Inject constructor(private val createCounterUseCas
         }
     }
 
+    fun saveCounterLocally(counters: List<Counter>) {
+        viewModelScope.launch {
+            createCounterUseCase.createLocalCounters(counters)
+        }
+    }
+
     fun toggleProgressDialog(show: Boolean) {
         _isLoading.value = show
     }

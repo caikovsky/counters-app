@@ -7,4 +7,6 @@ import retrofit2.Response
 interface GetCounterUseCase {
 
     suspend operator fun invoke(): NetworkResult<List<Counter>>
+
+    suspend fun getLocalCounters(): List<Counter>
 }

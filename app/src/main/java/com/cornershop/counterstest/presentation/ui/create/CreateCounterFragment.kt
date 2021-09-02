@@ -108,6 +108,7 @@ class CreateCounterFragment : Fragment() {
             when (counters) {
                 is NetworkResult.Success -> {
                     viewModel.toggleProgressDialog(true)
+                    counters.data?.let { viewModel.saveCounterLocally(it) }
                     findNavController().popBackStack()
                 }
                 is NetworkResult.Error -> {

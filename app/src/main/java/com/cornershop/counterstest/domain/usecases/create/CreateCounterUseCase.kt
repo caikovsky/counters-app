@@ -7,4 +7,6 @@ import com.cornershop.counterstest.domain.model.Counter
 interface CreateCounterUseCase {
 
     suspend operator fun invoke(title: CreateCounterRequest): NetworkResult<List<Counter>>
+
+    suspend fun createLocalCounters(counters: List<Counter>)
 }

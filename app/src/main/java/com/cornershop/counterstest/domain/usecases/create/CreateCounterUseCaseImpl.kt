@@ -12,4 +12,8 @@ class CreateCounterUseCaseImpl @Inject constructor(private val counterRepository
     override suspend fun invoke(title: CreateCounterRequest): NetworkResult<List<Counter>> {
         return safeApiCall { counterRepository.createCounter(title) }
     }
+
+    override suspend fun createLocalCounters(counters: List<Counter>) {
+        return counterRepository.createLocalCounters(counters)
+    }
 }

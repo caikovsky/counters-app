@@ -17,6 +17,7 @@ import com.cornershop.counterstest.domain.model.Counter
 import com.cornershop.counterstest.util.Constants.COUNTER_KEY
 import com.cornershop.counterstest.util.DialogButton
 import com.cornershop.counterstest.util.DialogUtil
+import com.cornershop.counterstest.util.logD
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -58,6 +59,7 @@ class ListCountersFragment : Fragment() {
     }
 
     private fun decrementOnClick(counter: Counter) {
+        viewModel.getLocalCounters()
         viewModel.decrementCounter(counter)
     }
 
@@ -140,6 +142,10 @@ class ListCountersFragment : Fragment() {
     }
 
     private fun observeStates() {
+        viewModel.local.observe(viewLifecycleOwner) { response ->
+            logD(response.toString())
+        }
+
         viewModel.counters.observe(viewLifecycleOwner) { counters ->
             when (counters) {
                 is NetworkResult.Success -> {
