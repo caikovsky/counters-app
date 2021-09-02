@@ -9,20 +9,15 @@ import com.cornershop.counterstest.domain.model.Counter
 import retrofit2.Response
 import javax.inject.Inject
 
-class CounterServiceHelperImpl @Inject constructor(private val counterService: CounterService) :
-    CounterServiceHelper {
+class CounterServiceHelperImpl @Inject constructor(private val counterService: CounterService) : CounterServiceHelper {
 
     override suspend fun getCounters(): Response<List<Counter>> = counterService.getCounters()
 
-    override suspend fun createCounter(title: CreateCounterRequest): Response<List<Counter>> =
-        counterService.createCounter(title)
+    override suspend fun createCounter(title: CreateCounterRequest): Response<List<Counter>> = counterService.createCounter(title)
 
-    override suspend fun deleteCounter(id: DeleteCounterRequest): List<Counter> =
-        counterService.deleteCounter(id)
+    override suspend fun deleteCounter(id: DeleteCounterRequest): List<Counter> = counterService.deleteCounter(id)
 
-    override suspend fun incrementCounter(id: IncrementCounterRequest): Response<List<Counter>> =
-        counterService.incrementCounter(id)
+    override suspend fun incrementCounter(id: IncrementCounterRequest): Response<List<Counter>> = counterService.incrementCounter(id)
 
-    override suspend fun decrementCounter(id: DecrementCounterRequest): Response<List<Counter>> =
-        counterService.decrementCounter(id)
+    override suspend fun decrementCounter(id: DecrementCounterRequest): Response<List<Counter>> = counterService.decrementCounter(id)
 }

@@ -10,26 +10,19 @@ import com.cornershop.counterstest.domain.model.Counter
 import retrofit2.Response
 import javax.inject.Inject
 
-class CounterRepository @Inject constructor(
-    private val counterLocal: LocalDataSource,
-    private val counterService: CounterService
-) {
+class CounterRepository @Inject constructor(private val counterLocal: LocalDataSource, private val counterService: CounterService) {
 
     suspend fun getCounters(): Response<List<Counter>> = counterService.getCounters()
 
-    suspend fun createCounter(request: CreateCounterRequest): Response<List<Counter>> =
-        counterService.createCounter(request)
+    suspend fun createCounter(request: CreateCounterRequest): Response<List<Counter>> = counterService.createCounter(request)
 
-    suspend fun deleteCounter(request: DeleteCounterRequest): List<Counter> =
-        counterService.deleteCounter(request)
+    suspend fun deleteCounter(request: DeleteCounterRequest): List<Counter> = counterService.deleteCounter(request)
 
-    suspend fun incrementCounter(request: IncrementCounterRequest): Response<List<Counter>> =
-        counterService.incrementCounter(request)
+    suspend fun incrementCounter(request: IncrementCounterRequest): Response<List<Counter>> = counterService.incrementCounter(request)
 
-    suspend fun decrementCounter(request: DecrementCounterRequest): Response<List<Counter>> =
-        counterService.decrementCounter(request)
+    suspend fun decrementCounter(request: DecrementCounterRequest): Response<List<Counter>> = counterService.decrementCounter(request)
 
-    fun getLocalCounters(): List<Counter> = counterLocal.getCounters()
+    suspend fun getLocalCounters(): List<Counter> = counterLocal.getCounters()
 
     suspend fun createLocalCounters(counters: List<Counter>): Unit = counterLocal.createCounters(counters)
 }
