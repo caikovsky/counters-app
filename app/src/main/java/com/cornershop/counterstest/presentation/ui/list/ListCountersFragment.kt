@@ -160,47 +160,30 @@ class ListCountersFragment : Fragment() {
             }
         }
 
-        viewModel.incCounter.observe(viewLifecycleOwner) { counters ->
-            when (counters) {
-                is NetworkResult.Success -> {
-                    renderCounterList(counters.data!!)
-                }
-                is NetworkResult.Error -> {
-                    DialogUtil.getDialog(
-                        requireActivity(),
-                        // TODO: Proper title
-                        title = "Couldnt update counter",
-                        message = resources.getString(R.string.connection_error_description),
-                        dialogButton = DialogButton(
-                            text = resources.getString(R.string.retry)
-                        ) { _, _ -> viewModel.retryButton() },
-                        negativeButton = DialogButton(
-                            "Dismiss"
-                        ) { dialogInterface, _ -> dialogInterface.dismiss() }
-                    ).show()
-                }
+        viewModel.dialogError.observe(viewLifecycleOwner) { counter ->
+            val title = String.format(resources.getString(R.string.error_updating_counter_title), counter.title, counter.count)
+            DialogUtil.getDialog(
+                requireActivity(),
+                title = title,
+                message = resources.getString(R.string.connection_error_description),
+                dialogButton = DialogButton(
+                    text = resources.getString(R.string.retry)
+                ) { _, _ -> viewModel.retryButton() },
+                negativeButton = DialogButton(
+                    resources.getString(R.string.dismiss)
+                ) { dialogInterface, _ -> dialogInterface.dismiss() }
+            ).show()
+        }
+
+        viewModel.incCounter.observe(viewLifecycleOwner) { response ->
+            if (response is NetworkResult.Success) {
+                renderCounterList(response.data!!)
             }
         }
 
-        viewModel.decCounter.observe(viewLifecycleOwner) { counters ->
-            when (counters) {
-                is NetworkResult.Success -> {
-                    renderCounterList(counters.data!!)
-                }
-                is NetworkResult.Error -> {
-                    DialogUtil.getDialog(
-                        requireActivity(),
-                        // TODO: Proper title
-                        title = "Couldnt update counter",
-                        message = resources.getString(R.string.connection_error_description),
-                        dialogButton = DialogButton(
-                            text = resources.getString(R.string.retry)
-                        ) { _, _ -> viewModel.retryButton() },
-                        negativeButton = DialogButton(
-                            "Dismiss"
-                        ) { dialogInterface, _ -> dialogInterface.dismiss() }
-                    ).show()
-                }
+        viewModel.decCounter.observe(viewLifecycleOwner) { response ->
+            if (response is NetworkResult.Success) {
+                renderCounterList(response.data!!)
             }
         }
 
