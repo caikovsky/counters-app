@@ -23,7 +23,7 @@ object DatabaseModule {
         context,
         CounterDatabase::class.java,
         DB_NAME
-    ).allowMainThreadQueries().build()
+    ).fallbackToDestructiveMigration().build()
 
     @Singleton
     @Provides
