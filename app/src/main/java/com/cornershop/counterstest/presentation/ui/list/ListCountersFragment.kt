@@ -1,9 +1,7 @@
 package com.cornershop.counterstest.presentation.ui.list
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -25,6 +23,7 @@ class ListCountersFragment : Fragment() {
     private var _binding: FragmentListCountersBinding? = null
     private val binding: FragmentListCountersBinding get() = _binding!!
     private val viewModel: ListCounterViewModel by viewModels()
+    private var mainMenu: Menu? = null
 
     private val counterAdapter: ListCounterAdapter = ListCounterAdapter(
         { counter -> decrementOnClick(counter) },
@@ -33,6 +32,7 @@ class ListCountersFragment : Fragment() {
 
     private fun selectCounterOnLongPress(counter: Counter): Boolean {
         counter.selected = true
+        showHideDelete(true)
         return false
     }
 
@@ -43,6 +43,11 @@ class ListCountersFragment : Fragment() {
     ): View {
         _binding = FragmentListCountersBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -56,11 +61,35 @@ class ListCountersFragment : Fragment() {
         updateItemCount(counterAdapter.itemCount)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        mainMenu = menu
+        inflater.inflate(R.menu.menu, menu)
+        showHideDelete(false)
+        return super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    private fun showHideDelete(show: Boolean) {
+        mainMenu?.findItem(R.id.menu_delete)?.isVisible = show
+    }
+
     private fun configureViewModel() {
         with(viewModel) {
             toggleProgressDialog(true)
             getCounters()
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_delete -> {
+                deleteItem(counterAdapter.selectedList)
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun deleteItem(deleteCounterList: MutableList<Counter>) {
+        viewModel.deleteCounter(deleteCounterList)
     }
 
     private fun decrementOnClick(counter: Counter) {

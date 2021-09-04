@@ -120,5 +120,9 @@ class ListCounterViewModel @Inject constructor(
         return total
     }
 
+    fun deleteCounter(deleteCounterList: MutableList<Counter>) {
+        // TODO: Implement API call
+    }
+
 
 }
