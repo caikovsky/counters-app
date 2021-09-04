@@ -15,14 +15,17 @@
         android:theme="@style/Theme.MainApplication"
         android:usesCleartextTraffic="true">
         <activity
-            android:name="com.cornershop.counterstest.presentation.ui.welcome.WelcomeActivity"
-            android:theme="@style/Theme.CountersWelcome">
+            android:name="com.cornershop.counterstest.presentation.ui.splash.SplashScreenActivity"
+            android:theme="@style/SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.cornershop.counterstest.presentation.ui.welcome.WelcomeActivity"
+            android:theme="@style/Theme.CountersWelcome" />
         <activity
             android:name="com.cornershop.counterstest.presentation.ui.main.MainActivity"
             android:theme="@style/Theme.MainApplication" />
