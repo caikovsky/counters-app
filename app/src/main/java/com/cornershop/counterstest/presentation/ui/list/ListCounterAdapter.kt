@@ -39,7 +39,8 @@ class ListCounterAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CounterViewHolder {
-        return CounterViewHolder.create(parent, decrementOnClick, incrementOnClick, selectOnLongPress, counterListFiltered, selectedList)
+        val itemBinding = ItemCounterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return CounterViewHolder(itemBinding, decrementOnClick, incrementOnClick, selectOnLongPress)
     }
 
     override fun onBindViewHolder(holder: CounterViewHolder, position: Int) {
@@ -79,13 +80,21 @@ class ListCounterAdapter(
         }
     }
 
-    class CounterViewHolder(
+    fun deleteSelectedItem() {
+        if (selectedList.isNotEmpty()) {
+            counterListFiltered.removeAll { item -> item.selected }
+        }
+
+        selectedList.clear()
+
+        notifyDataSetChanged()
+    }
+
+    inner class CounterViewHolder(
         private val itemBinding: ItemCounterBinding,
         private val decrementOnClick: (Counter) -> Unit,
         private val incrementOnClick: (Counter) -> Unit,
         private val selectOnLongPress: (Counter) -> Boolean,
-        private val counterListFiltered: ArrayList<Counter>,
-        private val selectedList: MutableList<Counter>
     ) : RecyclerView.ViewHolder(itemBinding.root) {
 
         fun bind(counter: Counter) {
@@ -99,6 +108,7 @@ class ListCounterAdapter(
                     itemCounterContainer.setBackgroundColor(root.resources.getColor(R.color.orange))
                     selectOnLongPress(counter)
                 }
+
                 if (counter.count == 0) {
                     isActiveButton(false)
                     decrementCounter.drawable.setTint(root.resources.getColor(R.color.light_gray))
@@ -112,7 +122,7 @@ class ListCounterAdapter(
         }
 
         private fun markSelectedItem(counter: Counter) {
-            if(!selectedList.contains(counter)){
+            if (!selectedList.contains(counter)) {
                 selectedList.add(counter)
             }
         }
@@ -121,21 +131,6 @@ class ListCounterAdapter(
             itemBinding.run {
                 decrementCounter.isClickable = isActive
                 decrementCounter.isFocusable = isActive
-            }
-        }
-
-        companion object {
-            fun create(
-                parent: ViewGroup,
-                decrementOnClick: (Counter) -> Unit,
-                incrementOnClick: (Counter) -> Unit,
-                selectOnLongPress: (Counter) -> Boolean,
-                counterListFiltered: ArrayList<Counter>,
-                selectedList: MutableList<Counter>
-            ): CounterViewHolder {
-                val itemBinding =
-                    ItemCounterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                return CounterViewHolder(itemBinding, decrementOnClick, incrementOnClick, selectOnLongPress, counterListFiltered, selectedList)
             }
         }
     }
