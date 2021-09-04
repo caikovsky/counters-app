@@ -8,6 +8,7 @@ import android.widget.Filterable
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.cornershop.counterstest.R
 import com.cornershop.counterstest.databinding.ItemCounterBinding
 import com.cornershop.counterstest.domain.model.Counter
 
@@ -84,10 +85,18 @@ class ListCounterAdapter(
 
         fun bind(counter: Counter) {
             itemBinding.run {
-                decrementCounter.setOnClickListener { decrementOnClick(counter) }
-                incrementCounter.setOnClickListener { incrementOnClick(counter) }
                 counterTitle.text = counter.title
                 counterValue.text = counter.count.toString()
+                incrementCounter.setOnClickListener { incrementOnClick(counter) }
+
+                if (counter.count == 0) {
+                    decrementCounter.drawable.setTint(root.resources.getColor(R.color.light_gray))
+                    counterValue.setTextColor(root.resources.getColor(R.color.light_gray))
+                } else {
+                    decrementCounter.drawable.setTint(root.resources.getColor(R.color.orange))
+                    counterValue.setTextColor(root.resources.getColor(R.color.black))
+                    decrementCounter.setOnClickListener { decrementOnClick(counter) }
+                }
             }
         }
 
