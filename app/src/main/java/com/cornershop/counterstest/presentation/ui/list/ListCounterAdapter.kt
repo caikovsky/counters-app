@@ -88,15 +88,24 @@ class ListCounterAdapter(
                 counterTitle.text = counter.title
                 counterValue.text = counter.count.toString()
                 incrementCounter.setOnClickListener { incrementOnClick(counter) }
+                decrementCounter.setOnClickListener { decrementOnClick(counter) }
 
                 if (counter.count == 0) {
+                    isActiveButton(false)
                     decrementCounter.drawable.setTint(root.resources.getColor(R.color.light_gray))
                     counterValue.setTextColor(root.resources.getColor(R.color.light_gray))
                 } else {
+                    isActiveButton(true)
                     decrementCounter.drawable.setTint(root.resources.getColor(R.color.orange))
                     counterValue.setTextColor(root.resources.getColor(R.color.black))
-                    decrementCounter.setOnClickListener { decrementOnClick(counter) }
                 }
+            }
+        }
+
+        private fun isActiveButton(isActive: Boolean) {
+            itemBinding.run {
+                decrementCounter.isClickable = isActive
+                decrementCounter.isFocusable = isActive
             }
         }
 
