@@ -42,12 +42,13 @@
 
             <Button
                 android:id="@+id/saveButton"
+                style="@style/MaterialButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:background="@android:color/transparent"
+                android:clickable="true"
+                android:focusable="true"
                 android:text="@string/save"
-                android:textColor="?attr/colorPrimary"
                 android:visibility="@{createViewModel.isLoading ? View.GONE : View.VISIBLE}" />
         </androidx.appcompat.widget.Toolbar>
 

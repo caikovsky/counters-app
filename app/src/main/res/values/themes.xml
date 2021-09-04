@@ -14,6 +14,12 @@
         <item name="android:statusBarColor">?attr/colorSecondary</item>
     </style>
 
+    <style name="MaterialButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="background">@android:color/transparent</item>
+        <item name="backgroundTint">@color/button_state</item>
+        <item name="android:textColor">@color/button_state</item>
+    </style>
+
     <style name="Theme.CountersWelcome" parent="Theme.CountersNormal">
         <item name="android:windowBackground">@color/welcome_background</item>
     </style>

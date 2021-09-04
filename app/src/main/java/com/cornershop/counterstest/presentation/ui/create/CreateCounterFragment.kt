@@ -15,6 +15,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -101,6 +102,8 @@ class CreateCounterFragment : Fragment() {
         with(binding) {
             lifecycleOwner = viewLifecycleOwner
             createViewModel = viewModel
+            saveButton.isClickable = contentLayout.textField.editText!!.text?.trim()?.isNotEmpty()!!
+            saveButton.isEnabled = contentLayout.textField.editText!!.text?.trim()?.isNotEmpty()!!
         }
     }
 
@@ -121,8 +124,17 @@ class CreateCounterFragment : Fragment() {
     }
 
     private fun setListeners() {
-        binding.saveButton.setOnClickListener {
-            viewModel.saveCounter(binding.contentLayout.textField.editText?.text.toString())
+        with(binding) {
+            saveButton.setOnClickListener {
+                viewModel.saveCounter(contentLayout.textField.editText?.text.toString())
+            }
+
+            contentLayout.textField.editText?.doAfterTextChanged { editable ->
+                editable?.let {
+                    saveButton.isClickable = it.trim().isNotEmpty()
+                    saveButton.isEnabled = it.trim().isNotEmpty()
+                }
+            }
         }
     }
 
