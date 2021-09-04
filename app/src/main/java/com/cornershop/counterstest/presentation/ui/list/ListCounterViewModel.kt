@@ -23,17 +23,20 @@ class ListCounterViewModel @Inject constructor(
 ) :
     ViewModel() {
 
-    val _isLoading = MutableLiveData<Boolean>()
+    private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> get() = _isLoading
 
-    val _isListEmpty = MutableLiveData<Boolean>()
+    private val _isListEmpty = MutableLiveData<Boolean>()
     val isListEmpty: LiveData<Boolean> get() = _isListEmpty
 
-    val _isError = MutableLiveData<Boolean>()
+    private val _isError = MutableLiveData<Boolean>()
     val isError: LiveData<Boolean> get() = _isError
 
-    val _noResults = MutableLiveData<Boolean>()
+    private val _noResults = MutableLiveData<Boolean>()
     val noResults: LiveData<Boolean> get() = _noResults
+
+    private val _dialogError = MutableLiveData<Counter>()
+    val dialogError: LiveData<Counter> get() = _dialogError
 
     private val _counters = MutableLiveData<NetworkResult<List<Counter>>>()
     val counters: LiveData<NetworkResult<List<Counter>>> get() = _counters
@@ -59,7 +62,12 @@ class ListCounterViewModel @Inject constructor(
 
         viewModelScope.launch {
             incrementCounterUseCase(IncrementCounterRequest(counter.id)).let {
-                _incCounter.value = it
+                if (it.isError) {
+                    counter.count = counter.count.inc()
+                    _dialogError.value = counter
+                } else {
+                    _incCounter.value = it
+                }
             }
         }
     }
@@ -69,10 +77,16 @@ class ListCounterViewModel @Inject constructor(
 
         viewModelScope.launch {
             decrementCounterUseCase(DecrementCounterRequest(counter.id)).let {
-                _decCounter.value = it
+                if (it.isError) {
+                    counter.count = counter.count.dec()
+                    _dialogError.value = counter
+                } else {
+                    _decCounter.value = it
+                }
             }
         }
     }
+
 
     fun toggleProgressDialog(show: Boolean) {
         _isLoading.value = show

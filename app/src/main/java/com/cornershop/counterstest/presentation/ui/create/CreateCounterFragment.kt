@@ -15,13 +15,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.cornershop.counterstest.R
 import com.cornershop.counterstest.data.core.NetworkResult
 import com.cornershop.counterstest.databinding.FragmentCreateCounterBinding
-import com.cornershop.counterstest.util.logD
+import com.cornershop.counterstest.util.DialogButton
+import com.cornershop.counterstest.util.DialogUtil
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -100,6 +102,8 @@ class CreateCounterFragment : Fragment() {
         with(binding) {
             lifecycleOwner = viewLifecycleOwner
             createViewModel = viewModel
+            saveButton.isClickable = contentLayout.textField.editText!!.text?.trim()?.isNotEmpty()!!
+            saveButton.isEnabled = contentLayout.textField.editText!!.text?.trim()?.isNotEmpty()!!
         }
     }
 
@@ -112,7 +116,7 @@ class CreateCounterFragment : Fragment() {
                 }
                 is NetworkResult.Error -> {
                     viewModel.toggleProgressDialog(false)
-                    logD("Error!")
+                    showErrorDialog()
                 }
                 is NetworkResult.Loading -> viewModel.toggleProgressDialog(true)
             }
@@ -120,11 +124,19 @@ class CreateCounterFragment : Fragment() {
     }
 
     private fun setListeners() {
-        binding.saveButton?.setOnClickListener {
-            viewModel.saveCounter(binding.contentLayout?.textField?.editText?.text.toString())
+        with(binding) {
+            saveButton.setOnClickListener {
+                viewModel.saveCounter(contentLayout.textField.editText?.text.toString())
+            }
+
+            contentLayout.textField.editText?.doAfterTextChanged { editable ->
+                editable?.let {
+                    saveButton.isClickable = it.trim().isNotEmpty()
+                    saveButton.isEnabled = it.trim().isNotEmpty()
+                }
+            }
         }
     }
-
 
     // FIXME
     private fun showKeyboard(activity: Activity, view: View, textInputLayout: TextInputLayout) {
@@ -132,6 +144,17 @@ class CreateCounterFragment : Fragment() {
             activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         textInputLayout.requestFocus()
         inputMethodManager.showSoftInput(view, 0)
+    }
+
+    private fun showErrorDialog() {
+        DialogUtil.getDialog(
+            requireActivity(),
+            title = resources.getString(R.string.error_creating_counter_title),
+            message = resources.getString(R.string.connection_error_description),
+            dialogButton = DialogButton(
+                text = resources.getString(R.string.ok)
+            ) { dialog, _ -> dialog.dismiss() },
+        ).show()
     }
 
     override fun onDestroyView() {

@@ -23,7 +23,7 @@ object DialogUtil {
             dialogBuilder.setPositiveButton(dialogButton.text, dialogButton.action)
             dialogBuilder.setNegativeButton(negativeButton.text, negativeButton.action)
         } ?: run {
-            dialogBuilder.setNeutralButton(dialogButton.text, dialogButton.action)
+            dialogBuilder.setNegativeButton(dialogButton.text, dialogButton.action)
         }
 
         return dialogBuilder.apply {
