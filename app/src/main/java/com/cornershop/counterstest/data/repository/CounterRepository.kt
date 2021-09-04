@@ -18,7 +18,7 @@ class CounterRepository @Inject constructor(
     suspend fun createCounter(request: CreateCounterRequest): Response<List<Counter>> =
         counterService.createCounter(request)
 
-    suspend fun deleteCounter(request: DeleteCounterRequest): List<Counter> =
+    suspend fun deleteCounter(request: DeleteCounterRequest): Response<List<Counter>> =
         counterService.deleteCounter(request)
 
     suspend fun incrementCounter(request: IncrementCounterRequest): Response<List<Counter>> =
