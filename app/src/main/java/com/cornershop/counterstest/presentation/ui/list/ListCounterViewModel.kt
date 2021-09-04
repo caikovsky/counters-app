@@ -6,9 +6,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cornershop.counterstest.data.core.NetworkResult
 import com.cornershop.counterstest.data.request.DecrementCounterRequest
+import com.cornershop.counterstest.data.request.DeleteCounterRequest
 import com.cornershop.counterstest.data.request.IncrementCounterRequest
 import com.cornershop.counterstest.domain.model.Counter
 import com.cornershop.counterstest.domain.usecases.dec.DecrementCounterUseCase
+import com.cornershop.counterstest.domain.usecases.delete.DeleteCounterUseCase
 import com.cornershop.counterstest.domain.usecases.get.GetCounterUseCase
 import com.cornershop.counterstest.domain.usecases.inc.IncrementCounterUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,6 +22,7 @@ class ListCounterViewModel @Inject constructor(
     private val getCounterUseCase: GetCounterUseCase,
     private val incrementCounterUseCase: IncrementCounterUseCase,
     private val decrementCounterUseCase: DecrementCounterUseCase,
+    private val deleteCounterUseCase: DeleteCounterUseCase
 ) :
     ViewModel() {
 
@@ -46,6 +49,9 @@ class ListCounterViewModel @Inject constructor(
 
     private val _decCounter = MutableLiveData<NetworkResult<List<Counter>>>()
     val decCounter: LiveData<NetworkResult<List<Counter>>> get() = _decCounter
+
+    private val _deleteCounter = MutableLiveData<NetworkResult<List<Counter>>>()
+    val deleteCounter: LiveData<NetworkResult<List<Counter>>> get() = _deleteCounter
 
     fun getCounters() {
         _counters.value = NetworkResult.Loading()
@@ -87,7 +93,6 @@ class ListCounterViewModel @Inject constructor(
         }
     }
 
-
     fun toggleProgressDialog(show: Boolean) {
         _isLoading.value = show
     }
@@ -120,9 +125,15 @@ class ListCounterViewModel @Inject constructor(
         return total
     }
 
-    fun deleteCounter(deleteCounterList: MutableList<Counter>) {
-        // TODO: Implement API call
+    fun deleteCounter(counter: Counter) {
+        viewModelScope.launch {
+            deleteCounterUseCase(DeleteCounterRequest(counter.id)).let {
+                if (it.isError) {
+                    _dialogError.value = counter
+                } else {
+                    _deleteCounter.value = it
+                }
+            }
+        }
     }
-
-
 }
