@@ -82,14 +82,14 @@ class ListCountersFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_delete -> {
-                deleteItem(counterAdapter.selectedList)
+                deleteItem()
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
-    private fun deleteItem(deleteCounterList: MutableList<Counter>) {
-        viewModel.deleteCounter(deleteCounterList)
+    private fun deleteItem() {
+        viewModel.deleteCounter(counterAdapter.selectedList[0])
     }
 
     private fun decrementOnClick(counter: Counter) {
@@ -191,6 +191,20 @@ class ListCountersFragment : Fragment() {
                 is NetworkResult.Error -> {
                     viewModel.toggleProgressDialog(false)
                     viewModel.renderErrorLayout(true)
+                }
+            }
+        }
+
+        viewModel.deleteCounter.observe(viewLifecycleOwner) { counters ->
+            when (counters) {
+                is NetworkResult.Success -> {
+                    if (counters.data.isNullOrEmpty()) {
+                        viewModel.renderEmptyLayout(true)
+                    } else {
+                        counterAdapter.deleteSelectedItem()
+                        renderCounterList(counters.data)
+                        binding.swipeLayout.isRefreshing = false
+                    }
                 }
             }
         }
