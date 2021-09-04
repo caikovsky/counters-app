@@ -205,6 +205,8 @@ class ListCountersFragment : Fragment() {
                         renderCounterList(counters.data)
                         binding.swipeLayout.isRefreshing = false
                     }
+
+                    showHideDelete(false)
                 }
             }
         }
