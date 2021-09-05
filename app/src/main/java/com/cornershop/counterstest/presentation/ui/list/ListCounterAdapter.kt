@@ -20,6 +20,7 @@ class ListCounterAdapter(
     Filterable, ListAdapter<Counter, ListCounterAdapter.CounterViewHolder>(DIFF_CALLBACK) {
     var counterList: ArrayList<Counter> = ArrayList()
     var counterListFiltered: ArrayList<Counter> = ArrayList()
+    var isSelectableMode: Boolean = false
     var selectedList = mutableListOf<Counter>()
 
     init {
@@ -40,7 +41,7 @@ class ListCounterAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CounterViewHolder {
         val itemBinding = ItemCounterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return CounterViewHolder(itemBinding, decrementOnClick, incrementOnClick, selectOnLongPress)
+        return CounterViewHolder(itemBinding)
     }
 
     override fun onBindViewHolder(holder: CounterViewHolder, position: Int) {
@@ -90,22 +91,31 @@ class ListCounterAdapter(
         notifyDataSetChanged()
     }
 
-    inner class CounterViewHolder(
-        private val itemBinding: ItemCounterBinding,
-        private val decrementOnClick: (Counter) -> Unit,
-        private val incrementOnClick: (Counter) -> Unit,
-        private val selectOnLongPress: (Counter) -> Boolean,
-    ) : RecyclerView.ViewHolder(itemBinding.root) {
+    inner class CounterViewHolder(private val itemBinding: ItemCounterBinding) : RecyclerView.ViewHolder(itemBinding.root) {
 
         fun bind(counter: Counter) {
             itemBinding.run {
                 counterTitle.text = counter.title
                 counterValue.text = counter.count.toString()
-                incrementCounter.setOnClickListener { incrementOnClick(counter) }
-                decrementCounter.setOnClickListener { decrementOnClick(counter) }
+
+                incrementCounter.setOnClickListener { if (!isSelectableMode) incrementOnClick(counter) }
+                decrementCounter.setOnClickListener { if (!isSelectableMode) decrementOnClick(counter) }
+
+                if (isSelectableMode) {
+                    itemCounterContainer.setOnClickListener { addSelectedItemToList(counter) }
+                }
+
                 counterTitle.setOnLongClickListener {
-                    markSelectedItem(counter)
-                    itemCounterContainer.setBackgroundColor(root.resources.getColor(R.color.orange))
+                    isSelectableMode = true
+
+                    if (isSelectedItem(counter)) {
+                        removeSelectedItemFromList(counter)
+                        itemCounterContainer.setBackgroundColor(root.resources.getColor(R.color.main_background))
+                    } else {
+                        addSelectedItemToList(counter)
+                        itemCounterContainer.setBackgroundColor(root.resources.getColor(R.color.orange))
+                    }
+
                     selectOnLongPress(counter)
                 }
 
@@ -121,7 +131,17 @@ class ListCounterAdapter(
             }
         }
 
-        private fun markSelectedItem(counter: Counter) {
+        private fun isSelectedItem(counter: Counter): Boolean = selectedList.contains(counter)
+
+        private fun removeSelectedItemFromList(counter: Counter) {
+            selectedList.remove(counter)
+
+            if (selectedList.isEmpty()) {
+                isSelectableMode = false
+            }
+        }
+
+        private fun addSelectedItemToList(counter: Counter) {
             if (!selectedList.contains(counter)) {
                 selectedList.add(counter)
             }

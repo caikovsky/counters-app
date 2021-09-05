@@ -34,8 +34,7 @@ class ListCountersFragment : Fragment() {
 
     private fun selectCounterOnLongPress(counter: Counter): Boolean {
         counter.selected = true
-        showHideDelete(true)
-        toggleShareVsibility(true)
+        toggleMenuIcons()
         return false
     }
 
@@ -67,17 +66,13 @@ class ListCountersFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         mainMenu = menu
         inflater.inflate(R.menu.menu, menu)
-        showHideDelete(false)
-        toggleShareVsibility(false)
+        toggleMenuIcons()
         return super.onCreateOptionsMenu(menu, inflater)
     }
 
-    private fun showHideDelete(show: Boolean) {
-        mainMenu?.findItem(R.id.menu_delete)?.isVisible = show
-    }
-
-    private fun toggleShareVsibility(show: Boolean) {
-        mainMenu?.findItem(R.id.menu_share)?.isVisible = show
+    private fun toggleMenuIcons() {
+        mainMenu?.findItem(R.id.menu_delete)?.isVisible = counterAdapter.isSelectableMode
+        mainMenu?.findItem(R.id.menu_share)?.isVisible = counterAdapter.isSelectableMode
     }
 
     private fun configureViewModel() {
@@ -226,7 +221,7 @@ class ListCountersFragment : Fragment() {
                         binding.swipeLayout.isRefreshing = false
                     }
 
-                    showHideDelete(false)
+                    toggleMenuIcons()
                 }
             }
         }
