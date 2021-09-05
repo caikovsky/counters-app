@@ -7,8 +7,10 @@
         android:id="@+id/itemCounterContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="16dp"
         android:background="@color/main_background"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingTop="16dp"
         android:paddingBottom="16dp">
 
         <androidx.constraintlayout.widget.Barrier
@@ -25,6 +27,8 @@
             android:layout_marginEnd="27dp"
             android:textColor="?attr/colorOnPrimary"
             android:textSize="17sp"
+            android:clickable="true"
+            android:focusable="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/decrementCounter"
             app:layout_constraintStart_toStartOf="parent"

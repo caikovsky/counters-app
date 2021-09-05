@@ -100,33 +100,24 @@ class ListCounterAdapter(
 
                 incrementCounter.setOnClickListener { if (!isSelectableMode) incrementOnClick(counter) }
                 decrementCounter.setOnClickListener { if (!isSelectableMode) decrementOnClick(counter) }
-
-                if (isSelectableMode) {
-                    itemCounterContainer.setOnClickListener { addSelectedItemToList(counter) }
-                }
+                itemCounterContainer.setOnClickListener { if (isSelectableMode) addSelectedItemToList(counter) }
 
                 counterTitle.setOnLongClickListener {
                     isSelectableMode = true
 
                     if (isSelectedItem(counter)) {
                         removeSelectedItemFromList(counter)
-                        itemCounterContainer.setBackgroundColor(root.resources.getColor(R.color.main_background))
                     } else {
                         addSelectedItemToList(counter)
-                        itemCounterContainer.setBackgroundColor(root.resources.getColor(R.color.orange))
                     }
 
                     selectOnLongPress(counter)
                 }
 
                 if (counter.count == 0) {
-                    isActiveButton(false)
-                    decrementCounter.drawable.setTint(root.resources.getColor(R.color.light_gray))
-                    counterValue.setTextColor(root.resources.getColor(R.color.light_gray))
+                    toggleDecrementButtonDisabledStatus(false)
                 } else {
-                    isActiveButton(true)
-                    decrementCounter.drawable.setTint(root.resources.getColor(R.color.orange))
-                    counterValue.setTextColor(root.resources.getColor(R.color.black))
+                    toggleDecrementButtonDisabledStatus(true)
                 }
             }
         }
@@ -135,6 +126,7 @@ class ListCounterAdapter(
 
         private fun removeSelectedItemFromList(counter: Counter) {
             selectedList.remove(counter)
+            itemBinding.itemCounterContainer.setBackgroundColor(itemBinding.root.resources.getColor(R.color.main_background))
 
             if (selectedList.isEmpty()) {
                 isSelectableMode = false
@@ -144,13 +136,22 @@ class ListCounterAdapter(
         private fun addSelectedItemToList(counter: Counter) {
             if (!selectedList.contains(counter)) {
                 selectedList.add(counter)
+                itemBinding.itemCounterContainer.setBackgroundColor(itemBinding.root.resources.getColor(R.color.orange))
             }
         }
 
-        private fun isActiveButton(isActive: Boolean) {
+        private fun toggleDecrementButtonDisabledStatus(isActive: Boolean) {
             itemBinding.run {
                 decrementCounter.isClickable = isActive
                 decrementCounter.isFocusable = isActive
+
+                if (isActive) {
+                    decrementCounter.drawable.setTint(root.resources.getColor(R.color.orange))
+                    counterValue.setTextColor(root.resources.getColor(R.color.black))
+                } else {
+                    decrementCounter.drawable.setTint(root.resources.getColor(R.color.light_gray))
+                    counterValue.setTextColor(root.resources.getColor(R.color.light_gray))
+                }
             }
         }
     }
