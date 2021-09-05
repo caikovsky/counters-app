@@ -8,6 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="16dp"
+        android:background="@color/main_background"
         android:paddingBottom="16dp">
 
         <androidx.constraintlayout.widget.Barrier

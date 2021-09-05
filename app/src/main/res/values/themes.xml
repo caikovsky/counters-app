@@ -26,6 +26,7 @@
 
     <style name="Theme.MainApplication" parent="Theme.CountersNormal">
         <item name="android:windowBackground">@color/main_background</item>
+        <item name="android:background">@color/main_background</item>
     </style>
 
     <style name="SplashScreen" parent="Theme.AppCompat.NoActionBar">
