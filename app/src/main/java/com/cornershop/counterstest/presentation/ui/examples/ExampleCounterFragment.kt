@@ -44,9 +44,6 @@ class ExampleCounterFragment : Fragment() {
     private fun setBindings() {
         with(binding) {
             lifecycleOwner = viewLifecycleOwner
-
-            toolbar.navigationIcon =
-                ContextCompat.getDrawable(requireActivity(), R.drawable.abc_vector_test).also { it?.setTint(resources.getColor(R.color.orange)) }
             toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         }
     }

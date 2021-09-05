@@ -112,11 +112,6 @@ class CreateCounterFragment : Fragment() {
             createViewModel = viewModel
             saveButton.isClickable = contentLayout.textField.editText!!.text?.trim()?.isNotEmpty()!!
             saveButton.isEnabled = contentLayout.textField.editText!!.text?.trim()?.isNotEmpty()!!
-
-            toolbar.navigationIcon = ContextCompat.getDrawable(requireActivity(), R.drawable.ic_close)
-            toolbar.setNavigationOnClickListener {
-                findNavController().popBackStack()
-            }
         }
     }
 
@@ -138,6 +133,8 @@ class CreateCounterFragment : Fragment() {
 
     private fun setListeners() {
         with(binding) {
+            toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+
             saveButton.setOnClickListener {
                 viewModel.saveCounter(contentLayout.textField.editText?.text.toString())
             }
