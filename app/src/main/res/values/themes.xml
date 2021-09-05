@@ -12,6 +12,8 @@
         <item name="android:textColorTertiary">@color/light_gray</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorSecondary</item>
+        <item name="android:colorAccent">?attr/colorPrimary</item>
+        <item name="colorControlActivated">?attr/colorPrimary</item>
     </style>
 
     <style name="MaterialButtonStyle" parent="Widget.MaterialComponents.Button">
@@ -59,7 +61,7 @@
         <item name="colorControlActivated">?attr/colorPrimary</item>
     </style>
 
-    <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView">
+    <style name="SearchViewStyle" parent="Widget.AppCompat.Light.SearchView">
         <item name="searchIcon">@drawable/ic_search</item>
         <item name="queryBackground">@android:color/transparent</item>
         <item name="android:queryBackground">@android:color/transparent</item>
@@ -71,6 +73,7 @@
         <item name="android:queryHint">@string/search_counters</item>
         <item name="closeIcon">@drawable/ic_close</item>
         <item name="android:closeIcon">@drawable/ic_close</item>
+        <item name="colorControlActivated">?attr/colorPrimary</item>
         <item name="android:textColor">?attr/colorOnPrimary</item>
         <item name="android:textColorSecondary">?attr/colorOnSecondary</item>
     </style>
