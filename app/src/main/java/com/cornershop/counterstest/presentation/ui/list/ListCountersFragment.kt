@@ -86,7 +86,10 @@ class ListCountersFragment : Fragment() {
     }
 
     private fun deleteItem() {
-        viewModel.deleteCounter(counterAdapter.selectedList[0])
+        // FIXME: Remove when proper show the layout states
+        if (counterAdapter.selectedList.isNotEmpty()) {
+            viewModel.deleteCounter(counterAdapter.selectedList[0])
+        }
     }
 
     private fun decrementOnClick(counter: Counter) {
