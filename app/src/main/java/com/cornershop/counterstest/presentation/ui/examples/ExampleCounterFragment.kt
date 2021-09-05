@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -11,7 +12,8 @@ import com.cornershop.counterstest.R
 import com.cornershop.counterstest.data.core.NetworkResult
 import com.cornershop.counterstest.databinding.FragmentExampleCounterBinding
 import com.cornershop.counterstest.presentation.ui.create.CreateCounterViewModel
-import com.cornershop.counterstest.util.logE
+import com.cornershop.counterstest.util.DialogButton
+import com.cornershop.counterstest.util.DialogUtil
 import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -35,7 +37,18 @@ class ExampleCounterFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         populateChips()
         setObservers()
+        setBindings()
         setHasOptionsMenu(false)
+    }
+
+    private fun setBindings() {
+        with(binding) {
+            lifecycleOwner = viewLifecycleOwner
+
+            toolbar.navigationIcon =
+                ContextCompat.getDrawable(requireActivity(), R.drawable.abc_vector_test).also { it?.setTint(resources.getColor(R.color.orange)) }
+            toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        }
     }
 
     private fun setObservers() {
@@ -45,11 +58,20 @@ class ExampleCounterFragment : Fragment() {
                     findNavController().navigate(R.id.action_exampleCounterFragment_to_listCountersFragment2)
                 }
 
-                is NetworkResult.Error -> {
-                    logE("Error!")
-                }
+                is NetworkResult.Error -> showErrorDialog()
             }
         }
+    }
+
+    private fun showErrorDialog() {
+        DialogUtil.getDialog(
+            requireActivity(),
+            title = resources.getString(R.string.error_creating_counter_title),
+            message = resources.getString(R.string.connection_error_description),
+            dialogButton = DialogButton(
+                text = resources.getString(R.string.ok)
+            ) { dialog, _ -> dialog.dismiss() },
+        ).show()
     }
 
     private fun populateChips() {
