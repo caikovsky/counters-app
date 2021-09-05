@@ -115,10 +115,10 @@ class ListCounterViewModel @Inject constructor(
         getCounters()
     }
 
-    fun calculateCountTimes(adapter: ListCounterAdapter): Int {
+    fun calculateCountTimes(list: List<Counter>): Int {
         var total = 0
 
-        for (counter in adapter.counterListFiltered) {
+        for (counter in list) {
             total += counter.count
         }
 

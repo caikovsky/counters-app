@@ -166,7 +166,7 @@ class ListCountersFragment : Fragment() {
         binding.listContent.listBodyContent.recyclerViewComponent.itemTimesTotal.text =
             String.format(
                 resources.getString(R.string.n_times),
-                viewModel.calculateCountTimes(counterAdapter)
+                viewModel.calculateCountTimes(counterAdapter.counterListFiltered)
             )
     }
 
