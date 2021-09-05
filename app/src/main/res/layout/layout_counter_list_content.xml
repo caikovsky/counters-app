@@ -31,21 +31,6 @@
             android:orientation="vertical"
             app:layout_constraintGuide_end="24dp" />
 
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/searchCounter"
-            style="SearchViewStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:includeFontPadding="false"
-            android:textColor="?attr/colorOnPrimary"
-            android:textSize="16sp"
-            app:iconifiedByDefault="false"
-            app:layout_constraintEnd_toEndOf="@id/right_guideline"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@id/left_guideline"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <ProgressBar
             android:id="@+id/progressDialog"
             style="@style/Theme.ProgressDialog"
@@ -62,25 +47,23 @@
             layout="@layout/layout_counter_list_body"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="20dp"
             android:visibility="@{viewModel.isListEmpty || viewModel.isLoading || viewModel.isError ? View.GONE : View.VISIBLE}"
-            bind:viewModel="@{viewModel}"
             app:layout_constraintBottom_toTopOf="@+id/createCounterButton"
             app:layout_constraintEnd_toStartOf="@+id/right_guideline"
             app:layout_constraintStart_toStartOf="@id/left_guideline"
-            app:layout_constraintTop_toBottomOf="@+id/searchCounter" />
+            app:layout_constraintTop_toTopOf="parent"
+            bind:viewModel="@{viewModel}" />
 
         <include
             android:id="@+id/listErrorContent"
             layout="@layout/layout_load_error"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="20dp"
-            bind:viewModel="@{viewModel}"
             app:layout_constraintBottom_toTopOf="@+id/createCounterButton"
             app:layout_constraintEnd_toStartOf="@+id/right_guideline"
             app:layout_constraintStart_toStartOf="@id/left_guideline"
-            app:layout_constraintTop_toBottomOf="@+id/searchCounter" />
+            app:layout_constraintTop_toTopOf="parent"
+            bind:viewModel="@{viewModel}" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/createCounterButton"
