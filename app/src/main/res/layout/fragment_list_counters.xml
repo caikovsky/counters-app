@@ -39,6 +39,7 @@
                 android:includeFontPadding="false"
                 android:textColor="?attr/colorOnPrimary"
                 android:textSize="16sp"
+                app:defaultQueryHint="@string/search_counters"
                 app:iconifiedByDefault="false" />
         </com.google.android.material.appbar.MaterialToolbar>
 
