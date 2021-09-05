@@ -55,9 +55,9 @@
     </style>
 
     <style name="TextInputLayout" parent="Base.Widget.MaterialComponents.TextInputLayout">
-        <item name="android:textColorHint">?attr/colorPrimary</item>
+        <item name="android:textColorHint">?attr/colorOnSecondary</item>
         <item name="colorAccent">?attr/colorPrimary</item>
-        <item name="colorControlNormal">?attr/colorPrimary</item>
+        <item name="colorControlNormal">?attr/colorOnSecondary</item>
         <item name="colorControlActivated">?attr/colorPrimary</item>
     </style>
 
