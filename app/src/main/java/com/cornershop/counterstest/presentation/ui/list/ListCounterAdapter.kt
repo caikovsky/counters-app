@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.cornershop.counterstest.R
 import com.cornershop.counterstest.databinding.ItemCounterBinding
 import com.cornershop.counterstest.domain.model.Counter
+import java.util.*
+import kotlin.collections.ArrayList
 
 class ListCounterAdapter(
     private val decrementOnClick: (Counter) -> Unit,
@@ -56,15 +58,17 @@ class ListCounterAdapter(
         notifyDataSetChanged()
     }
 
+    @ExperimentalStdlibApi
     override fun getFilter(): Filter {
         return object : Filter() {
             override fun performFiltering(constraint: CharSequence?): FilterResults {
                 val charString = constraint?.toString() ?: ""
                 counterListFiltered = if (charString.isEmpty()) counterList else {
                     val filteredList = ArrayList<Counter>()
+
                     counterList
                         .filter {
-                            it.title.contains(constraint!!)
+                            it.title.lowercase(Locale.ROOT).contains(constraint.toString().lowercase(Locale.ROOT))
                         }
                         .forEach { filteredList.add(it) }
                     filteredList
