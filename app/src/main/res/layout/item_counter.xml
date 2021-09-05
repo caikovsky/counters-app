@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/itemCounterContainer"
@@ -9,72 +8,28 @@
         android:layout_height="wrap_content"
         android:background="@color/main_background"
         android:clickable="true"
-        android:focusable="true"
-        android:paddingTop="@dimen/c16dp"
-        android:paddingBottom="@dimen/c16dp">
+        android:focusable="true">
 
-        <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/barrier"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:barrierDirection="end"
-            app:constraint_referenced_ids="counterTitle,decrementCounter" />
-
-        <TextView
-            android:id="@+id/counterTitle"
+        <include
+            android:id="@+id/normalLayout"
+            layout="@layout/layout_item_counter_normal"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/c27dp"
-            android:textColor="?attr/colorOnPrimary"
-            android:textSize="17sp"
-            android:clickable="true"
-            android:focusable="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/decrementCounter"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Counter name" />
-
-        <ImageView
-            android:id="@+id/decrementCounter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/c19dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:padding="@dimen/c5dp"
-            android:src="@drawable/ic_minus"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/counterValue"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="?attr/colorPrimary"
-            tools:ignore="ContentDescription" />
-
-        <TextView
-            android:id="@+id/counterValue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/c19dp"
-            android:textColor="?attr/colorOnPrimary"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/incrementCounter"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="5" />
-
-        <ImageView
-            android:id="@+id/incrementCounter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:focusable="true"
-            android:padding="@dimen/c5dp"
-            android:src="@drawable/ic_plus"
+            android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="?attr/colorPrimary"
-            tools:ignore="ContentDescription" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/selectedLayout"
+            layout="@layout/layout_item_counter_selected"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

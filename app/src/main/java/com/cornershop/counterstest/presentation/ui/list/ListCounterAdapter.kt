@@ -2,6 +2,7 @@ package com.cornershop.counterstest.presentation.ui.list
 
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
@@ -99,14 +100,34 @@ class ListCounterAdapter(
 
         fun bind(counter: Counter) {
             itemBinding.run {
-                counterTitle.text = counter.title
-                counterValue.text = counter.count.toString()
+                normalLayout.counterTitle.text = counter.title
+                selectedLayout.counterTitle.text = counter.title
+                normalLayout.counterValue.text = counter.count.toString()
 
-                incrementCounter.setOnClickListener { if (!isSelectableMode) incrementOnClick(counter) }
-                decrementCounter.setOnClickListener { if (!isSelectableMode) decrementOnClick(counter) }
-                itemCounterContainer.setOnClickListener { if (isSelectableMode) addSelectedItemToList(counter) }
+                normalLayout.incrementCounter.setOnClickListener { if (!isSelectableMode) incrementOnClick(counter) }
+                normalLayout.decrementCounter.setOnClickListener { if (!isSelectableMode) decrementOnClick(counter) }
 
-                counterTitle.setOnLongClickListener {
+                normalLayout.root.setOnClickListener {
+                    if (isSelectableMode) {
+                        if (isSelectedItem(counter)) {
+                            removeSelectedItemFromList(counter)
+                        } else {
+                            addSelectedItemToList(counter)
+                        }
+                    }
+                }
+
+                selectedLayout.root.setOnClickListener {
+                    if (isSelectableMode) {
+                        if (isSelectedItem(counter)) {
+                            removeSelectedItemFromList(counter)
+                        } else {
+                            addSelectedItemToList(counter)
+                        }
+                    }
+                }
+
+                normalLayout.counterTitle.setOnLongClickListener {
                     isSelectableMode = true
 
                     if (isSelectedItem(counter)) {
@@ -130,7 +151,7 @@ class ListCounterAdapter(
 
         private fun removeSelectedItemFromList(counter: Counter) {
             selectedList.remove(counter)
-            itemBinding.itemCounterContainer.setBackgroundColor(itemBinding.root.resources.getColor(R.color.main_background))
+            setItemNormalLayout()
 
             if (selectedList.isEmpty()) {
                 isSelectableMode = false
@@ -140,23 +161,34 @@ class ListCounterAdapter(
         private fun addSelectedItemToList(counter: Counter) {
             if (!selectedList.contains(counter)) {
                 selectedList.add(counter)
-                itemBinding.itemCounterContainer.setBackgroundColor(itemBinding.root.resources.getColor(R.color.orange))
             }
+
+            setItemSelectedLayout()
         }
 
         private fun toggleDecrementButtonDisabledStatus(isActive: Boolean) {
             itemBinding.run {
-                decrementCounter.isClickable = isActive
-                decrementCounter.isFocusable = isActive
+                normalLayout.decrementCounter.isClickable = isActive
+                normalLayout.decrementCounter.isFocusable = isActive
 
                 if (isActive) {
-                    decrementCounter.drawable.setTint(root.resources.getColor(R.color.orange))
-                    counterValue.setTextColor(root.resources.getColor(R.color.black))
+                    normalLayout.decrementCounter.drawable.setTint(root.resources.getColor(R.color.orange))
+                    normalLayout.counterValue.setTextColor(root.resources.getColor(R.color.black))
                 } else {
-                    decrementCounter.drawable.setTint(root.resources.getColor(R.color.light_gray))
-                    counterValue.setTextColor(root.resources.getColor(R.color.light_gray))
+                    normalLayout.decrementCounter.drawable.setTint(root.resources.getColor(R.color.light_gray))
+                    normalLayout.counterValue.setTextColor(root.resources.getColor(R.color.light_gray))
                 }
             }
+        }
+
+        fun setItemSelectedLayout() {
+            itemBinding.normalLayout.root.visibility = View.GONE
+            itemBinding.selectedLayout.root.visibility = View.VISIBLE
+        }
+
+        fun setItemNormalLayout() {
+            itemBinding.normalLayout.root.visibility = View.VISIBLE
+            itemBinding.selectedLayout.root.visibility = View.GONE
         }
     }
 
