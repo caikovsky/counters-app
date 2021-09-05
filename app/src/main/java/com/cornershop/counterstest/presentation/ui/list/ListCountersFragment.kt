@@ -2,7 +2,9 @@ package com.cornershop.counterstest.presentation.ui.list
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -25,7 +27,6 @@ class ListCountersFragment : Fragment() {
     private var _binding: FragmentListCountersBinding? = null
     private val binding: FragmentListCountersBinding get() = _binding!!
     private val viewModel: ListCounterViewModel by viewModels()
-    private var mainMenu: Menu? = null
 
     private val counterAdapter: ListCounterAdapter = ListCounterAdapter(
         { counter -> decrementOnClick(counter) },
@@ -55,6 +56,7 @@ class ListCountersFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setRecyclerView()
+        setUpBindings()
         setListeners()
         configureSwipeLayout()
         observeStates()
@@ -63,16 +65,9 @@ class ListCountersFragment : Fragment() {
         updateItemCount(counterAdapter.itemCount)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        mainMenu = menu
-        inflater.inflate(R.menu.menu, menu)
-        toggleMenuIcons()
-        return super.onCreateOptionsMenu(menu, inflater)
-    }
-
     private fun toggleMenuIcons() {
-        mainMenu?.findItem(R.id.menu_delete)?.isVisible = counterAdapter.isSelectableMode
-        mainMenu?.findItem(R.id.menu_share)?.isVisible = counterAdapter.isSelectableMode
+        binding.toolbar.menu.findItem(R.id.menu_share)?.isVisible = counterAdapter.isSelectableMode
+        binding.toolbar.menu.findItem(R.id.menu_delete)?.isVisible = counterAdapter.isSelectableMode
     }
 
     private fun configureViewModel() {
@@ -80,19 +75,6 @@ class ListCountersFragment : Fragment() {
             toggleProgressDialog(true)
             getCounters()
         }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menu_delete -> {
-                deleteItem()
-            }
-
-            R.id.menu_share -> {
-                shareCounter()
-            }
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun shareCounter() {
@@ -119,21 +101,36 @@ class ListCountersFragment : Fragment() {
         binding.swipeLayout.setColorSchemeResources(R.color.orange)
     }
 
+    private fun setUpBindings() {
+        with(binding) {
+            toolbar.inflateMenu(R.menu.menu)
+            lifecycleOwner = viewLifecycleOwner
+            listViewModel = viewModel
+            toggleMenuIcons()
+        }
+    }
+
     private fun setListeners() {
         with(binding) {
+            binding.toolbar.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.menu_delete -> deleteItem()
+                    R.id.menu_share -> shareCounter()
+
+                }
+                false
+            }
+
             listContent.createCounterButton.setOnClickListener {
                 findNavController().navigate(R.id.action_listCountersFragment_to_createCounterFragment)
             }
-
-            lifecycleOwner = viewLifecycleOwner
-            listViewModel = viewModel
 
             swipeLayout.setOnRefreshListener {
                 viewModel.getCounters()
                 binding.swipeLayout.isRefreshing = false
             }
 
-            listContent.searchCounter.setOnQueryTextListener(object :
+            searchCounter.setOnQueryTextListener(object :
                 SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     return false
@@ -255,7 +252,7 @@ class ListCountersFragment : Fragment() {
 
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoadingLayoutBeingShown ->
             binding.swipeLayout.isEnabled = !isLoadingLayoutBeingShown
-            binding.listContent.searchCounter.isEnabled = !isLoadingLayoutBeingShown
+            binding.searchCounter.isEnabled = !isLoadingLayoutBeingShown
             // TODO: Disable Search View
         }
 
