@@ -1,5 +1,6 @@
 package com.cornershop.counterstest.presentation.ui.list
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.SearchView
@@ -17,6 +18,7 @@ import com.cornershop.counterstest.util.DialogButton
 import com.cornershop.counterstest.util.DialogUtil
 import dagger.hilt.android.AndroidEntryPoint
 
+
 @AndroidEntryPoint
 class ListCountersFragment : Fragment() {
 
@@ -33,6 +35,7 @@ class ListCountersFragment : Fragment() {
     private fun selectCounterOnLongPress(counter: Counter): Boolean {
         counter.selected = true
         showHideDelete(true)
+        toggleShareVsibility(true)
         return false
     }
 
@@ -65,11 +68,16 @@ class ListCountersFragment : Fragment() {
         mainMenu = menu
         inflater.inflate(R.menu.menu, menu)
         showHideDelete(false)
+        toggleShareVsibility(false)
         return super.onCreateOptionsMenu(menu, inflater)
     }
 
     private fun showHideDelete(show: Boolean) {
         mainMenu?.findItem(R.id.menu_delete)?.isVisible = show
+    }
+
+    private fun toggleShareVsibility(show: Boolean) {
+        mainMenu?.findItem(R.id.menu_share)?.isVisible = show
     }
 
     private fun configureViewModel() {
@@ -84,8 +92,20 @@ class ListCountersFragment : Fragment() {
             R.id.menu_delete -> {
                 deleteItem()
             }
+
+            R.id.menu_share -> {
+                shareCounter()
+            }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun shareCounter() {
+        val sharingIntent = Intent(Intent.ACTION_SEND)
+        sharingIntent.type = "text/plain";
+        val content = viewModel.formatShareList(counterAdapter.selectedList).joinToString("\n")
+        sharingIntent.putExtra(Intent.EXTRA_TEXT, content)
+        startActivity(Intent.createChooser(sharingIntent, "Share using"))
     }
 
     private fun deleteItem() {
