@@ -40,7 +40,8 @@
                 android:textColor="?attr/colorOnPrimary"
                 android:textSize="16sp"
                 app:defaultQueryHint="@string/search_counters"
-                app:iconifiedByDefault="false" />
+                app:iconifiedByDefault="false"
+                app:queryBackground="@android:color/transparent" />
         </com.google.android.material.appbar.MaterialToolbar>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
