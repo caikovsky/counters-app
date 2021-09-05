@@ -6,4 +6,16 @@
     <dimen name="margin_normal_1">16dp</dimen>
     <dimen name="margin_normal_2">24dp</dimen>
     <dimen name="margin_normal_3">32dp</dimen>
+    <dimen name="c25dp">25dp</dimen>
+    <dimen name="c40dp">40dp</dimen>
+    <dimen name="c32dp">32dp</dimen>
+    <dimen name="c16dp">16dp</dimen>
+    <dimen name="c48dp">48dp</dimen>
+    <dimen name="c27dp">27dp</dimen>
+    <dimen name="c19dp">19dp</dimen>
+    <dimen name="c5dp">5dp</dimen>
+    <dimen name="c20dp">20dp</dimen>
+    <dimen name="c10dp">10dp</dimen>
+    <dimen name="c7dp">7dp</dimen>
+    <dimen name="c26dp">26dp</dimen>
 </resources>

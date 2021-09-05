@@ -49,7 +49,7 @@
             android:id="@+id/textDisclaimer"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="@dimen/c25dp"
             android:textColor="?attr/colorOnSecondary"
             android:text="@string/create_counter_disclaimer"
             app:layout_constraintEnd_toEndOf="@+id/right_guideline"

@@ -56,7 +56,7 @@
             style="@style/ExampleDescriptionText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="@dimen/c40dp"
             android:text="@string/examples_description"
             app:layout_constraintEnd_toStartOf="@+id/right_guideline"
             app:layout_constraintStart_toStartOf="@+id/leftGuidelineHeaderText"
@@ -67,7 +67,7 @@
             style="@style/ExampleHeaderText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="@dimen/c32dp"
             android:text="@string/example_header_drink"
             app:layout_constraintEnd_toStartOf="@+id/right_guideline"
             app:layout_constraintStart_toStartOf="@+id/leftGuidelineHeaderText"
@@ -86,7 +86,7 @@
                 android:id="@+id/drinkExamplesChipGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                app:chipSpacing="16dp"
+                app:chipSpacing="@dimen/c16dp"
                 app:singleLine="true"
                 app:singleSelection="true" />
         </HorizontalScrollView>
@@ -96,7 +96,7 @@
             style="@style/ExampleHeaderText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="48dp"
+            android:layout_marginTop="@dimen/c48dp"
             android:text="@string/example_header_food"
             app:layout_constraintEnd_toStartOf="@+id/right_guideline"
             app:layout_constraintStart_toStartOf="@+id/leftGuidelineChip"
@@ -115,7 +115,7 @@
                 android:id="@+id/foodExamplesChipGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:chipSpacing="16dp"
+                app:chipSpacing="@dimen/c16dp"
                 app:singleLine="true"
                 app:singleSelection="true" />
         </HorizontalScrollView>
@@ -125,7 +125,7 @@
             style="@style/ExampleHeaderText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="48dp"
+            android:layout_marginTop="@dimen/c48dp"
             android:text="@string/example_header_misc"
             app:layout_constraintEnd_toStartOf="@+id/right_guideline"
             app:layout_constraintStart_toStartOf="@+id/leftGuidelineHeaderText"
@@ -144,7 +144,7 @@
                 android:id="@+id/miscExamplesChipGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:chipSpacing="16dp"
+                app:chipSpacing="@dimen/c16dp"
                 app:singleLine="true"
                 app:singleSelection="true" />
         </HorizontalScrollView>

@@ -22,7 +22,7 @@
             android:id="@+id/itemTimesTotal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="7dp"
+            android:layout_marginStart="@dimen/c7dp"
             android:textColor="?attr/colorOnSecondary"
             android:textSize="17sp"
             app:layout_constraintBottom_toTopOf="@+id/counterRecycler"
