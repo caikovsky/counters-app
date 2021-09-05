@@ -18,4 +18,5 @@
     <dimen name="c10dp">10dp</dimen>
     <dimen name="c7dp">7dp</dimen>
     <dimen name="c26dp">26dp</dimen>
+    <dimen name="c14dp">14dp</dimen>
 </resources>
