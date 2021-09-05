@@ -35,6 +35,7 @@ class ExampleCounterFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         populateChips()
         setObservers()
+        setHasOptionsMenu(false)
     }
 
     private fun setObservers() {

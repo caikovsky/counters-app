@@ -48,6 +48,7 @@ class CreateCounterFragment : Fragment() {
         observeStates()
         setBindings()
         configureDisclaimerText()
+        setHasOptionsMenu(false)
     }
 
     private fun configureDisclaimerText() {
