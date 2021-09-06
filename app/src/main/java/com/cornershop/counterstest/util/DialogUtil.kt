@@ -12,7 +12,7 @@ object DialogUtil {
     fun getDialog(
         context: Context,
         title: String,
-        message: String,
+        message: String? = null,
         isCancelable: Boolean = false,
         dialogButton: DialogButton,
         negativeButton: DialogButton? = null

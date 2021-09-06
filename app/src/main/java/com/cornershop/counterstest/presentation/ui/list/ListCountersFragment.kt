@@ -98,9 +98,20 @@ class ListCountersFragment : Fragment() {
 
     private fun deleteItem() {
         // FIXME: Remove when proper show the layout states
-        if (counterAdapter.selectedList.isNotEmpty()) {
-            viewModel.deleteCounter(counterAdapter.selectedList[0])
-        }
+        DialogUtil.getDialog(
+            requireActivity(),
+            title = String.format(resources.getString(R.string.delete_x_question), counterAdapter.selectedList[0].title),
+            dialogButton = DialogButton(
+                text = resources.getString(R.string.delete)
+            ) { _, _ ->
+                if (counterAdapter.selectedList.isNotEmpty()) {
+                    viewModel.deleteCounter(counterAdapter.selectedList[0])
+                }
+            },
+            negativeButton = DialogButton(
+                resources.getString(R.string.cancel)
+            ) { dialogInterface, _ -> dialogInterface.dismiss() }
+        ).show()
     }
 
     private fun decrementOnClick(counter: Counter) {
@@ -130,8 +141,8 @@ class ListCountersFragment : Fragment() {
                 when (item.itemId) {
                     R.id.menu_delete -> deleteItem()
                     R.id.menu_share -> shareCounter()
-
                 }
+
                 false
             }
 
