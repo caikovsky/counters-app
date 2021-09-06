@@ -125,16 +125,6 @@ class ListCounterViewModel @Inject constructor(
         return total
     }
 
-    fun formatShareList(selectedCounterList: MutableList<Counter>): ArrayList<String> {
-        val itemList = arrayListOf<String>()
-
-        for (item in selectedCounterList) {
-            itemList.add("${item.count} × ${item.title}")
-        }
-
-        return itemList
-    }
-
     fun deleteCounter(counter: Counter) {
         viewModelScope.launch {
             deleteCounterUseCase(DeleteCounterRequest(counter.id)).let {
