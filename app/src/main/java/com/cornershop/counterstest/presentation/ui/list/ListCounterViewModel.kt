@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.cornershop.counterstest.R
 import com.cornershop.counterstest.data.core.NetworkResult
 import com.cornershop.counterstest.data.request.DecrementCounterRequest
 import com.cornershop.counterstest.data.request.DeleteCounterRequest
@@ -123,16 +124,6 @@ class ListCounterViewModel @Inject constructor(
         }
 
         return total
-    }
-
-    fun formatShareList(selectedCounterList: MutableList<Counter>): ArrayList<String> {
-        val itemList = arrayListOf<String>()
-
-        for (item in selectedCounterList) {
-            itemList.add("${item.count} × ${item.title}")
-        }
-
-        return itemList
     }
 
     fun deleteCounter(counter: Counter) {

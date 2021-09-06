@@ -103,9 +103,20 @@ class ListCountersFragment : Fragment() {
     private fun shareCounter() {
         val sharingIntent = Intent(Intent.ACTION_SEND)
         sharingIntent.type = "text/plain";
-        val content = viewModel.formatShareList(counterAdapter.selectedList).joinToString("\n")
+
+        val content = formatShareList(counterAdapter.selectedList).joinToString("\n")
         sharingIntent.putExtra(Intent.EXTRA_TEXT, content)
         startActivity(Intent.createChooser(sharingIntent, "Share using"))
+    }
+
+    private fun formatShareList(selectedCounterList: MutableList<Counter>): ArrayList<String> {
+        val itemList = arrayListOf<String>()
+
+        for (item in selectedCounterList) {
+            itemList.add(String.format(resources.getString(R.string.n_per_counter_name), item.count, item.title))
+        }
+
+        return itemList
     }
 
     private fun deleteItem() {
