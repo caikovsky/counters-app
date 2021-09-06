@@ -105,13 +105,11 @@ class ListCountersFragment : Fragment() {
     }*/
 
     private fun decrementOnClick(counter: Counter) {
-        logD("onDecrementItemClick: $counter")
-        // viewModel.decrementCounter(counter)
+        if (actionMode == null) viewModel.decrementCounter(counter)
     }
 
     private fun incrementOnClick(counter: Counter) {
-        logD("incrementOnClick: $counter")
-//        viewModel.incrementCounter(counter)
+        if (actionMode == null) viewModel.incrementCounter(counter)
     }
 
     private fun selectCounterOnLongPress(position: Int): Boolean {
@@ -132,7 +130,6 @@ class ListCountersFragment : Fragment() {
                 }
 
                 override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
-                    // TODO: Implement share
                     return when (item?.itemId) {
                         R.id.action_delete -> {
                             // TODO: Implement delete feature
@@ -279,7 +276,6 @@ class ListCountersFragment : Fragment() {
                     if (counters.data.isNullOrEmpty()) {
                         viewModel.renderEmptyLayout(true)
                     } else {
-//                        counterAdapter.deleteSelectedItem()
                         renderCounterList(counters.data)
                         binding.swipeLayout.isRefreshing = false
                     }
