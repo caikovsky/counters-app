@@ -62,6 +62,7 @@ class ListCountersFragment : Fragment() {
     private fun configureViewModel() {
         with(viewModel) {
             toggleProgressDialog(true)
+            renderCreateButton(true)
             getCounters()
         }
     }
@@ -137,6 +138,7 @@ class ListCountersFragment : Fragment() {
             actionMode = activity?.startActionMode(object : ActionMode.Callback {
                 override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
                     mode?.menuInflater?.inflate(R.menu.menu_delete, menu)
+                    viewModel.renderCreateButton(false)
                     return true
                 }
 
@@ -161,6 +163,7 @@ class ListCountersFragment : Fragment() {
                 }
 
                 override fun onDestroyActionMode(mode: ActionMode?) {
+                    viewModel.renderCreateButton(true)
                     counterAdapter.selectedItems.clear()
                     val counters = counterAdapter.counterListFiltered
 
@@ -181,6 +184,7 @@ class ListCountersFragment : Fragment() {
 
         if (size == 0) {
             actionMode?.finish()
+            viewModel.renderCreateButton(true)
         } else {
             actionMode?.title = String.format(resources.getString(R.string.n_selected), size)
             actionMode?.invalidate()

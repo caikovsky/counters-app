@@ -26,6 +26,9 @@ class ListCounterViewModel @Inject constructor(
 ) :
     ViewModel() {
 
+    private val _isCreateButton = MutableLiveData<Boolean>()
+    val isCreateButton: LiveData<Boolean> get() = _isCreateButton
+
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> get() = _isLoading
 
@@ -147,6 +150,10 @@ class ListCounterViewModel @Inject constructor(
 
             _deleteCounter.value = content
         }
+    }
+
+    fun renderCreateButton(show: Boolean) {
+        _isCreateButton.value = show
     }
 }
 

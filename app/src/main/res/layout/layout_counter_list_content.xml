@@ -75,6 +75,7 @@
             android:background="?attr/colorPrimary"
             android:text="@string/add_counters"
             android:textColor="?attr/colorSecondary"
+            android:visibility="@{viewModel.isCreateButton ? View.VISIBLE : View.GONE}"
             app:icon="@drawable/ic_plus"
             app:iconGravity="textStart"
             app:iconPadding="@dimen/c10dp"
