@@ -162,16 +162,16 @@ class ListCountersFragment : Fragment() {
                     actionMode = null
                 }
             })
+        }
 
-            counterAdapter.toggleSelection(position)
-            val size = counterAdapter.selectedItems.size
+        counterAdapter.toggleSelection(position)
+        val size = counterAdapter.selectedItems.size
 
-            if (size == 0) {
-                actionMode?.finish()
-            } else {
-                actionMode?.title = String.format(resources.getString(R.string.n_selected), size)
-                actionMode?.invalidate()
-            }
+        if (size == 0) {
+            actionMode?.finish()
+        } else {
+            actionMode?.title = String.format(resources.getString(R.string.n_selected), size)
+            actionMode?.invalidate()
         }
     }
 
@@ -206,7 +206,6 @@ class ListCountersFragment : Fragment() {
                 override fun onQueryTextChange(newText: String?): Boolean {
                     counterAdapter.filter.filter(newText)
 
-                    // TODO: Improve logic
                     if (counterAdapter.itemCount == 0) {
                         viewModel.renderNoResultsLayout(true)
                     } else {

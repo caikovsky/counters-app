@@ -109,7 +109,6 @@ class ListCounterAdapter(
         fun bind(counter: Counter) {
             itemBinding.run {
                 normalLayout.counterTitle.text = counter.title
-                selectedLayout.counterTitle.text = counter.title
                 normalLayout.counterValue.text = counter.count.toString()
 
                 normalLayout.incrementCounter.setOnClickListener { incrementOnClick(counter) }
@@ -117,11 +116,17 @@ class ListCounterAdapter(
                 normalLayout.counterTitle.setOnLongClickListener { selectOnLongPress(position) }
 
                 if (counter.selected) {
-                    selectedLayout.itemCounterContainer.visibility = View.VISIBLE
-                    normalLayout.itemCounterContainer.visibility = View.GONE
+                    normalLayout.itemCounterContainer.setBackgroundResource(R.drawable.item_counter_selected)
+                    normalLayout.counterCheckbox.visibility = View.VISIBLE
+                    normalLayout.incrementCounter.visibility = View.GONE
+                    normalLayout.decrementCounter.visibility = View.GONE
+                    normalLayout.counterValue.visibility = View.GONE
                 } else {
-                    selectedLayout.itemCounterContainer.visibility = View.GONE
-                    normalLayout.itemCounterContainer.visibility = View.VISIBLE
+                    normalLayout.itemCounterContainer.setBackgroundColor(root.resources.getColor(R.color.main_background))
+                    normalLayout.counterCheckbox.visibility = View.GONE
+                    normalLayout.incrementCounter.visibility = View.VISIBLE
+                    normalLayout.decrementCounter.visibility = View.VISIBLE
+                    normalLayout.counterValue.visibility = View.VISIBLE
                 }
 
                 if (counter.count == 0) {
