@@ -1,0 +1,58 @@
+<resources>
+    <!-- Examples -->
+    <string name="example_header_drink">Drinques</string>
+    <string-array name="drinks_array">
+        <item>Xícaras de café</item>
+        <item>Copos de água</item>
+        <item>Shots de tequila</item>
+        <item>Caipirinhas</item>
+    </string-array>
+    <string name="example_header_food">Comidas</string>
+    <string-array name="food_array">
+        <item>Cachorros-quentes</item>
+        <item>Cupcakes comidos</item>
+        <item>Sanduíches de frango</item>
+    </string-array>
+    <string name="example_header_misc">Outros</string>
+    <string-array name="misc_array">
+        <item>Espirros</item>
+        <item>Cochilos</item>
+        <item>Devaneios</item>
+    </string-array>
+
+    <!-- Others -->
+    <string name="app_name">Contadores</string>
+    <string name="welcome_title">Contadores</string>
+    <string name="welcome_description">Conte xícaras de lattes, frapuccinos, ou qualquer coisa que possa ser contado.</string>
+    <string name="get_started">Começar</string>
+    <string name="no_counters">Sem contadores ainda.</string>
+    <string name="no_results">Sem resultados</string>
+    <string name="no_counters_phrase">“Quando eu comecei a contar minhas bênçãos, toda a minha vida mudou.”
+—Willie Nelson</string>
+    <string name="search_counters">Procurar contadores</string>
+    <string name="add_counters">Adicionar</string>
+    <string name="n_items">%d itens</string>
+    <string name="n_times">%d vezes</string>
+    <string name="n_selected">%d selecionados</string>
+    <string name="error_load_counters_title">Não foi possível carregar os contadores</string>
+    <string name="error_creating_counter_title">Não foi possível criar o contador</string>
+    <string name="error_updating_counter_title">Não foi possível atualizar o contador “%s” para %d</string>
+    <string name="error_deleting_counter_title">Não foi possível deletar o contador</string>
+    <string name="connection_error_description">A conexão com a internet parece estar desligada.</string>
+    <string name="generic_error_description">Algo deu errado.</string>
+    <string name="retry">Tentar novamente</string>
+    <string name="save">Salvar</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancelar</string>
+    <string name="dismiss">Sair</string>
+    <string name="share">Compartilhar</string>
+    <string name="examples">Exemplos</string>
+    <string name="examples_description">Escolha um exemplo para adicionar aos seus contadores.</string>
+    <string name="delete">Deletar</string>
+    <string name="create_counter">Criar contador</string>
+    <string name="counter_name_label">Nome</string>
+    <string name="counter_name_hint">Xícaras de café</string>
+    <string name="create_counter_disclaimer">Dê um nome. Bloqueio criativo? Veja <annotation type="examples_link">exemplos</annotation>.</string>
+    <string name="delete_x_question">Deletar "%s"?</string>
+    <string name="n_per_counter_name">%d × %s</string>
+</resources>
