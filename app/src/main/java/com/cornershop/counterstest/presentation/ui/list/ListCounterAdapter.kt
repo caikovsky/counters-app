@@ -108,25 +108,25 @@ class ListCounterAdapter(
 
         fun bind(counter: Counter) {
             itemBinding.run {
-                normalLayout.counterTitle.text = counter.title
-                normalLayout.counterValue.text = counter.count.toString()
+                counterTitle.text = counter.title
+                counterValue.text = counter.count.toString()
 
-                normalLayout.incrementCounter.setOnClickListener { incrementOnClick(counter) }
-                normalLayout.decrementCounter.setOnClickListener { decrementOnClick(counter) }
-                normalLayout.counterTitle.setOnLongClickListener { selectOnLongPress(position) }
+                incrementCounter.setOnClickListener { incrementOnClick(counter) }
+                decrementCounter.setOnClickListener { decrementOnClick(counter) }
+                counterTitle.setOnLongClickListener { selectOnLongPress(position) }
 
                 if (counter.selected) {
-                    normalLayout.itemCounterContainer.setBackgroundResource(R.drawable.item_counter_selected)
-                    normalLayout.counterCheckbox.visibility = View.VISIBLE
-                    normalLayout.incrementCounter.visibility = View.GONE
-                    normalLayout.decrementCounter.visibility = View.GONE
-                    normalLayout.counterValue.visibility = View.GONE
+                    itemCounterContainer.setBackgroundResource(R.drawable.item_counter_selected)
+                    counterCheckbox.visibility = View.VISIBLE
+                    incrementCounter.visibility = View.GONE
+                    decrementCounter.visibility = View.GONE
+                    counterValue.visibility = View.GONE
                 } else {
-                    normalLayout.itemCounterContainer.setBackgroundColor(root.resources.getColor(R.color.main_background))
-                    normalLayout.counterCheckbox.visibility = View.GONE
-                    normalLayout.incrementCounter.visibility = View.VISIBLE
-                    normalLayout.decrementCounter.visibility = View.VISIBLE
-                    normalLayout.counterValue.visibility = View.VISIBLE
+                    itemCounterContainer.setBackgroundColor(root.resources.getColor(R.color.main_background))
+                    counterCheckbox.visibility = View.GONE
+                    incrementCounter.visibility = View.VISIBLE
+                    decrementCounter.visibility = View.VISIBLE
+                    counterValue.visibility = View.VISIBLE
                 }
 
                 if (counter.count == 0) {
@@ -139,15 +139,15 @@ class ListCounterAdapter(
 
         private fun toggleDecrementButtonDisabledStatus(isActive: Boolean) {
             itemBinding.run {
-                normalLayout.decrementCounter.isClickable = isActive
-                normalLayout.decrementCounter.isFocusable = isActive
+                decrementCounter.isClickable = isActive
+                decrementCounter.isFocusable = isActive
 
                 if (isActive) {
-                    normalLayout.decrementCounter.drawable.setTint(root.resources.getColor(R.color.orange))
-                    normalLayout.counterValue.setTextColor(root.resources.getColor(R.color.black))
+                    decrementCounter.drawable.setTint(root.resources.getColor(R.color.orange))
+                    counterValue.setTextColor(root.resources.getColor(R.color.black))
                 } else {
-                    normalLayout.decrementCounter.drawable.setTint(root.resources.getColor(R.color.light_gray))
-                    normalLayout.counterValue.setTextColor(root.resources.getColor(R.color.light_gray))
+                    decrementCounter.drawable.setTint(root.resources.getColor(R.color.light_gray))
+                    counterValue.setTextColor(root.resources.getColor(R.color.light_gray))
                 }
             }
         }
