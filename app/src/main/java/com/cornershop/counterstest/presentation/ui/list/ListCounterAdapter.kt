@@ -1,8 +1,8 @@
 package com.cornershop.counterstest.presentation.ui.list
 
 
+import android.util.SparseBooleanArray
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
@@ -18,17 +18,19 @@ import kotlin.collections.ArrayList
 class ListCounterAdapter(
     private val decrementOnClick: (Counter) -> Unit,
     private val incrementOnClick: (Counter) -> Unit,
-    private val selectOnLongPress: (Counter) -> Boolean
+    private val selectOnLongPress: (Int) -> Boolean
 ) :
     Filterable, ListAdapter<Counter, ListCounterAdapter.CounterViewHolder>(DIFF_CALLBACK) {
     var counterList: ArrayList<Counter> = ArrayList()
     var counterListFiltered: ArrayList<Counter> = ArrayList()
     var isSelectableMode: Boolean = false
-    var selectedList = mutableListOf<Counter>()
+    var selectedItems = SparseBooleanArray()
+    private var currentSelectedPos: Int = -1
 
     init {
         counterListFiltered = counterList
     }
+
 
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Counter>() {
@@ -48,7 +50,9 @@ class ListCounterAdapter(
     }
 
     override fun onBindViewHolder(holder: CounterViewHolder, position: Int) {
-        holder.bind(counterListFiltered[position])
+        val counter = counterListFiltered[position]
+        holder.bind(counter)
+        if (currentSelectedPos == position) currentSelectedPos = -1
     }
 
     override fun getItemCount(): Int = counterListFiltered.size
@@ -86,14 +90,18 @@ class ListCounterAdapter(
         }
     }
 
-    fun deleteSelectedItem() {
-        if (selectedList.isNotEmpty()) {
-            counterListFiltered.removeAll { item -> item.selected }
+    fun toggleSelection(position: Int) {
+        currentSelectedPos = position
+
+        if(selectedItems.get(position)){
+            selectedItems.delete(position)
+            counterListFiltered[position].selected = false
+        } else {
+            selectedItems.put(position, true)
+            counterListFiltered[position].selected = true
         }
 
-        selectedList.clear()
-
-        notifyDataSetChanged()
+        notifyItemChanged(position)
     }
 
     inner class CounterViewHolder(private val itemBinding: ItemCounterBinding) : RecyclerView.ViewHolder(itemBinding.root) {
@@ -104,40 +112,17 @@ class ListCounterAdapter(
                 selectedLayout.counterTitle.text = counter.title
                 normalLayout.counterValue.text = counter.count.toString()
 
-                normalLayout.incrementCounter.setOnClickListener { if (!isSelectableMode) incrementOnClick(counter) }
-                normalLayout.decrementCounter.setOnClickListener { if (!isSelectableMode) decrementOnClick(counter) }
+                normalLayout.incrementCounter.setOnClickListener { incrementOnClick(counter) }
+                normalLayout.decrementCounter.setOnClickListener { decrementOnClick(counter) }
+                normalLayout.counterTitle.setOnLongClickListener { selectOnLongPress(position) }
 
-                normalLayout.root.setOnClickListener {
-                    if (isSelectableMode) {
-                        if (isSelectedItem(counter)) {
-                            removeSelectedItemFromList(counter)
-                        } else {
-                            addSelectedItemToList(counter)
-                        }
-                    }
-                }
-
-                selectedLayout.root.setOnClickListener {
-                    if (isSelectableMode) {
-                        if (isSelectedItem(counter)) {
-                            removeSelectedItemFromList(counter)
-                        } else {
-                            addSelectedItemToList(counter)
-                        }
-                    }
-                }
-
-                normalLayout.counterTitle.setOnLongClickListener {
-                    isSelectableMode = true
-
-                    if (isSelectedItem(counter)) {
-                        removeSelectedItemFromList(counter)
-                    } else {
-                        addSelectedItemToList(counter)
-                    }
-
-                    selectOnLongPress(counter)
-                }
+                /*if (counter.selected) {
+                    normalLayout.itemCounterContainer.visibility = View.GONE
+                    selectedLayout.itemCounterContainer.visibility = View.VISIBLE
+                } else {
+                    selectedLayout.itemCounterContainer.visibility = View.VISIBLE
+                    normalLayout.itemCounterContainer.visibility = View.GONE
+                }*/
 
                 if (counter.count == 0) {
                     toggleDecrementButtonDisabledStatus(false)
@@ -145,25 +130,6 @@ class ListCounterAdapter(
                     toggleDecrementButtonDisabledStatus(true)
                 }
             }
-        }
-
-        private fun isSelectedItem(counter: Counter): Boolean = selectedList.contains(counter)
-
-        private fun removeSelectedItemFromList(counter: Counter) {
-            selectedList.remove(counter)
-            setItemNormalLayout()
-
-            if (selectedList.isEmpty()) {
-                isSelectableMode = false
-            }
-        }
-
-        private fun addSelectedItemToList(counter: Counter) {
-            if (!selectedList.contains(counter)) {
-                selectedList.add(counter)
-            }
-
-            setItemSelectedLayout()
         }
 
         private fun toggleDecrementButtonDisabledStatus(isActive: Boolean) {
@@ -180,16 +146,7 @@ class ListCounterAdapter(
                 }
             }
         }
-
-        fun setItemSelectedLayout() {
-            itemBinding.normalLayout.root.visibility = View.GONE
-            itemBinding.selectedLayout.root.visibility = View.VISIBLE
-        }
-
-        fun setItemNormalLayout() {
-            itemBinding.normalLayout.root.visibility = View.VISIBLE
-            itemBinding.selectedLayout.root.visibility = View.GONE
-        }
     }
-
 }
+
+

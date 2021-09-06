@@ -2,10 +2,9 @@ package com.cornershop.counterstest.presentation.ui.list
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.appcompat.widget.SearchView
+import androidx.core.util.size
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -18,6 +17,7 @@ import com.cornershop.counterstest.domain.model.Counter
 import com.cornershop.counterstest.util.Constants.COUNTER_KEY
 import com.cornershop.counterstest.util.DialogButton
 import com.cornershop.counterstest.util.DialogUtil
+import com.cornershop.counterstest.util.logD
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -27,17 +27,12 @@ class ListCountersFragment : Fragment() {
     private var _binding: FragmentListCountersBinding? = null
     private val binding: FragmentListCountersBinding get() = _binding!!
     private val viewModel: ListCounterViewModel by viewModels()
-
+    private var actionMode: ActionMode? = null
     private val counterAdapter: ListCounterAdapter = ListCounterAdapter(
         { counter -> decrementOnClick(counter) },
         { counter -> incrementOnClick(counter) },
-        { counter -> selectCounterOnLongPress(counter) })
+        { position -> selectCounterOnLongPress(position) })
 
-    private fun selectCounterOnLongPress(counter: Counter): Boolean {
-        counter.selected = true
-        toggleMenuIcons()
-        return false
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -81,8 +76,8 @@ class ListCountersFragment : Fragment() {
         val sharingIntent = Intent(Intent.ACTION_SEND)
         sharingIntent.type = "text/plain";
 
-        val content = formatShareList(counterAdapter.selectedList).joinToString("\n")
-        sharingIntent.putExtra(Intent.EXTRA_TEXT, content)
+//        val content = formatShareList(counterAdapter.selectedList).joinToString("\n")
+//        sharingIntent.putExtra(Intent.EXTRA_TEXT, content)
         startActivity(Intent.createChooser(sharingIntent, "Share using"))
     }
 
@@ -96,7 +91,7 @@ class ListCountersFragment : Fragment() {
         return itemList
     }
 
-    private fun deleteItem() {
+    /*private fun deleteItem() {
         // FIXME: Remove when proper show the layout states
         DialogUtil.getDialog(
             requireActivity(),
@@ -112,14 +107,71 @@ class ListCountersFragment : Fragment() {
                 resources.getString(R.string.cancel)
             ) { dialogInterface, _ -> dialogInterface.dismiss() }
         ).show()
-    }
+    }*/
 
     private fun decrementOnClick(counter: Counter) {
-        viewModel.decrementCounter(counter)
+        logD("onDecrementItemClick: $counter")
+        // viewModel.decrementCounter(counter)
     }
 
     private fun incrementOnClick(counter: Counter) {
-        viewModel.incrementCounter(counter)
+        logD("incrementOnClick: $counter")
+//        viewModel.incrementCounter(counter)
+    }
+
+    private fun selectCounterOnLongPress(position: Int): Boolean {
+        enableActionMode(position)
+        logD("selectCounterOnLongPress: $position")
+        return true
+    }
+
+    private fun enableActionMode(position: Int) {
+        if (actionMode == null) {
+            actionMode = activity?.startActionMode(object : ActionMode.Callback {
+                override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+                    mode?.menuInflater?.inflate(R.menu.menu_delete, menu)
+                    return true
+                }
+
+                override fun onPrepareActionMode(p0: ActionMode?, p1: Menu?): Boolean {
+                    return false
+                }
+
+                override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
+                    if (item?.itemId == R.id.action_delete) {
+
+                        mode?.finish()
+                        return true
+                    }
+
+                    return false
+                }
+
+                override fun onDestroyActionMode(mode: ActionMode?) {
+                    counterAdapter.selectedItems.clear()
+                    val counters = counterAdapter.counterListFiltered
+
+                    for (counter in counters) {
+                        if (counter.selected) {
+                            counter.selected = false
+                        }
+                    }
+
+                    counterAdapter.notifyDataSetChanged()
+                    actionMode = null
+                }
+            })
+
+            counterAdapter.toggleSelection(position)
+            val size = counterAdapter.selectedItems.size
+
+            if (size == 0) {
+                actionMode?.finish()
+            } else {
+                actionMode?.title = String.format(resources.getString(R.string.n_selected), size)
+                actionMode?.invalidate()
+            }
+        }
     }
 
     private fun configureSwipeLayout() {
@@ -139,7 +191,7 @@ class ListCountersFragment : Fragment() {
         with(binding) {
             binding.toolbar.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
-                    R.id.menu_delete -> deleteItem()
+//                    R.id.menu_delete -> deleteItem()
                     R.id.menu_share -> shareCounter()
                 }
 
@@ -238,7 +290,7 @@ class ListCountersFragment : Fragment() {
                     if (counters.data.isNullOrEmpty()) {
                         viewModel.renderEmptyLayout(true)
                     } else {
-                        counterAdapter.deleteSelectedItem()
+//                        counterAdapter.deleteSelectedItem()
                         renderCounterList(counters.data)
                         binding.swipeLayout.isRefreshing = false
                     }
