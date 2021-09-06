@@ -38,8 +38,8 @@ class ListCounterViewModel @Inject constructor(
     private val _noResults = MutableLiveData<Boolean>()
     val noResults: LiveData<Boolean> get() = _noResults
 
-    private val _dialogError = MutableLiveData<Counter>()
-    val dialogError: LiveData<Counter> get() = _dialogError
+    private val _dialogError = MutableLiveData<CounterError>()
+    val dialogError: LiveData<CounterError> get() = _dialogError
 
     private val _counters = MutableLiveData<NetworkResult<List<Counter>>>()
     val counters: LiveData<NetworkResult<List<Counter>>> get() = _counters
@@ -70,7 +70,7 @@ class ListCounterViewModel @Inject constructor(
             incrementCounterUseCase(IncrementCounterRequest(counter.id)).let {
                 if (it.isError) {
                     counter.count = counter.count.inc()
-                    _dialogError.value = counter
+                    _dialogError.value = CounterError(counter)
                 } else {
                     _incCounter.value = it
                 }
@@ -85,7 +85,7 @@ class ListCounterViewModel @Inject constructor(
             decrementCounterUseCase(DecrementCounterRequest(counter.id)).let {
                 if (it.isError) {
                     counter.count = counter.count.dec()
-                    _dialogError.value = counter
+                    _dialogError.value = CounterError(counter)
                 } else {
                     _decCounter.value = it
                 }
@@ -129,7 +129,7 @@ class ListCounterViewModel @Inject constructor(
         viewModelScope.launch {
             deleteCounterUseCase(DeleteCounterRequest(counter.id)).let {
                 if (it.isError) {
-                    _dialogError.value = counter
+                    _dialogError.value = CounterError(counter, "delete")
                 } else {
                     _deleteCounter.value = it
                 }
@@ -137,3 +137,5 @@ class ListCounterViewModel @Inject constructor(
         }
     }
 }
+
+class CounterError(val counter: Counter, val type: String = "update")

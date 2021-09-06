@@ -39,6 +39,7 @@
     <string name="error_updating_counter_title">Não foi possível atualizar o contador “%s” para %d</string>
     <string name="error_deleting_counter_title">Não foi possível deletar o contador</string>
     <string name="connection_error_description">A conexão com a internet parece estar desligada.</string>
+    <string name="generic_error_title">Erro</string>
     <string name="generic_error_description">Algo deu errado.</string>
     <string name="retry">Tentar novamente</string>
     <string name="save">Salvar</string>

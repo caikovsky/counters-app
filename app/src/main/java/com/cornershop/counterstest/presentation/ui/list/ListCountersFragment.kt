@@ -237,19 +237,47 @@ class ListCountersFragment : Fragment() {
             }
         }
 
-        viewModel.dialogError.observe(viewLifecycleOwner) { counter ->
-            val title = String.format(resources.getString(R.string.error_updating_counter_title), counter.title, counter.count)
-            DialogUtil.getDialog(
-                requireActivity(),
-                title = title,
-                message = resources.getString(R.string.connection_error_description),
-                dialogButton = DialogButton(
-                    text = resources.getString(R.string.retry)
-                ) { _, _ -> viewModel.retryButton() },
-                negativeButton = DialogButton(
-                    resources.getString(R.string.dismiss)
-                ) { dialogInterface, _ -> dialogInterface.dismiss() }
-            ).show()
+        viewModel.dialogError.observe(viewLifecycleOwner) { response ->
+            when (response.type) {
+                "update" -> {
+                    val title =
+                        String.format(resources.getString(R.string.error_updating_counter_title), response.counter.title, response.counter.count)
+
+                    DialogUtil.getDialog(
+                        requireActivity(),
+                        title = title,
+                        message = resources.getString(R.string.connection_error_description),
+                        dialogButton = DialogButton(
+                            text = resources.getString(R.string.retry)
+                        ) { _, _ -> viewModel.retryButton() },
+                        negativeButton = DialogButton(
+                            resources.getString(R.string.dismiss)
+                        ) { dialogInterface, _ -> dialogInterface.dismiss() }
+                    ).show()
+                }
+
+                "delete" -> {
+                    DialogUtil.getDialog(
+                        requireActivity(),
+                        title = resources.getString(R.string.error_deleting_counter_title),
+                        message = resources.getString(R.string.connection_error_description),
+                        dialogButton = DialogButton(
+                            text = resources.getString(R.string.dismiss)
+                        ) { dialog, _ -> dialog.dismiss() }
+                    ).show()
+                }
+
+                else -> {
+                    DialogUtil.getDialog(
+                        requireActivity(),
+                        title = resources.getString(R.string.generic_error_title),
+                        message = resources.getString(R.string.generic_error_description),
+                        dialogButton = DialogButton(
+                            text = resources.getString(R.string.retry)
+                        ) { dialog, _ -> dialog.dismiss() },
+                    ).show()
+                }
+            }
         }
 
         viewModel.incCounter.observe(viewLifecycleOwner) { response ->
@@ -275,7 +303,6 @@ class ListCountersFragment : Fragment() {
             // TODO: Disable Search View
         }
     }
-
 
     private fun observeNavigationBackStack() {
         findNavController().run {
