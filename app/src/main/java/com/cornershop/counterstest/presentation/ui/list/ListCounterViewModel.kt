@@ -6,15 +6,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cornershop.counterstest.data.core.NetworkResult
 import com.cornershop.counterstest.data.request.DecrementCounterRequest
+import com.cornershop.counterstest.data.request.DeleteCounterRequest
 import com.cornershop.counterstest.data.request.IncrementCounterRequest
 import com.cornershop.counterstest.domain.model.Counter
 import com.cornershop.counterstest.domain.usecases.dec.DecrementCounterUseCase
 import com.cornershop.counterstest.domain.usecases.delete.DeleteCounterUseCase
 import com.cornershop.counterstest.domain.usecases.get.GetCounterUseCase
 import com.cornershop.counterstest.domain.usecases.inc.IncrementCounterUseCase
-import com.cornershop.counterstest.util.logD
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -50,8 +50,8 @@ class ListCounterViewModel @Inject constructor(
     private val _decCounter = MutableLiveData<NetworkResult<List<Counter>>>()
     val decCounter: LiveData<NetworkResult<List<Counter>>> get() = _decCounter
 
-    private val _deleteCounter = MutableLiveData<NetworkResult<List<Counter>>>()
-    val deleteCounter: LiveData<NetworkResult<List<Counter>>> get() = _deleteCounter
+    private val _deleteCounter = MutableLiveData<List<Counter>>()
+    val deleteCounter: LiveData<List<Counter>> get() = _deleteCounter
 
     fun getCounters() {
         _counters.value = NetworkResult.Loading()
@@ -126,16 +126,27 @@ class ListCounterViewModel @Inject constructor(
     }
 
     fun deleteCounter(counters: List<Counter>) {
-        logD(counters.toString())
-        /*viewModelScope.launch {
-            deleteCounterUseCase(DeleteCounterRequest(counter.id)).let {
-                if (it.isError) {
-                    _dialogError.value = CounterError(counter, "delete")
-                } else {
-                    _deleteCounter.value = it
+        viewModelScope.launch {
+            val content = arrayListOf<Counter>()
+
+            withContext(Dispatchers.IO) {
+                val runningTasks = counters.map { counter ->
+                    async {
+                        val apiResponse = deleteCounterUseCase(DeleteCounterRequest(counter.id))
+                        counter.id to apiResponse
+                    }
+                }
+
+                val responses = runningTasks.awaitAll()
+
+                responses.forEach { (id, response) ->
+                    if (response.isSuccess) content.addAll(response.data!!)
+                    // TODO: Handle errors
                 }
             }
-        }*/
+
+            _deleteCounter.value = content
+        }
     }
 }
 

@@ -9,4 +9,5 @@ sealed class NetworkResult<T>(
     class Loading<T> : NetworkResult<T>()
 
     val isError: Boolean get() = this is Error
+    val isSuccess: Boolean get() = this is Success
 }

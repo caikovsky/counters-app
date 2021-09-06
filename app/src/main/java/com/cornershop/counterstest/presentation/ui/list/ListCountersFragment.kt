@@ -286,16 +286,15 @@ class ListCountersFragment : Fragment() {
         }
 
         viewModel.deleteCounter.observe(viewLifecycleOwner) { counters ->
-            when (counters) {
-                is NetworkResult.Success -> {
-                    if (counters.data.isNullOrEmpty()) {
-                        viewModel.renderEmptyLayout(true)
-                    } else {
-                        renderCounterList(counters.data)
-                        binding.swipeLayout.isRefreshing = false
-                    }
-                }
+            if (counters.isNullOrEmpty()) {
+                viewModel.toggleProgressDialog(false)
+                viewModel.renderErrorLayout(false)
+                viewModel.renderEmptyLayout(true)
+            } else {
+                renderCounterList(counters)
+                binding.swipeLayout.isRefreshing = false
             }
+
         }
 
         viewModel.dialogError.observe(viewLifecycleOwner) { response ->
