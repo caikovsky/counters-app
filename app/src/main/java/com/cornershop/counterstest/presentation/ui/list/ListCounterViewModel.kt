@@ -6,13 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cornershop.counterstest.data.core.NetworkResult
 import com.cornershop.counterstest.data.request.DecrementCounterRequest
-import com.cornershop.counterstest.data.request.DeleteCounterRequest
 import com.cornershop.counterstest.data.request.IncrementCounterRequest
 import com.cornershop.counterstest.domain.model.Counter
 import com.cornershop.counterstest.domain.usecases.dec.DecrementCounterUseCase
 import com.cornershop.counterstest.domain.usecases.delete.DeleteCounterUseCase
 import com.cornershop.counterstest.domain.usecases.get.GetCounterUseCase
 import com.cornershop.counterstest.domain.usecases.inc.IncrementCounterUseCase
+import com.cornershop.counterstest.util.logD
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -125,8 +125,9 @@ class ListCounterViewModel @Inject constructor(
         return total
     }
 
-    fun deleteCounter(counter: Counter) {
-        viewModelScope.launch {
+    fun deleteCounter(counters: List<Counter>) {
+        logD(counters.toString())
+        /*viewModelScope.launch {
             deleteCounterUseCase(DeleteCounterRequest(counter.id)).let {
                 if (it.isError) {
                     _dialogError.value = CounterError(counter, "delete")
@@ -134,7 +135,7 @@ class ListCounterViewModel @Inject constructor(
                     _deleteCounter.value = it
                 }
             }
-        }
+        }*/
     }
 }
 

@@ -17,7 +17,6 @@ import com.cornershop.counterstest.domain.model.Counter
 import com.cornershop.counterstest.util.Constants.COUNTER_KEY
 import com.cornershop.counterstest.util.DialogButton
 import com.cornershop.counterstest.util.DialogUtil
-import com.cornershop.counterstest.util.logD
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -86,23 +85,39 @@ class ListCountersFragment : Fragment() {
         return itemList
     }
 
-    /*private fun deleteItem() {
-        // FIXME: Remove when proper show the layout states
+    private fun getSelectedItems(): List<Counter> {
+        val items = mutableListOf<Counter>()
+
+        for (item in counterAdapter.counterListFiltered) {
+            if (item.selected) {
+                items.add(item)
+            }
+        }
+
+        return items
+    }
+
+    private fun deleteItem() {
+        val countersToDelete = getSelectedItems()
+        val title: String = if (countersToDelete.isNotEmpty() && countersToDelete.size == 1) {
+            String.format(resources.getString(R.string.delete_x_question), countersToDelete[0].title)
+        } else {
+            String.format(resources.getString(R.string.delete_n_items), countersToDelete.size)
+        }
+
         DialogUtil.getDialog(
             requireActivity(),
-            title = String.format(resources.getString(R.string.delete_x_question), counterAdapter.selectedList[0].title),
+            title = title,
             dialogButton = DialogButton(
                 text = resources.getString(R.string.delete)
             ) { _, _ ->
-                if (counterAdapter.selectedList.isNotEmpty()) {
-                    viewModel.deleteCounter(counterAdapter.selectedList[0])
-                }
+                viewModel.deleteCounter(countersToDelete)
             },
             negativeButton = DialogButton(
                 resources.getString(R.string.cancel)
             ) { dialogInterface, _ -> dialogInterface.dismiss() }
         ).show()
-    }*/
+    }
 
     private fun decrementOnClick(counter: Counter) {
         if (actionMode == null) viewModel.decrementCounter(counter)
@@ -132,7 +147,7 @@ class ListCountersFragment : Fragment() {
                 override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
                     return when (item?.itemId) {
                         R.id.action_delete -> {
-                            // TODO: Implement delete feature
+                            deleteItem()
                             mode?.finish()
                             true
                         }
