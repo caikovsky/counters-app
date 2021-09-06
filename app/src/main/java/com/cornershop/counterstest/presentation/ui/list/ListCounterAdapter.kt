@@ -3,6 +3,7 @@ package com.cornershop.counterstest.presentation.ui.list
 
 import android.util.SparseBooleanArray
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
@@ -23,7 +24,6 @@ class ListCounterAdapter(
     Filterable, ListAdapter<Counter, ListCounterAdapter.CounterViewHolder>(DIFF_CALLBACK) {
     var counterList: ArrayList<Counter> = ArrayList()
     var counterListFiltered: ArrayList<Counter> = ArrayList()
-    var isSelectableMode: Boolean = false
     var selectedItems = SparseBooleanArray()
     private var currentSelectedPos: Int = -1
 
@@ -93,7 +93,7 @@ class ListCounterAdapter(
     fun toggleSelection(position: Int) {
         currentSelectedPos = position
 
-        if(selectedItems.get(position)){
+        if (selectedItems.get(position)) {
             selectedItems.delete(position)
             counterListFiltered[position].selected = false
         } else {
@@ -116,13 +116,13 @@ class ListCounterAdapter(
                 normalLayout.decrementCounter.setOnClickListener { decrementOnClick(counter) }
                 normalLayout.counterTitle.setOnLongClickListener { selectOnLongPress(position) }
 
-                /*if (counter.selected) {
-                    normalLayout.itemCounterContainer.visibility = View.GONE
+                if (counter.selected) {
                     selectedLayout.itemCounterContainer.visibility = View.VISIBLE
+                    normalLayout.itemCounterContainer.visibility = View.GONE
                 } else {
-                    selectedLayout.itemCounterContainer.visibility = View.VISIBLE
-                    normalLayout.itemCounterContainer.visibility = View.GONE
-                }*/
+                    selectedLayout.itemCounterContainer.visibility = View.GONE
+                    normalLayout.itemCounterContainer.visibility = View.VISIBLE
+                }
 
                 if (counter.count == 0) {
                     toggleDecrementButtonDisabledStatus(false)

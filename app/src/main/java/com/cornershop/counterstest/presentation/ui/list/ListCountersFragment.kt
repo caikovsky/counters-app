@@ -60,11 +60,6 @@ class ListCountersFragment : Fragment() {
         updateItemCount(counterAdapter.itemCount)
     }
 
-    private fun toggleMenuIcons() {
-        binding.toolbar.menu.findItem(R.id.menu_share)?.isVisible = counterAdapter.isSelectableMode
-        binding.toolbar.menu.findItem(R.id.menu_delete)?.isVisible = counterAdapter.isSelectableMode
-    }
-
     private fun configureViewModel() {
         with(viewModel) {
             toggleProgressDialog(true)
@@ -76,16 +71,16 @@ class ListCountersFragment : Fragment() {
         val sharingIntent = Intent(Intent.ACTION_SEND)
         sharingIntent.type = "text/plain";
 
-//        val content = formatShareList(counterAdapter.selectedList).joinToString("\n")
-//        sharingIntent.putExtra(Intent.EXTRA_TEXT, content)
+        val content = formatShareList().joinToString("\n")
+        sharingIntent.putExtra(Intent.EXTRA_TEXT, content)
         startActivity(Intent.createChooser(sharingIntent, "Share using"))
     }
 
-    private fun formatShareList(selectedCounterList: MutableList<Counter>): ArrayList<String> {
+    private fun formatShareList(): List<String> {
         val itemList = arrayListOf<String>()
 
-        for (item in selectedCounterList) {
-            itemList.add(String.format(resources.getString(R.string.n_per_counter_name), item.count, item.title))
+        for (item in counterAdapter.counterListFiltered) {
+            if (item.selected) itemList.add(String.format(resources.getString(R.string.n_per_counter_name), item.count, item.title))
         }
 
         return itemList
@@ -121,7 +116,6 @@ class ListCountersFragment : Fragment() {
 
     private fun selectCounterOnLongPress(position: Int): Boolean {
         enableActionMode(position)
-        logD("selectCounterOnLongPress: $position")
         return true
     }
 
@@ -138,13 +132,20 @@ class ListCountersFragment : Fragment() {
                 }
 
                 override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
-                    if (item?.itemId == R.id.action_delete) {
-
-                        mode?.finish()
-                        return true
+                    // TODO: Implement share
+                    return when (item?.itemId) {
+                        R.id.action_delete -> {
+                            // TODO: Implement delete feature
+                            mode?.finish()
+                            true
+                        }
+                        R.id.menu_share -> {
+                            shareCounter()
+                            mode?.finish()
+                            true
+                        }
+                        else -> false
                     }
-
-                    return false
                 }
 
                 override fun onDestroyActionMode(mode: ActionMode?) {
@@ -180,24 +181,13 @@ class ListCountersFragment : Fragment() {
 
     private fun setUpBindings() {
         with(binding) {
-            toolbar.inflateMenu(R.menu.menu)
             lifecycleOwner = viewLifecycleOwner
             listViewModel = viewModel
-            toggleMenuIcons()
         }
     }
 
     private fun setListeners() {
         with(binding) {
-            binding.toolbar.setOnMenuItemClickListener { item ->
-                when (item.itemId) {
-//                    R.id.menu_delete -> deleteItem()
-                    R.id.menu_share -> shareCounter()
-                }
-
-                false
-            }
-
             listContent.createCounterButton.setOnClickListener {
                 findNavController().navigate(R.id.action_listCountersFragment_to_createCounterFragment)
             }
@@ -294,8 +284,6 @@ class ListCountersFragment : Fragment() {
                         renderCounterList(counters.data)
                         binding.swipeLayout.isRefreshing = false
                     }
-
-                    toggleMenuIcons()
                 }
             }
         }

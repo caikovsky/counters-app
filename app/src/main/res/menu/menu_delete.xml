@@ -8,4 +8,9 @@
         android:title="@string/delete"
         app:showAsAction="always" />
 
+    <item
+        android:id="@+id/menu_share"
+        android:icon="@drawable/ic_share"
+        android:title="@string/share"
+        app:showAsAction="always" />
 </menu>
