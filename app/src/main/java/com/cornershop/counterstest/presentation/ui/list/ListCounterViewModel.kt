@@ -148,11 +148,8 @@ class ListCounterViewModel @Inject constructor(
                 }
 
                 val responses = runningTasks.awaitAll()
-
-                responses.forEach { (id, response) ->
-                    if (response.isSuccess) content.addAll(response.data!!)
-                    // TODO: Handle errors
-                }
+                // TODO: Handle errors
+                content.addAll(responses.last().second.data!!)
             }
 
             _deleteCounter.value = content
