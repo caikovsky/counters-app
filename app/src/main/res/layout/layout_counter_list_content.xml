@@ -72,7 +72,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center"
             android:layout_marginBottom="@dimen/margin_normal_3"
-            android:background="?attr/colorPrimary"
+            android:background="@drawable/rounded_create_button"
             android:text="@string/add_counters"
             android:textColor="?attr/colorSecondary"
             android:visibility="@{viewModel.isCreateButton ? View.VISIBLE : View.GONE}"
