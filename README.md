@@ -1,6 +1,9 @@
 # Counters
 An application where you can count things and manage your counters.
 
+![counter list](https://i.imgur.com/oTN1S4r.png)
+![examples](https://i.imgur.com/71q3Vmb.png)
+![delete counter](https://i.imgur.com/aU7hW2Z.png)
 
 ## 🚀 Features
 A few of the things you can do with Counters:
@@ -15,6 +18,8 @@ A few of the things you can do with Counters:
 * Persists data back to the server
 * Available in English and Portuguese languages
 * Handles orientation changes
+* Splash screen
+* First access and second access
 * Clean architecture!
 
 ## ⚙️ Stack
@@ -26,6 +31,7 @@ A few of the things you can do with Counters:
  * Hilt - dependecy injection
  * Android Navigation - navigation management between fragments
  * Material design
+ * Shared Preferences - handles first/second access
 
 ## 📦 Setup
 ### Local server
