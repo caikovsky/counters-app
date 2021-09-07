@@ -14,13 +14,12 @@ class WelcomeActivity : AppCompatActivity() {
 
     private var _binding: ActivityWelcomeBinding? = null
     private val binding: ActivityWelcomeBinding get() = _binding!!
-    private val sharedPreferencesName = "${packageName}_preferences"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityWelcomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        val sharedPreferencesName = "${packageName}_preferences"
         val sharedPref = getSharedPreferences(sharedPreferencesName, Context.MODE_PRIVATE)
         val firstAccess = sharedPref.getBoolean(FIRST_ACCESS_SHARED_KEY, true)
 

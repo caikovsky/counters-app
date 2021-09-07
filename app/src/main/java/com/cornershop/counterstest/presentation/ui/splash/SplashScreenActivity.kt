@@ -16,12 +16,10 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class SplashScreenActivity : AppCompatActivity() {
 
-    private val sharedPreferencesName = "${packageName}_preferences"
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
-
+        val sharedPreferencesName = "${packageName}_preferences"
         val sharedPref = getSharedPreferences(sharedPreferencesName, Context.MODE_PRIVATE)
         val firstAccess = sharedPref.getBoolean(FIRST_ACCESS_SHARED_KEY, true)
 
