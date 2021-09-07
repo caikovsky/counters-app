@@ -29,6 +29,9 @@ class ListCounterViewModel @Inject constructor(
     private val _isCreateButton = MutableLiveData<Boolean>()
     val isCreateButton: LiveData<Boolean> get() = _isCreateButton
 
+    val _showToolbar = MutableLiveData<Boolean>()
+    val showToolbar: LiveData<Boolean> get() = _showToolbar
+
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> get() = _isLoading
 
@@ -110,6 +113,10 @@ class ListCounterViewModel @Inject constructor(
 
     fun renderEmptyLayout(show: Boolean) {
         _isListEmpty.value = show
+    }
+
+    fun toggleSearchToolbar(show: Boolean) {
+        _showToolbar.value = show
     }
 
     fun retryButton() {

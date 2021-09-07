@@ -26,6 +26,7 @@
             android:background="@drawable/toolbar_rounded"
             android:elevation="4dp"
             android:theme="@style/Theme.CountersNormal"
+            android:visibility="@{listViewModel.showToolbar ? View.VISIBLE : View.GONE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
