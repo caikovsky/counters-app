@@ -70,10 +70,9 @@ class ListCountersFragment : Fragment() {
     private fun shareCounter() {
         val sharingIntent = Intent(Intent.ACTION_SEND)
         sharingIntent.type = "text/plain";
-
         val content = formatShareList().joinToString("\n")
         sharingIntent.putExtra(Intent.EXTRA_TEXT, content)
-        startActivity(Intent.createChooser(sharingIntent, "Share using"))
+        startActivity(Intent.createChooser(sharingIntent, resources.getString(R.string.share)))
     }
 
     private fun formatShareList(): List<String> {
@@ -112,6 +111,7 @@ class ListCountersFragment : Fragment() {
             dialogButton = DialogButton(
                 text = resources.getString(R.string.delete)
             ) { _, _ ->
+                actionMode?.finish()
                 viewModel.deleteCounter(countersToDelete)
             },
             negativeButton = DialogButton(
@@ -150,7 +150,6 @@ class ListCountersFragment : Fragment() {
                     return when (item?.itemId) {
                         R.id.action_delete -> {
                             deleteItem()
-                            mode?.finish()
                             true
                         }
                         R.id.menu_share -> {
