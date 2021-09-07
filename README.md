@@ -4,6 +4,7 @@ An application where you can count things and manage your counters.
 ![counter list](https://i.imgur.com/oTN1S4r.png)
 ![examples](https://i.imgur.com/71q3Vmb.png)
 ![delete counter](https://i.imgur.com/aU7hW2Z.png)
+![share counter](https://i.imgur.com/wyOw19T.png)
 
 ## 🚀 Features
 A few of the things you can do with Counters:
