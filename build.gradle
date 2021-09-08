@@ -3,6 +3,12 @@ buildscript {
     ext.kotlin_version = "1.4.30"
     ext.hilt_version = "2.38.1"
     ext.nav_version = "2.3.5"
+    ext.mockk_version = "1.12.0"
+    ext.swipe_version = "1.1.0"
+    ext.retrofit_version = "2.9.0"
+    ext.logging_version = "4.5.0"
+    ext.junit_version = "4.13.2"
+    ext.coroutines_version = "1.5.0"
 
     repositories {
         google()
