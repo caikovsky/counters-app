@@ -38,7 +38,7 @@ A few of the things you can do with Counters:
 ## 📦 Setup
 ### Local server
 
-Open `test` folder, install and start the server
+Open `server` folder, install and start the server
 ```
 $ npm install
 $ npm start
