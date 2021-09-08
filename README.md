@@ -33,11 +33,12 @@ A few of the things you can do with Counters:
  * Android Navigation - navigation management between fragments
  * Material design
  * Shared Preferences - handles first/second access
+ * MockK - unit testing
 
 ## 📦 Setup
 ### Local server
 
-Install and start the server
+Open `test` folder, install and start the server
 ```
 $ npm install
 $ npm start
@@ -54,7 +55,9 @@ Feel free to file an issue. Feature requests are always welcome.
  * Missing proper batch deletion error handling (it should indicate if any request fails)
  * Search should open a custom Searchable Activity
  * Increase test coverage
+ * Add NetworkBoundResource to Room (already started in `feature/room` branch but not integrated yet)
 
 ## 🕵🏻‍♂️ Known issues
- * No results layout only shows when the second character is typed
+ * The `no results` layout from searching counters only shows when the second character is typed
  * Swipe refresh works while Search is activated (it should be disabled to avoid inconsistencies)
+ * Fix current implementation to show keyboard when opening the `CreateCounterFragment` automatically
