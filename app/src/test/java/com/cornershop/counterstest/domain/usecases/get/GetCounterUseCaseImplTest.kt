@@ -6,10 +6,12 @@ import com.cornershop.counterstest.data.repository.CounterRepository
 import com.cornershop.counterstest.domain.model.Counter
 import io.mockk.coEvery
 import io.mockk.mockk
-import junit.framework.Assert.assertEquals
+import junit.framework.Assert.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.ResponseBody
+import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -37,6 +39,21 @@ class GetCounterUseCaseImplTest {
 
         val result = getCounterUseCase.invoke()
 
+        assertNotNull(result.data)
+        assertTrue(result.isSuccess)
+        assertEquals(repositoryResponse.body(), result.data)
+    }
+
+    @Test
+    fun `should call repository and return an error`() = mainCoroutineRule.runBlockingTest {
+        val repositoryResponse = Response.error<List<Counter>>(400, "error".toResponseBody("application/json".toMediaTypeOrNull()))
+
+        coEvery { repository.getCounters() } returns repositoryResponse
+
+        val result = getCounterUseCase.invoke()
+
+        assertNull(result.data)
+        assertTrue(result.isError)
         assertEquals(repositoryResponse.body(), result.data)
     }
 }
