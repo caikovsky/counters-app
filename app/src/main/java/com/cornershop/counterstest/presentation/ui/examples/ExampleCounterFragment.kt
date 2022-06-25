@@ -4,25 +4,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.ComposeView
+import androidx.compose.material.MaterialTheme
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.cornershop.counterstest.R
-import com.cornershop.counterstest.databinding.FragmentExampleCounterBinding
+import com.cornershop.counterstest.databinding.LayoutComposeBinding
 import com.cornershop.counterstest.presentation.ui.create.CreateCounterViewModel
 import com.cornershop.counterstest.presentation.ui.list.State
 import com.cornershop.counterstest.util.DialogButton
 import com.cornershop.counterstest.util.DialogUtil
-import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 internal class ExampleCounterFragment : Fragment() {
 
-    private var _binding: FragmentExampleCounterBinding? = null
-    private val binding: FragmentExampleCounterBinding get() = _binding!!
+    private var _binding: LayoutComposeBinding? = null
+    private val binding: LayoutComposeBinding get() = _binding!!
     private val viewModel: CreateCounterViewModel by viewModels()
 
     override fun onCreateView(
@@ -30,11 +29,22 @@ internal class ExampleCounterFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return ComposeView(requireContext()).apply {
+        _binding = LayoutComposeBinding.inflate(inflater, container, false)
+        val view = binding.root
+        binding.composeView.apply {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
-                ExampleCounterScreen()
+                MaterialTheme {
+                    ExampleCounterScreen()
+                }
             }
         }
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -45,12 +55,12 @@ internal class ExampleCounterFragment : Fragment() {
 //        setHasOptionsMenu(false)
     }
 
-    private fun setBindings() {
+    /*private fun setBindings() {
         with(binding) {
             lifecycleOwner = viewLifecycleOwner
             toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         }
-    }
+    }*/
 
     private fun setObservers() {
         viewModel.save.observe(viewLifecycleOwner) { response ->
@@ -76,13 +86,13 @@ internal class ExampleCounterFragment : Fragment() {
         ).show()
     }
 
-    private fun populateChips() {
-        renderDrinkExamples()
-        renderFoodExamples()
-        renderMiscExamples()
-    }
+    /* private fun populateChips() {
+         renderDrinkExamples()
+         renderFoodExamples()
+         renderMiscExamples()
+     }*/
 
-    private fun renderMiscExamples() {
+    /*private fun renderMiscExamples() {
         val miscList = resources.getStringArray(R.array.misc_array)
 
         for (misc in miscList) {
@@ -113,5 +123,5 @@ internal class ExampleCounterFragment : Fragment() {
             chip.setOnClickListener { viewModel.saveCounter(drink) }
             binding.drinkExamplesChipGroup.addView(chip)
         }
-    }
+    }*/
 }
