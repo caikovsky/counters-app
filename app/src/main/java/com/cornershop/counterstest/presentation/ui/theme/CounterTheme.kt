@@ -1,35 +1,48 @@
 package com.cornershop.counterstest.presentation.ui.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material.*
+import androidx.compose.material.Shapes
+import androidx.compose.material.Typography
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.remember
 
-@Composable
-fun CounterTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable () -> Unit
-) {
-    val colors = if (darkTheme) DarkColorPalette else LightColorPalette
+internal object CounterTheme {
+    val colors: CounterColors
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalColors.current
 
-    MaterialTheme(
-        colors = colors,
-        typography = CounterTypography,
-        shapes = CounterShapes,
-        content = content
-    )
+    val typography: Typography
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalTypography.current
+
+    val dimensions: CounterDimensions
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalDimensions.current
+
+    val shapes: Shapes
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalShapes.current
 }
 
-private val DarkColorPalette = darkColors()
+@Composable
+internal fun CounterTheme(
+    colors: CounterColors = CounterTheme.colors,
+    typography: Typography = CounterTheme.typography,
+    dimensions: CounterDimensions = CounterTheme.dimensions,
+    shapes: Shapes = CounterTheme.shapes,
+    content: @Composable () -> Unit
+) {
+    val rememberedColors = remember { colors.copy() }.apply { updateColorsFrom(colors) }
 
-private val LightColorPalette = lightColors(
-    primary = Color(0xFFFF9500),
-    secondary = Color(0xFFFFFFFF),
-    error = Color.Red,
-    onPrimary = Color(0xFF212121),
-    onSecondary = Color(0xFF888B90),
-)
-
-private val CounterTypography: Typography = Typography()
-
-private val CounterShapes: Shapes = Shapes()
+    CompositionLocalProvider(
+        LocalColors provides rememberedColors,
+        LocalTypography provides typography,
+        LocalDimensions provides dimensions,
+        LocalShapes provides shapes
+    ) { content() }
+}
