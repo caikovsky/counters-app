@@ -9,10 +9,10 @@ import com.cornershop.counterstest.data.core.NetworkResult
 import com.cornershop.counterstest.data.request.DecrementCounterRequest
 import com.cornershop.counterstest.data.request.DeleteCounterRequest
 import com.cornershop.counterstest.data.request.IncrementCounterRequest
-import com.cornershop.counterstest.domain.usecases.dec.DecrementCounterUseCase
-import com.cornershop.counterstest.domain.usecases.delete.DeleteCounterUseCase
-import com.cornershop.counterstest.domain.usecases.get.GetCounterUseCase
-import com.cornershop.counterstest.domain.usecases.inc.IncrementCounterUseCase
+import com.cornershop.counterstest.domain.usecases.DecrementCounterUseCase
+import com.cornershop.counterstest.domain.usecases.DeleteCounterUseCase
+import com.cornershop.counterstest.domain.usecases.GetCounterUseCase
+import com.cornershop.counterstest.domain.usecases.IncrementCounterUseCase
 import com.cornershop.counterstest.presentation.model.Counter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*

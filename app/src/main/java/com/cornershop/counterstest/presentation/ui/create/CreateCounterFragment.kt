@@ -15,7 +15,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -33,7 +32,6 @@ class CreateCounterFragment : Fragment() {
     private var _binding: FragmentCreateCounterBinding? = null
     private val binding: FragmentCreateCounterBinding get() = _binding!!
     private val viewModel: CreateCounterViewModel by viewModels()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

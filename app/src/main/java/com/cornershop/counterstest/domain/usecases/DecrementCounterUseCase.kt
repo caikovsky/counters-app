@@ -1,4 +1,4 @@
-package com.cornershop.counterstest.domain.usecases.dec
+package com.cornershop.counterstest.domain.usecases
 
 import com.cornershop.counterstest.data.core.BaseApiResponse
 import com.cornershop.counterstest.data.core.NetworkResult
@@ -7,10 +7,10 @@ import com.cornershop.counterstest.data.request.DecrementCounterRequest
 import com.cornershop.counterstest.domain.model.Counter
 import javax.inject.Inject
 
-class DecrementCounterUseCaseImpl @Inject constructor(private val counterRepositoryImpl: CounterRepositoryImpl) :
-    DecrementCounterUseCase, BaseApiResponse() {
+class DecrementCounterUseCase @Inject constructor(private val counterRepositoryImpl: CounterRepositoryImpl) :
+    BaseApiResponse() {
 
-    override suspend fun invoke(id: DecrementCounterRequest): NetworkResult<List<Counter>> {
+    suspend operator fun invoke(id: DecrementCounterRequest): NetworkResult<List<Counter>> {
         return safeApiCall { counterRepositoryImpl.decrementCounter(id) }
     }
 }

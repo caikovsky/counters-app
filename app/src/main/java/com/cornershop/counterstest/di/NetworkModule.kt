@@ -1,8 +1,7 @@
-package com.cornershop.counterstest.data
+package com.cornershop.counterstest.di
 
 import com.cornershop.counterstest.BuildConfig
-import com.cornershop.counterstest.data.remote.CounterServiceHelper
-import com.cornershop.counterstest.data.remote.CounterServiceHelperImpl
+import com.cornershop.counterstest.data.CounterService
 import com.cornershop.counterstest.util.Constants
 import dagger.Module
 import dagger.Provides
@@ -13,7 +12,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
-
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -46,10 +44,6 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideApiService(retrofit: Retrofit) = retrofit.create(CounterService::class.java)
-
-    @Provides
-    @Singleton
-    fun provideApiHelper(counterService: CounterServiceHelperImpl): CounterServiceHelper = counterService
-
+    fun provideApiService(retrofit: Retrofit): CounterService =
+        retrofit.create(CounterService::class.java)
 }

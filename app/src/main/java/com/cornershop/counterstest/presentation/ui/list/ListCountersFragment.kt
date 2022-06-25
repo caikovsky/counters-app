@@ -11,7 +11,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.fragment.findNavController
 import com.cornershop.counterstest.R
-import com.cornershop.counterstest.data.core.NetworkResult
 import com.cornershop.counterstest.databinding.FragmentListCountersBinding
 import com.cornershop.counterstest.presentation.model.Counter
 import com.cornershop.counterstest.util.Constants.COUNTER_KEY

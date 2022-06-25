@@ -5,8 +5,7 @@ import com.cornershop.counterstest.MainCoroutineRule
 import com.cornershop.counterstest.data.repository.CounterRepositoryImpl
 import com.cornershop.counterstest.data.request.CreateCounterRequest
 import com.cornershop.counterstest.domain.model.Counter
-import com.cornershop.counterstest.domain.usecases.create.CreateCounterUseCase
-import com.cornershop.counterstest.domain.usecases.create.CreateCounterUseCaseImpl
+import com.cornershop.counterstest.domain.usecases.CreateCounterUseCase
 import com.cornershop.counterstest.getOrAwaitValue
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -33,7 +32,7 @@ class CreateCounterViewModelTest {
 
     @Before
     fun setUp() {
-        createCounterUseCase = CreateCounterUseCaseImpl(repository)
+        createCounterUseCase = CreateCounterUseCase(repository)
         viewModel = CreateCounterViewModel(createCounterUseCase)
     }
 

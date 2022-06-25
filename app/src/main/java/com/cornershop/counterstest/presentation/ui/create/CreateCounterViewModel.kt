@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.cornershop.counterstest.data.core.NetworkResult
 import com.cornershop.counterstest.data.request.CreateCounterRequest
 import com.cornershop.counterstest.domain.model.Counter
-import com.cornershop.counterstest.domain.usecases.create.CreateCounterUseCase
+import com.cornershop.counterstest.domain.usecases.CreateCounterUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -35,5 +35,4 @@ class CreateCounterViewModel @Inject constructor(private val createCounterUseCas
     fun toggleProgressDialog(show: Boolean) {
         _isLoading.value = show
     }
-
 }
