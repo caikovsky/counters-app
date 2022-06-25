@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -17,7 +19,7 @@ import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ExampleCounterFragment : Fragment() {
+internal class ExampleCounterFragment : Fragment() {
 
     private var _binding: FragmentExampleCounterBinding? = null
     private val binding: FragmentExampleCounterBinding get() = _binding!!
@@ -28,16 +30,19 @@ class ExampleCounterFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentExampleCounterBinding.inflate(inflater, container, false)
-        return binding.root
+        return ComposeView(requireContext()).apply {
+            setContent {
+                ExampleCounterScreen()
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        populateChips()
-        setObservers()
-        setBindings()
-        setHasOptionsMenu(false)
+//        populateChips()
+//        setObservers()
+//        setBindings()
+//        setHasOptionsMenu(false)
     }
 
     private fun setBindings() {

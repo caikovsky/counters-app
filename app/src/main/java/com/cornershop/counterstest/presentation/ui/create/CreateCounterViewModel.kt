@@ -15,8 +15,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-internal class CreateCounterViewModel @Inject constructor(private val createCounterUseCase: CreateCounterUseCase) :
-    ViewModel() {
+internal class CreateCounterViewModel @Inject constructor(
+    private val createCounterUseCase: CreateCounterUseCase
+) : ViewModel() {
 
     private val _save = MutableLiveData<State<List<Counter>>>()
     val save: LiveData<State<List<Counter>>> get() = _save
