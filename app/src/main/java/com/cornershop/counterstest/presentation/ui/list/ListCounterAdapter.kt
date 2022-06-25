@@ -1,5 +1,5 @@
 package com.cornershop.counterstest.presentation.ui.list
-
+/*
 import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
@@ -151,3 +151,4 @@ internal class ListCounterAdapter(
         }
     }
 }
+*/
