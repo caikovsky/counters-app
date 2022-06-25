@@ -61,7 +61,6 @@ internal class ListCounterAdapter(
         notifyDataSetChanged()
     }
 
-    @ExperimentalStdlibApi
     override fun getFilter(): Filter {
         return object : Filter() {
             override fun performFiltering(constraint: CharSequence?): FilterResults {
