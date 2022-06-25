@@ -185,7 +185,16 @@ internal class ListCounterViewModel @Inject constructor(
 
                 val responses = runningTasks.awaitAll()
                 // TODO: Handle errors
-//                content.addAll(responses.last().second.data!!)
+                content.addAll(
+                    responses.last().second.map { domainModel ->
+                        Counter(
+                            id = domainModel.id,
+                            title = domainModel.title,
+                            count = domainModel.count,
+                            selected = false
+                        )
+                    }
+                )
             }
 
             _deleteCounter.value = content
