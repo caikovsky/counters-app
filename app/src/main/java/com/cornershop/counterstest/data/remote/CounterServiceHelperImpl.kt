@@ -2,6 +2,7 @@ package com.cornershop.counterstest.data.remote
 
 import com.cornershop.counterstest.data.CounterService
 import com.cornershop.counterstest.data.model.GetCounterResponse
+import com.cornershop.counterstest.data.model.IncrementCounterResponse
 import com.cornershop.counterstest.data.request.CreateCounterRequest
 import com.cornershop.counterstest.data.request.DecrementCounterRequest
 import com.cornershop.counterstest.data.request.DeleteCounterRequest
@@ -21,7 +22,7 @@ class CounterServiceHelperImpl @Inject constructor(private val counterService: C
     override suspend fun deleteCounter(id: DeleteCounterRequest): Response<List<Counter>> =
         counterService.deleteCounter(id)
 
-    override suspend fun incrementCounter(id: IncrementCounterRequest): Response<List<Counter>> =
+    override suspend fun incrementCounter(id: IncrementCounterRequest): List<IncrementCounterResponse> =
         counterService.incrementCounter(id)
 
     override suspend fun decrementCounter(id: DecrementCounterRequest): Response<List<Counter>> =

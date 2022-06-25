@@ -1,6 +1,7 @@
 package com.cornershop.counterstest.data
 
 import com.cornershop.counterstest.data.model.GetCounterResponse
+import com.cornershop.counterstest.data.model.IncrementCounterResponse
 import com.cornershop.counterstest.data.request.CreateCounterRequest
 import com.cornershop.counterstest.data.request.DecrementCounterRequest
 import com.cornershop.counterstest.data.request.DeleteCounterRequest
@@ -24,7 +25,7 @@ interface CounterService {
     suspend fun deleteCounter(@Body id: DeleteCounterRequest): Response<List<Counter>>
 
     @POST("counter/inc")
-    suspend fun incrementCounter(@Body id: IncrementCounterRequest): Response<List<Counter>>
+    suspend fun incrementCounter(@Body id: IncrementCounterRequest): List<IncrementCounterResponse>
 
     @POST("counter/dec")
     suspend fun decrementCounter(@Body id: DecrementCounterRequest): Response<List<Counter>>

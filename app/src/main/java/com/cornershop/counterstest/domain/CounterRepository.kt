@@ -1,6 +1,7 @@
 package com.cornershop.counterstest.domain
 
 import com.cornershop.counterstest.data.model.GetCounterResponse
+import com.cornershop.counterstest.data.model.IncrementCounterResponse
 import com.cornershop.counterstest.data.request.CreateCounterRequest
 import com.cornershop.counterstest.data.request.DecrementCounterRequest
 import com.cornershop.counterstest.data.request.DeleteCounterRequest
@@ -16,7 +17,7 @@ interface CounterRepository {
 
     suspend fun deleteCounter(request: DeleteCounterRequest): Response<List<Counter>>
 
-    suspend fun incrementCounter(request: IncrementCounterRequest): Response<List<Counter>>
+    suspend fun incrementCounter(request: IncrementCounterRequest): List<IncrementCounterResponse>
 
     suspend fun decrementCounter(request: DecrementCounterRequest): Response<List<Counter>>
 }

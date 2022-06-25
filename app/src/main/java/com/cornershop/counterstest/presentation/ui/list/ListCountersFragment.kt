@@ -360,14 +360,14 @@ class ListCountersFragment : Fragment() {
         }
 
         viewModel.incCounter.observe(viewLifecycleOwner) { response ->
-            if (response is NetworkResult.Success) {
-                renderCounterList(response.data!!)
+            if (response is State.Success) {
+                renderCounterList(response.data)
             }
         }
 
         viewModel.decCounter.observe(viewLifecycleOwner) { response ->
-            if (response is NetworkResult.Success) {
-                renderCounterList(response.data!!)
+            if (response is State.Success) {
+                renderCounterList(response.data)
             }
         }
 

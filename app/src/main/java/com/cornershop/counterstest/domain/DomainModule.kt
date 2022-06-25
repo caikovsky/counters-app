@@ -6,8 +6,6 @@ import com.cornershop.counterstest.domain.usecases.dec.DecrementCounterUseCase
 import com.cornershop.counterstest.domain.usecases.dec.DecrementCounterUseCaseImpl
 import com.cornershop.counterstest.domain.usecases.delete.DeleteCounterUseCase
 import com.cornershop.counterstest.domain.usecases.delete.DeleteCounterUseCaseImpl
-import com.cornershop.counterstest.domain.usecases.inc.IncrementCounterUseCase
-import com.cornershop.counterstest.domain.usecases.inc.IncrementCounterUseCaseImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -22,9 +20,6 @@ interface DomainModule {
 
     @Binds
     fun bindDeleteCounterUseCase(useCase: DeleteCounterUseCaseImpl): DeleteCounterUseCase
-
-    @Binds
-    fun bindIncrementCounterUseCase(useCase: IncrementCounterUseCaseImpl): IncrementCounterUseCase
 
     @Binds
     fun bindDecrementCounterUseCase(useCase: DecrementCounterUseCaseImpl): DecrementCounterUseCase

@@ -2,6 +2,7 @@ package com.cornershop.counterstest.data.repository
 
 import com.cornershop.counterstest.data.CounterService
 import com.cornershop.counterstest.data.model.GetCounterResponse
+import com.cornershop.counterstest.data.model.IncrementCounterResponse
 import com.cornershop.counterstest.data.request.CreateCounterRequest
 import com.cornershop.counterstest.data.request.DecrementCounterRequest
 import com.cornershop.counterstest.data.request.DeleteCounterRequest
@@ -23,7 +24,7 @@ class CounterRepositoryImpl @Inject constructor(
     override suspend fun deleteCounter(request: DeleteCounterRequest): Response<List<Counter>> =
         counterService.deleteCounter(request)
 
-    override suspend fun incrementCounter(request: IncrementCounterRequest): Response<List<Counter>> =
+    override suspend fun incrementCounter(request: IncrementCounterRequest): List<IncrementCounterResponse> =
         counterService.incrementCounter(request)
 
     override suspend fun decrementCounter(request: DecrementCounterRequest): Response<List<Counter>> =

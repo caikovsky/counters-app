@@ -51,11 +51,11 @@ internal class ListCounterViewModel @Inject constructor(
     private val _counters = MutableLiveData<State<List<Counter>>>()
     val counters: LiveData<State<List<Counter>>> get() = _counters
 
-    private val _incCounter = MutableLiveData<NetworkResult<List<Counter>>>()
-    val incCounter: LiveData<NetworkResult<List<Counter>>> get() = _incCounter
+    private val _incCounter = MutableLiveData<State<List<Counter>>>()
+    val incCounter: LiveData<State<List<Counter>>> get() = _incCounter
 
-    private val _decCounter = MutableLiveData<NetworkResult<List<Counter>>>()
-    val decCounter: LiveData<NetworkResult<List<Counter>>> get() = _decCounter
+    private val _decCounter = MutableLiveData<State<List<Counter>>>()
+    val decCounter: LiveData<State<List<Counter>>> get() = _decCounter
 
     private val _deleteCounter = MutableLiveData<List<Counter>>()
     val deleteCounter: LiveData<List<Counter>> get() = _deleteCounter
@@ -85,22 +85,32 @@ internal class ListCounterViewModel @Inject constructor(
     }
 
     fun incrementCounter(counter: Counter) {
-        _incCounter.value = NetworkResult.Loading()
-
         viewModelScope.launch {
-            incrementCounterUseCase(IncrementCounterRequest(counter.id)).let {
-                if (it.isError) {
-                    counter.count = counter.count.inc()
-                    _dialogError.value = CounterError(counter)
-                } else {
-//                    _incCounter.value = it
+            _incCounter.value = State.Loading
+
+            runCatching {
+                incrementCounterUseCase(IncrementCounterRequest(counter.id))
+            }.onSuccess { list ->
+                val result = list.map { domainModel ->
+                    Counter(
+                        id = domainModel.id,
+                        title = domainModel.title,
+                        count = domainModel.count,
+                        selected = false
+                    )
                 }
+
+                _incCounter.value = State.Success(result)
+            }.onFailure { throwable ->
+                Log.e(this::class.simpleName, "incrementCounterUseCase: ${throwable.message}")
+                counter.count = counter.count.inc()
+                _dialogError.value = CounterError(counter)
             }
         }
     }
 
     fun decrementCounter(counter: Counter) {
-        _decCounter.value = NetworkResult.Loading()
+        _decCounter.value = State.Loading
 
         viewModelScope.launch {
             decrementCounterUseCase(DecrementCounterRequest(counter.id)).let {
