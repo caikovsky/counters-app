@@ -43,3 +43,5 @@ gen/
 local.properties
 /captures
 report.xml
+
+/server/node_modules/*
