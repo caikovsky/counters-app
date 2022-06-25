@@ -1,5 +1,6 @@
 package com.cornershop.counterstest.presentation.ui.create
 
+/*
 import android.app.Activity
 import android.graphics.Color
 import android.os.Bundle
@@ -64,7 +65,7 @@ class CreateCounterFragment : Fragment() {
 
         val clickableSpan = object : ClickableSpan() {
             override fun onClick(view: View) {
-                findNavController().navigate(R.id.action_createCounterFragment_to_exampleCounterFragment)
+//                findNavController().navigate(R.id.action_createCounterFragment_to_exampleCounterFragment)
             }
         }
 
@@ -170,3 +171,4 @@ class CreateCounterFragment : Fragment() {
         super.onDestroyView()
     }
 }
+*/

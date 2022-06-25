@@ -17,43 +17,45 @@ import com.cornershop.counterstest.util.DialogButton
 import com.cornershop.counterstest.util.DialogUtil
 import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
-internal class ExampleCounterFragment : Fragment() {
+//@AndroidEntryPoint
+//internal class ExampleCounterFragment : Fragment() {
+//
+//    private var _binding: LayoutComposeBinding? = null
+//    private val binding: LayoutComposeBinding get() = _binding!!
+//    private val viewModel: CreateCounterViewModel by viewModels()
+//
+//    override fun onCreateView(
+//        inflater: LayoutInflater,
+//        container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View {
+//        _binding = LayoutComposeBinding.inflate(inflater, container, false)
+//        val view = binding.root
+//        binding.composeView.apply {
+//            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+//            setContent {
+//                MaterialTheme {
+//                    ExampleCounterScreen(
+//                        navController =
+//                    )
+//                }
+//            }
+//        }
+//        return view
+//    }
+//
+//    override fun onDestroyView() {
+//        super.onDestroyView()
+//        _binding = null
+//    }
 
-    private var _binding: LayoutComposeBinding? = null
-    private val binding: LayoutComposeBinding get() = _binding!!
-    private val viewModel: CreateCounterViewModel by viewModels()
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = LayoutComposeBinding.inflate(inflater, container, false)
-        val view = binding.root
-        binding.composeView.apply {
-            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-            setContent {
-                MaterialTheme {
-                    ExampleCounterScreen()
-                }
-            }
-        }
-        return view
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//        super.onViewCreated(view, savedInstanceState)
 //        populateChips()
 //        setObservers()
 //        setBindings()
 //        setHasOptionsMenu(false)
-    }
+//    }
 
     /*private fun setBindings() {
         with(binding) {
@@ -61,20 +63,17 @@ internal class ExampleCounterFragment : Fragment() {
             toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         }
     }*/
-
+/*
     private fun setObservers() {
         viewModel.save.observe(viewLifecycleOwner) { response ->
             when (response) {
-                is State.Success -> findNavController()
-                    .navigate(
-                        R.id.action_exampleCounterFragment_to_listCountersFragment2
-                    )
+                is State.Success -> {}
                 is State.Error -> showErrorDialog()
                 else -> {}
             }
         }
-    }
-
+    }*/
+/*
     private fun showErrorDialog() {
         DialogUtil.getDialog(
             requireActivity(),
@@ -84,7 +83,7 @@ internal class ExampleCounterFragment : Fragment() {
                 text = resources.getString(R.string.ok)
             ) { dialog, _ -> dialog.dismiss() },
         ).show()
-    }
+    }*/
 
     /* private fun populateChips() {
          renderDrinkExamples()
@@ -124,4 +123,4 @@ internal class ExampleCounterFragment : Fragment() {
             binding.drinkExamplesChipGroup.addView(chip)
         }
     }*/
-}
+//}

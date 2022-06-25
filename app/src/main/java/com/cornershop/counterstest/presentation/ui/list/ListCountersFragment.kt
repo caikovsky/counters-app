@@ -1,5 +1,6 @@
 package com.cornershop.counterstest.presentation.ui.list
 
+/*
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
@@ -52,7 +53,6 @@ class ListCountersFragment : Fragment() {
         setListeners()
         configureSwipeLayout()
         observeStates()
-        observeNavigationBackStack()
         configureViewModel()
         updateItemCount(counterAdapter.itemCount)
     }
@@ -215,7 +215,7 @@ class ListCountersFragment : Fragment() {
     private fun setListeners() {
         with(binding) {
             listContent.createCounterButton.setOnClickListener {
-                findNavController().navigate(R.id.action_listCountersFragment_to_createCounterFragment)
+//                findNavController().navigate(R.id.action_listCountersFragment_to_createCounterFragment)
             }
 
             swipeLayout.setOnRefreshListener {
@@ -382,39 +382,9 @@ class ListCountersFragment : Fragment() {
         }
     }
 
-    private fun observeNavigationBackStack() {
-        findNavController().run {
-            val navBackStackEntry = getBackStackEntry(R.id.listCountersFragment)
-            val savedStateHandle = navBackStackEntry.savedStateHandle
-            val observer = LifecycleEventObserver { _, event ->
-                if (event == Lifecycle.Event.ON_RESUME && savedStateHandle.contains(COUNTER_KEY)) {
-                    val product = savedStateHandle.get<Counter>(COUNTER_KEY)
-                    val oldList = counterAdapter.currentList
-                    val newList = oldList.toMutableList().apply {
-                        add(product)
-                    }
-                    counterAdapter.submitList(newList)
-                    binding.listContent.listBodyContent.recyclerViewComponent.counterRecycler.smoothScrollToPosition(
-                        newList.size - 1
-                    )
-                    savedStateHandle.remove<Counter>(COUNTER_KEY)
-                }
-            }
-
-            navBackStackEntry.lifecycle.addObserver(observer)
-
-            viewLifecycleOwner.lifecycle.addObserver(
-                LifecycleEventObserver { _, event ->
-                    if (event == Lifecycle.Event.ON_DESTROY) {
-                        navBackStackEntry.lifecycle.removeObserver(observer)
-                    }
-                }
-            )
-        }
-    }
-
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
     }
 }
+*/
