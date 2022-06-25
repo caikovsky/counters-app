@@ -44,4 +44,5 @@ local.properties
 /captures
 report.xml
 
+package-lock.json
 /server/node_modules/*
