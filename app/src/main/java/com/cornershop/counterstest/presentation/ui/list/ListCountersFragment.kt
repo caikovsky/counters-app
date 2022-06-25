@@ -282,19 +282,19 @@ class ListCountersFragment : Fragment() {
     private fun observeStates() {
         viewModel.counters.observe(viewLifecycleOwner) { response ->
             when (response) {
-                is CounterListState.Loading -> viewModel.toggleProgressDialog(true)
-                is CounterListState.Success -> {
+                is State.Loading -> viewModel.toggleProgressDialog(true)
+                is State.Success -> {
                     viewModel.toggleProgressDialog(false)
                     viewModel.renderErrorLayout(false)
 
-                    if (response.counters.isEmpty()) {
+                    if (response.data.isEmpty()) {
                         viewModel.renderEmptyLayout(true)
                     } else {
-                        renderCounterList(response.counters)
+                        renderCounterList(response.data)
                         binding.swipeLayout.isRefreshing = false
                     }
                 }
-                is CounterListState.Error -> {
+                is State.Error -> {
                     viewModel.toggleProgressDialog(false)
                     viewModel.renderErrorLayout(true)
                 }

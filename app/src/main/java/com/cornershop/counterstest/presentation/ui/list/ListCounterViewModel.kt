@@ -48,8 +48,8 @@ internal class ListCounterViewModel @Inject constructor(
     private val _dialogError = MutableLiveData<CounterError>()
     val dialogError: LiveData<CounterError> get() = _dialogError
 
-    private val _counters = MutableLiveData<CounterListState>()
-    val counters: LiveData<CounterListState> get() = _counters
+    private val _counters = MutableLiveData<State<List<Counter>>>()
+    val counters: LiveData<State<List<Counter>>> get() = _counters
 
     private val _incCounter = MutableLiveData<NetworkResult<List<Counter>>>()
     val incCounter: LiveData<NetworkResult<List<Counter>>> get() = _incCounter
@@ -61,9 +61,9 @@ internal class ListCounterViewModel @Inject constructor(
     val deleteCounter: LiveData<List<Counter>> get() = _deleteCounter
 
     fun getCounters() {
-        _counters.value = CounterListState.Loading
-
         viewModelScope.launch {
+            _counters.value = State.Loading
+
             runCatching {
                 getCounterUseCase()
             }.onSuccess { response ->
@@ -76,10 +76,10 @@ internal class ListCounterViewModel @Inject constructor(
                     )
                 }
 
-                _counters.value = CounterListState.Success(result)
+                _counters.value = State.Success(result)
             }.onFailure { throwable ->
-                Log.e(this::class.simpleName, "onEvent: ${throwable.message}")
-                _counters.value = CounterListState.Error
+                Log.e(this::class.simpleName, "getCounterUseCase: ${throwable.message}")
+                _counters.value = State.Error
             }
         }
     }
@@ -180,10 +180,10 @@ internal class ListCounterViewModel @Inject constructor(
     }
 }
 
-internal sealed class CounterListState {
-    object Loading : CounterListState()
-    object Error : CounterListState()
-    data class Success(val counters: List<Counter>) : CounterListState()
+internal sealed class State<out T : Any> {
+    object Loading : State<Nothing>()
+    object Error : State<Nothing>()
+    data class Success<out T : Any>(val data: T) : State<T>()
 }
 
 internal class CounterError(val counter: Counter, val type: String = "update")
