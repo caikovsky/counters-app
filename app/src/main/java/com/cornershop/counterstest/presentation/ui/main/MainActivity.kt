@@ -1,25 +1,53 @@
 package com.cornershop.counterstest.presentation.ui.main
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import com.cornershop.counterstest.databinding.ActivityMainBinding
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.material.MaterialTheme
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.cornershop.counterstest.presentation.ui.create.CreateCounterScreen
+import com.cornershop.counterstest.presentation.ui.examples.ExampleCounterScreen
+import com.cornershop.counterstest.presentation.ui.list.ListCounterScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
-
-    private var _binding: ActivityMainBinding? = null
-    private val binding: ActivityMainBinding get() = _binding!!
+class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _binding = ActivityMainBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
+        setContent {
+            MaterialTheme {
+                val navController = rememberNavController()
+
+                NavHost(
+                    navController = navController,
+                    startDestination = Routes.CreateCounters.route
+                ) {
+                    composable(route = Routes.ListCounters.route) {
+                        ListCounterScreen(
+                            navController = navController
+                        )
+                    }
+                    composable(route = Routes.CreateCounters.route) {
+                        CreateCounterScreen(
+                            navController = navController
+                        )
+                    }
+                    composable(route = Routes.ExampleCounter.route) {
+                        ExampleCounterScreen(
+                            navController = navController
+                        )
+                    }
+                }
+            }
+        }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
+    private sealed class Routes(val route: String) {
+        object ListCounters : Routes("list_screen")
+        object CreateCounters : Routes("create_screen")
+        object ExampleCounter : Routes("example_screen")
     }
 }
