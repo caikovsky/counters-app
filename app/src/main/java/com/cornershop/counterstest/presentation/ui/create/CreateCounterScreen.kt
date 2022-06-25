@@ -19,11 +19,11 @@ internal fun CreateCounterScreen(
     navController: NavController
 ) {
     Scaffold(
-        backgroundColor = MaterialTheme.colors.background,
+        backgroundColor = CounterTheme.colors.background,
         topBar = {
             TopAppBar(
-                backgroundColor = MaterialTheme.colors.secondary,
-                contentColor = MaterialTheme.colors.primary,
+                backgroundColor = CounterTheme.colors.secondary,
+                contentColor = CounterTheme.colors.primary,
                 title = { Text(text = stringResource(id = R.string.create_counter)) }
             )
         }
@@ -44,14 +44,14 @@ internal fun CreateCounterScreen(
                     onValueChange = {},
                     label = { Text(text = stringResource(id = R.string.counter_name_label)) },
                     maxLines = 1,
-                    textStyle = TextStyle(color = MaterialTheme.colors.primary)
+                    textStyle = TextStyle(color = CounterTheme.colors.primary)
                 )
 
                 Spacer(modifier = modifier.height(25.dp))
 
                 Text(
                     text = stringResource(id = R.string.create_counter_disclaimer),
-                    color = MaterialTheme.colors.onSecondary
+                    color = CounterTheme.colors.onSecondary
                 )
             }
         }
