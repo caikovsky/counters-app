@@ -13,12 +13,11 @@ import androidx.navigation.fragment.findNavController
 import com.cornershop.counterstest.R
 import com.cornershop.counterstest.data.core.NetworkResult
 import com.cornershop.counterstest.databinding.FragmentListCountersBinding
-import com.cornershop.counterstest.domain.model.Counter
+import com.cornershop.counterstest.presentation.model.Counter
 import com.cornershop.counterstest.util.Constants.COUNTER_KEY
 import com.cornershop.counterstest.util.DialogButton
 import com.cornershop.counterstest.util.DialogUtil
 import dagger.hilt.android.AndroidEntryPoint
-
 
 @AndroidEntryPoint
 class ListCountersFragment : Fragment() {
@@ -30,8 +29,8 @@ class ListCountersFragment : Fragment() {
     private val counterAdapter: ListCounterAdapter = ListCounterAdapter(
         { counter -> decrementOnClick(counter) },
         { counter -> incrementOnClick(counter) },
-        { position -> selectCounterOnLongPress(position) })
-
+        { position -> selectCounterOnLongPress(position) }
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -70,7 +69,7 @@ class ListCountersFragment : Fragment() {
 
     private fun shareCounter() {
         val sharingIntent = Intent(Intent.ACTION_SEND)
-        sharingIntent.type = "text/plain";
+        sharingIntent.type = "text/plain"
         val content = formatShareList().joinToString("\n")
         sharingIntent.putExtra(Intent.EXTRA_TEXT, content)
         startActivity(Intent.createChooser(sharingIntent, resources.getString(R.string.share)))
@@ -80,7 +79,13 @@ class ListCountersFragment : Fragment() {
         val itemList = arrayListOf<String>()
 
         for (item in counterAdapter.counterListFiltered) {
-            if (item.selected) itemList.add(String.format(resources.getString(R.string.n_per_counter_name), item.count, item.title))
+            if (item.selected) itemList.add(
+                String.format(
+                    resources.getString(R.string.n_per_counter_name),
+                    item.count,
+                    item.title
+                )
+            )
         }
 
         return itemList
@@ -101,7 +106,10 @@ class ListCountersFragment : Fragment() {
     private fun deleteItem() {
         val countersToDelete = getSelectedItems()
         val title: String = if (countersToDelete.isNotEmpty() && countersToDelete.size == 1) {
-            String.format(resources.getString(R.string.delete_x_question), countersToDelete[0].title)
+            String.format(
+                resources.getString(R.string.delete_x_question),
+                countersToDelete[0].title
+            )
         } else {
             String.format(resources.getString(R.string.delete_n_items), countersToDelete.size)
         }
@@ -217,25 +225,25 @@ class ListCountersFragment : Fragment() {
             }
 
             searchCounter.setOnQueryTextListener(object :
-                SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    return false
-                }
-
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    counterAdapter.filter.filter(newText)
-
-                    if (counterAdapter.itemCount == 0) {
-                        viewModel.renderNoResultsLayout(true)
-                    } else {
-                        viewModel.renderNoResultsLayout(false)
+                    SearchView.OnQueryTextListener {
+                    override fun onQueryTextSubmit(query: String?): Boolean {
+                        return false
                     }
 
-                    updateCountTimes()
-                    updateItemCount(counterAdapter.itemCount)
-                    return false
-                }
-            })
+                    override fun onQueryTextChange(newText: String?): Boolean {
+                        counterAdapter.filter.filter(newText)
+
+                        if (counterAdapter.itemCount == 0) {
+                            viewModel.renderNoResultsLayout(true)
+                        } else {
+                            viewModel.renderNoResultsLayout(false)
+                        }
+
+                        updateCountTimes()
+                        updateItemCount(counterAdapter.itemCount)
+                        return false
+                    }
+                })
         }
     }
 
@@ -272,20 +280,21 @@ class ListCountersFragment : Fragment() {
     }
 
     private fun observeStates() {
-        viewModel.counters.observe(viewLifecycleOwner) { counters ->
-            when (counters) {
-                is NetworkResult.Success -> {
+        viewModel.counters.observe(viewLifecycleOwner) { response ->
+            when (response) {
+                is CounterListState.Loading -> viewModel.toggleProgressDialog(true)
+                is CounterListState.Success -> {
                     viewModel.toggleProgressDialog(false)
                     viewModel.renderErrorLayout(false)
 
-                    if (counters.data.isNullOrEmpty()) {
+                    if (response.counters.isEmpty()) {
                         viewModel.renderEmptyLayout(true)
                     } else {
-                        renderCounterList(counters.data)
+                        renderCounterList(response.counters)
                         binding.swipeLayout.isRefreshing = false
                     }
                 }
-                is NetworkResult.Error -> {
+                is CounterListState.Error -> {
                     viewModel.toggleProgressDialog(false)
                     viewModel.renderErrorLayout(true)
                 }
@@ -301,14 +310,17 @@ class ListCountersFragment : Fragment() {
                 renderCounterList(counters)
                 binding.swipeLayout.isRefreshing = false
             }
-
         }
 
         viewModel.dialogError.observe(viewLifecycleOwner) { response ->
             when (response.type) {
                 "update" -> {
                     val title =
-                        String.format(resources.getString(R.string.error_updating_counter_title), response.counter.title, response.counter.count)
+                        String.format(
+                            resources.getString(R.string.error_updating_counter_title),
+                            response.counter.title,
+                            response.counter.count
+                        )
 
                     DialogUtil.getDialog(
                         requireActivity(),
@@ -392,11 +404,13 @@ class ListCountersFragment : Fragment() {
 
             navBackStackEntry.lifecycle.addObserver(observer)
 
-            viewLifecycleOwner.lifecycle.addObserver(LifecycleEventObserver { _, event ->
-                if (event == Lifecycle.Event.ON_DESTROY) {
-                    navBackStackEntry.lifecycle.removeObserver(observer)
+            viewLifecycleOwner.lifecycle.addObserver(
+                LifecycleEventObserver { _, event ->
+                    if (event == Lifecycle.Event.ON_DESTROY) {
+                        navBackStackEntry.lifecycle.removeObserver(observer)
+                    }
                 }
-            })
+            )
         }
     }
 

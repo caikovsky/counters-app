@@ -1,5 +1,6 @@
 package com.cornershop.counterstest.presentation.ui.list
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,17 +9,17 @@ import com.cornershop.counterstest.data.core.NetworkResult
 import com.cornershop.counterstest.data.request.DecrementCounterRequest
 import com.cornershop.counterstest.data.request.DeleteCounterRequest
 import com.cornershop.counterstest.data.request.IncrementCounterRequest
-import com.cornershop.counterstest.domain.model.Counter
 import com.cornershop.counterstest.domain.usecases.dec.DecrementCounterUseCase
 import com.cornershop.counterstest.domain.usecases.delete.DeleteCounterUseCase
 import com.cornershop.counterstest.domain.usecases.get.GetCounterUseCase
 import com.cornershop.counterstest.domain.usecases.inc.IncrementCounterUseCase
+import com.cornershop.counterstest.presentation.model.Counter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import javax.inject.Inject
 
 @HiltViewModel
-class ListCounterViewModel @Inject constructor(
+internal class ListCounterViewModel @Inject constructor(
     private val getCounterUseCase: GetCounterUseCase,
     private val incrementCounterUseCase: IncrementCounterUseCase,
     private val decrementCounterUseCase: DecrementCounterUseCase,
@@ -47,8 +48,8 @@ class ListCounterViewModel @Inject constructor(
     private val _dialogError = MutableLiveData<CounterError>()
     val dialogError: LiveData<CounterError> get() = _dialogError
 
-    private val _counters = MutableLiveData<NetworkResult<List<Counter>>>()
-    val counters: LiveData<NetworkResult<List<Counter>>> get() = _counters
+    private val _counters = MutableLiveData<CounterListState>()
+    val counters: LiveData<CounterListState> get() = _counters
 
     private val _incCounter = MutableLiveData<NetworkResult<List<Counter>>>()
     val incCounter: LiveData<NetworkResult<List<Counter>>> get() = _incCounter
@@ -60,11 +61,25 @@ class ListCounterViewModel @Inject constructor(
     val deleteCounter: LiveData<List<Counter>> get() = _deleteCounter
 
     fun getCounters() {
-        _counters.value = NetworkResult.Loading()
+        _counters.value = CounterListState.Loading
 
         viewModelScope.launch {
-            getCounterUseCase().let {
-                _counters.value = it
+            runCatching {
+                getCounterUseCase()
+            }.onSuccess { response ->
+                val result = response.map { domainModel ->
+                    Counter(
+                        id = domainModel.id,
+                        title = domainModel.title,
+                        count = domainModel.count,
+                        selected = false
+                    )
+                }
+
+                _counters.value = CounterListState.Success(result)
+            }.onFailure { throwable ->
+                Log.e(this::class.simpleName, "onEvent: ${throwable.message}")
+                _counters.value = CounterListState.Error
             }
         }
     }
@@ -78,7 +93,7 @@ class ListCounterViewModel @Inject constructor(
                     counter.count = counter.count.inc()
                     _dialogError.value = CounterError(counter)
                 } else {
-                    _incCounter.value = it
+//                    _incCounter.value = it
                 }
             }
         }
@@ -89,11 +104,15 @@ class ListCounterViewModel @Inject constructor(
 
         viewModelScope.launch {
             decrementCounterUseCase(DecrementCounterRequest(counter.id)).let {
-                if (it.isError) {
-                    counter.count = counter.count.dec()
-                    _dialogError.value = CounterError(counter)
-                } else {
-                    _decCounter.value = it
+                when (it) {
+                    is NetworkResult.Error -> {
+                        counter.count = counter.count.dec()
+                        _dialogError.value = CounterError(counter)
+                    }
+                    is NetworkResult.Success -> {
+//                        _decCounter.value = it.data
+                    }
+                    is NetworkResult.Loading -> {}
                 }
             }
         }
@@ -149,7 +168,7 @@ class ListCounterViewModel @Inject constructor(
 
                 val responses = runningTasks.awaitAll()
                 // TODO: Handle errors
-                content.addAll(responses.last().second.data!!)
+//                content.addAll(responses.last().second.data!!)
             }
 
             _deleteCounter.value = content
@@ -161,4 +180,10 @@ class ListCounterViewModel @Inject constructor(
     }
 }
 
-class CounterError(val counter: Counter, val type: String = "update")
+internal sealed class CounterListState {
+    object Loading : CounterListState()
+    object Error : CounterListState()
+    data class Success(val counters: List<Counter>) : CounterListState()
+}
+
+internal class CounterError(val counter: Counter, val type: String = "update")

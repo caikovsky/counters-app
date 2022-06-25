@@ -1,6 +1,7 @@
 package com.cornershop.counterstest.data.remote
 
 import com.cornershop.counterstest.data.CounterService
+import com.cornershop.counterstest.data.model.GetCounterResponse
 import com.cornershop.counterstest.data.request.CreateCounterRequest
 import com.cornershop.counterstest.data.request.DecrementCounterRequest
 import com.cornershop.counterstest.data.request.DeleteCounterRequest
@@ -12,7 +13,7 @@ import javax.inject.Inject
 class CounterServiceHelperImpl @Inject constructor(private val counterService: CounterService) :
     CounterServiceHelper {
 
-    override suspend fun getCounters(): Response<List<Counter>> = counterService.getCounters()
+    override suspend fun getCounters(): List<GetCounterResponse> = counterService.getCounters()
 
     override suspend fun createCounter(title: CreateCounterRequest): Response<List<Counter>> =
         counterService.createCounter(title)

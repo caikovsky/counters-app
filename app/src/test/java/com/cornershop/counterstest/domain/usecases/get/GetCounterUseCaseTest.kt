@@ -1,8 +1,7 @@
 package com.cornershop.counterstest.domain.usecases.get
 
 import com.cornershop.counterstest.MainCoroutineRule
-import com.cornershop.counterstest.data.core.NetworkResult
-import com.cornershop.counterstest.data.repository.CounterRepository
+import com.cornershop.counterstest.data.repository.CounterRepositoryImpl
 import com.cornershop.counterstest.domain.model.Counter
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -10,7 +9,6 @@ import junit.framework.Assert.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.ResponseBody
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.Before
 import org.junit.Rule
@@ -18,17 +16,17 @@ import org.junit.Test
 import retrofit2.Response
 
 @ExperimentalCoroutinesApi
-class GetCounterUseCaseImplTest {
+class GetCounterUseCaseTest {
 
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
-    private val repository = mockk<CounterRepository>()
+    private val repository = mockk<CounterRepositoryImpl>()
     private lateinit var getCounterUseCase: GetCounterUseCase
 
     @Before
     fun setUp() {
-        getCounterUseCase = GetCounterUseCaseImpl(repository)
+        getCounterUseCase = GetCounterUseCase(repository)
     }
 
     @Test

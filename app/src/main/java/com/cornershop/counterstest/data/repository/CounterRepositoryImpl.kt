@@ -1,29 +1,31 @@
 package com.cornershop.counterstest.data.repository
 
 import com.cornershop.counterstest.data.CounterService
+import com.cornershop.counterstest.data.model.GetCounterResponse
 import com.cornershop.counterstest.data.request.CreateCounterRequest
 import com.cornershop.counterstest.data.request.DecrementCounterRequest
 import com.cornershop.counterstest.data.request.DeleteCounterRequest
 import com.cornershop.counterstest.data.request.IncrementCounterRequest
+import com.cornershop.counterstest.domain.CounterRepository
 import com.cornershop.counterstest.domain.model.Counter
 import retrofit2.Response
 import javax.inject.Inject
 
-class CounterRepository @Inject constructor(
+class CounterRepositoryImpl @Inject constructor(
     private val counterService: CounterService
-) {
+) : CounterRepository {
 
-    suspend fun getCounters(): Response<List<Counter>> = counterService.getCounters()
+    override suspend fun getCounters(): List<GetCounterResponse> = counterService.getCounters()
 
-    suspend fun createCounter(request: CreateCounterRequest): Response<List<Counter>> =
+    override suspend fun createCounter(request: CreateCounterRequest): Response<List<Counter>> =
         counterService.createCounter(request)
 
-    suspend fun deleteCounter(request: DeleteCounterRequest): Response<List<Counter>> =
+    override suspend fun deleteCounter(request: DeleteCounterRequest): Response<List<Counter>> =
         counterService.deleteCounter(request)
 
-    suspend fun incrementCounter(request: IncrementCounterRequest): Response<List<Counter>> =
+    override suspend fun incrementCounter(request: IncrementCounterRequest): Response<List<Counter>> =
         counterService.incrementCounter(request)
 
-    suspend fun decrementCounter(request: DecrementCounterRequest): Response<List<Counter>> =
+    override suspend fun decrementCounter(request: DecrementCounterRequest): Response<List<Counter>> =
         counterService.decrementCounter(request)
 }

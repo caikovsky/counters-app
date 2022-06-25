@@ -1,5 +1,6 @@
 package com.cornershop.counterstest.data
 
+import com.cornershop.counterstest.data.model.GetCounterResponse
 import com.cornershop.counterstest.data.request.CreateCounterRequest
 import com.cornershop.counterstest.data.request.DecrementCounterRequest
 import com.cornershop.counterstest.data.request.DeleteCounterRequest
@@ -14,7 +15,7 @@ import retrofit2.http.POST
 interface CounterService {
 
     @GET("counters")
-    suspend fun getCounters(): Response<List<Counter>>
+    suspend fun getCounters(): List<GetCounterResponse>
 
     @POST("counter")
     suspend fun createCounter(@Body title: CreateCounterRequest): Response<List<Counter>>

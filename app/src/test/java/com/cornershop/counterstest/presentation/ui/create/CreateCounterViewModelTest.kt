@@ -2,7 +2,7 @@ package com.cornershop.counterstest.presentation.ui.create
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.cornershop.counterstest.MainCoroutineRule
-import com.cornershop.counterstest.data.repository.CounterRepository
+import com.cornershop.counterstest.data.repository.CounterRepositoryImpl
 import com.cornershop.counterstest.data.request.CreateCounterRequest
 import com.cornershop.counterstest.domain.model.Counter
 import com.cornershop.counterstest.domain.usecases.create.CreateCounterUseCase
@@ -28,7 +28,7 @@ class CreateCounterViewModelTest {
     var instantExecutorRule = InstantTaskExecutorRule()
 
     private lateinit var createCounterUseCase: CreateCounterUseCase
-    private val repository = mockk<CounterRepository>()
+    private val repository = mockk<CounterRepositoryImpl>()
     private lateinit var viewModel: CreateCounterViewModel
 
     @Before

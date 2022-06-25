@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import com.cornershop.counterstest.R
 import com.cornershop.counterstest.presentation.ui.main.MainActivity
 import com.cornershop.counterstest.presentation.ui.welcome.WelcomeActivity

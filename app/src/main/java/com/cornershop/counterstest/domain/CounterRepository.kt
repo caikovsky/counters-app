@@ -1,4 +1,4 @@
-package com.cornershop.counterstest.data.remote
+package com.cornershop.counterstest.domain
 
 import com.cornershop.counterstest.data.model.GetCounterResponse
 import com.cornershop.counterstest.data.request.CreateCounterRequest
@@ -8,15 +8,15 @@ import com.cornershop.counterstest.data.request.IncrementCounterRequest
 import com.cornershop.counterstest.domain.model.Counter
 import retrofit2.Response
 
-interface CounterServiceHelper {
+interface CounterRepository {
 
     suspend fun getCounters(): List<GetCounterResponse>
 
-    suspend fun createCounter(title: CreateCounterRequest): Response<List<Counter>>
+    suspend fun createCounter(request: CreateCounterRequest): Response<List<Counter>>
 
-    suspend fun deleteCounter(id: DeleteCounterRequest): Response<List<Counter>>
+    suspend fun deleteCounter(request: DeleteCounterRequest): Response<List<Counter>>
 
-    suspend fun incrementCounter(id: IncrementCounterRequest): Response<List<Counter>>
+    suspend fun incrementCounter(request: IncrementCounterRequest): Response<List<Counter>>
 
-    suspend fun decrementCounter(id: DecrementCounterRequest): Response<List<Counter>>
+    suspend fun decrementCounter(request: DecrementCounterRequest): Response<List<Counter>>
 }

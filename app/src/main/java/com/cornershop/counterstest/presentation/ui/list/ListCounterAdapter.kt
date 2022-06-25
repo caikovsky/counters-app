@@ -1,6 +1,5 @@
 package com.cornershop.counterstest.presentation.ui.list
 
-
 import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
@@ -12,11 +11,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.cornershop.counterstest.R
 import com.cornershop.counterstest.databinding.ItemCounterBinding
-import com.cornershop.counterstest.domain.model.Counter
+import com.cornershop.counterstest.presentation.model.Counter
 import java.util.*
-import kotlin.collections.ArrayList
 
-class ListCounterAdapter(
+internal class ListCounterAdapter(
     private val decrementOnClick: (Counter) -> Unit,
     private val incrementOnClick: (Counter) -> Unit,
     private val selectOnLongPress: (Int) -> Boolean
@@ -31,7 +29,6 @@ class ListCounterAdapter(
         counterListFiltered = counterList
     }
 
-
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Counter>() {
             override fun areItemsTheSame(oldItem: Counter, newItem: Counter): Boolean {
@@ -45,7 +42,8 @@ class ListCounterAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CounterViewHolder {
-        val itemBinding = ItemCounterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val itemBinding =
+            ItemCounterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CounterViewHolder(itemBinding)
     }
 
@@ -73,7 +71,8 @@ class ListCounterAdapter(
 
                     counterList
                         .filter {
-                            it.title.lowercase(Locale.ROOT).contains(constraint.toString().lowercase(Locale.ROOT))
+                            it.title.lowercase(Locale.ROOT)
+                                .contains(constraint.toString().lowercase(Locale.ROOT))
                         }
                         .forEach { filteredList.add(it) }
                     filteredList
@@ -86,7 +85,6 @@ class ListCounterAdapter(
                 counterListFiltered = results?.values as ArrayList<Counter>
                 notifyDataSetChanged()
             }
-
         }
     }
 
@@ -104,7 +102,8 @@ class ListCounterAdapter(
         notifyItemChanged(position)
     }
 
-    inner class CounterViewHolder(private val itemBinding: ItemCounterBinding) : RecyclerView.ViewHolder(itemBinding.root) {
+    inner class CounterViewHolder(private val itemBinding: ItemCounterBinding) :
+        RecyclerView.ViewHolder(itemBinding.root) {
 
         fun bind(counter: Counter) {
             itemBinding.run {
@@ -153,5 +152,3 @@ class ListCounterAdapter(
         }
     }
 }
-
-
