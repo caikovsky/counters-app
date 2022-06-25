@@ -1,0 +1,3 @@
+[*.{kt,kts}]
+# We should avoid wildcard imports, but first we need to fix all existing ones..
+disabled_rules = no-wildcard-imports
