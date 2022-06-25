@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.cornershop.counterstest.R
+import com.cornershop.counterstest.presentation.ui.theme.CounterTheme
 
 @Composable
 internal fun CreateCounterScreen(
@@ -50,7 +51,7 @@ internal fun CreateCounterScreen(
 
                 Text(
                     text = stringResource(id = R.string.create_counter_disclaimer),
-                    color = MaterialTheme.colors.secondary
+                    color = MaterialTheme.colors.onSecondary
                 )
             }
         }
@@ -60,7 +61,9 @@ internal fun CreateCounterScreen(
 @Preview
 @Composable
 private fun CreateCounterScreenPreview() {
-    CreateCounterScreen(
-        navController = rememberNavController()
-    )
+    CounterTheme {
+        CreateCounterScreen(
+            navController = rememberNavController()
+        )
+    }
 }

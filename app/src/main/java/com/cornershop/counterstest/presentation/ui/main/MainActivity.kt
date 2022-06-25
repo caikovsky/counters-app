@@ -3,13 +3,13 @@ package com.cornershop.counterstest.presentation.ui.main
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material.MaterialTheme
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.cornershop.counterstest.presentation.ui.create.CreateCounterScreen
 import com.cornershop.counterstest.presentation.ui.examples.ExampleCounterScreen
 import com.cornershop.counterstest.presentation.ui.list.ListCounterScreen
+import com.cornershop.counterstest.presentation.ui.theme.CounterTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -18,7 +18,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MaterialTheme {
+            CounterTheme {
                 val navController = rememberNavController()
 
                 NavHost(
