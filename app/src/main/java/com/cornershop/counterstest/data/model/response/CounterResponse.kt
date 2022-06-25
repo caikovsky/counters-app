@@ -1,8 +1,8 @@
-package com.cornershop.counterstest.data.model
+package com.cornershop.counterstest.data.model.response
 
 import com.google.gson.annotations.SerializedName
 
-data class GetCounterResponse(
+data class CounterResponse(
     @SerializedName("count")
     val count: Int,
     @SerializedName("id")
