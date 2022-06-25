@@ -9,6 +9,7 @@ import com.cornershop.counterstest.data.model.request.CreateCounterRequest
 import com.cornershop.counterstest.domain.usecases.CreateCounterUseCase
 import com.cornershop.counterstest.presentation.model.Counter
 import com.cornershop.counterstest.presentation.ui.list.State
+import com.cornershop.counterstest.presentation.util.toPresentationModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -29,17 +30,8 @@ internal class CreateCounterViewModel @Inject constructor(private val createCoun
 
             runCatching {
                 createCounterUseCase(CreateCounterRequest(title))
-            }.onSuccess {
-                val result = it.map { domainModel ->
-                    Counter(
-                        id = domainModel.id,
-                        title = domainModel.title,
-                        count = domainModel.count,
-                        selected = false
-                    )
-                }
-
-                _save.value = State.Success(result)
+            }.onSuccess { response ->
+                _save.value = State.Success(response.toPresentationModel())
             }.onFailure { throwable ->
                 Log.e(this::class.simpleName, "createCounterUseCase: ${throwable.message}")
                 _save.value = State.Error

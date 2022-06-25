@@ -13,6 +13,7 @@ import com.cornershop.counterstest.domain.usecases.DeleteCounterUseCase
 import com.cornershop.counterstest.domain.usecases.GetCounterUseCase
 import com.cornershop.counterstest.domain.usecases.IncrementCounterUseCase
 import com.cornershop.counterstest.presentation.model.Counter
+import com.cornershop.counterstest.presentation.util.toPresentationModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import javax.inject.Inject
@@ -66,16 +67,7 @@ internal class ListCounterViewModel @Inject constructor(
             runCatching {
                 getCounterUseCase()
             }.onSuccess { response ->
-                val result = response.map { domainModel ->
-                    Counter(
-                        id = domainModel.id,
-                        title = domainModel.title,
-                        count = domainModel.count,
-                        selected = false
-                    )
-                }
-
-                _counters.value = State.Success(result)
+                _counters.value = State.Success(response.toPresentationModel())
             }.onFailure { throwable ->
                 Log.e(this::class.simpleName, "getCounterUseCase: ${throwable.message}")
                 _counters.value = State.Error
@@ -89,17 +81,8 @@ internal class ListCounterViewModel @Inject constructor(
 
             runCatching {
                 incrementCounterUseCase(IncrementCounterRequest(counter.id))
-            }.onSuccess { list ->
-                val result = list.map { domainModel ->
-                    Counter(
-                        id = domainModel.id,
-                        title = domainModel.title,
-                        count = domainModel.count,
-                        selected = false
-                    )
-                }
-
-                _incCounter.value = State.Success(result)
+            }.onSuccess { response ->
+                _incCounter.value = State.Success(response.toPresentationModel())
             }.onFailure { throwable ->
                 Log.e(this::class.simpleName, "incrementCounterUseCase: ${throwable.message}")
                 counter.count = counter.count.inc()
@@ -116,16 +99,7 @@ internal class ListCounterViewModel @Inject constructor(
             runCatching {
                 decrementCounterUseCase(DecrementCounterRequest(counter.id))
             }.onSuccess { response ->
-                val result = response.map { domainModel ->
-                    Counter(
-                        id = domainModel.id,
-                        title = domainModel.title,
-                        count = domainModel.count,
-                        selected = false
-                    )
-                }
-
-                _decCounter.value = State.Success(result)
+                _decCounter.value = State.Success(response.toPresentationModel())
             }.onFailure { throwable ->
                 Log.e(this::class.simpleName, "decrementCounterUseCase: ${throwable.message}")
                 counter.count = counter.count.dec()
@@ -184,17 +158,9 @@ internal class ListCounterViewModel @Inject constructor(
                 }
 
                 val responses = runningTasks.awaitAll()
+
                 // TODO: Handle errors
-                content.addAll(
-                    responses.last().second.map { domainModel ->
-                        Counter(
-                            id = domainModel.id,
-                            title = domainModel.title,
-                            count = domainModel.count,
-                            selected = false
-                        )
-                    }
-                )
+                content.addAll(responses.last().second.toPresentationModel())
             }
 
             _deleteCounter.value = content
