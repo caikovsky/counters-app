@@ -1,4 +1,4 @@
-package com.cornershop.counterstest.data.request
+package com.cornershop.counterstest.data.model.request
 
 data class CreateCounterRequest(val title: String)
 data class DeleteCounterRequest(val id: String)

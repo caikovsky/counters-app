@@ -3,7 +3,7 @@ package com.cornershop.counterstest.presentation.ui.create
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.cornershop.counterstest.MainCoroutineRule
 import com.cornershop.counterstest.data.repository.CounterRepositoryImpl
-import com.cornershop.counterstest.data.request.CreateCounterRequest
+import com.cornershop.counterstest.data.model.request.CreateCounterRequest
 import com.cornershop.counterstest.domain.model.Counter
 import com.cornershop.counterstest.domain.usecases.CreateCounterUseCase
 import com.cornershop.counterstest.getOrAwaitValue

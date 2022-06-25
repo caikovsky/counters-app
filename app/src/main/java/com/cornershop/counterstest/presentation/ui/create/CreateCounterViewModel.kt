@@ -1,33 +1,48 @@
 package com.cornershop.counterstest.presentation.ui.create
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cornershop.counterstest.data.core.NetworkResult
-import com.cornershop.counterstest.data.request.CreateCounterRequest
-import com.cornershop.counterstest.domain.model.Counter
+import com.cornershop.counterstest.data.model.request.CreateCounterRequest
 import com.cornershop.counterstest.domain.usecases.CreateCounterUseCase
+import com.cornershop.counterstest.presentation.model.Counter
+import com.cornershop.counterstest.presentation.ui.list.State
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CreateCounterViewModel @Inject constructor(private val createCounterUseCase: CreateCounterUseCase) :
+internal class CreateCounterViewModel @Inject constructor(private val createCounterUseCase: CreateCounterUseCase) :
     ViewModel() {
 
-    private val _save = MutableLiveData<NetworkResult<List<Counter>>>()
-    val save: LiveData<NetworkResult<List<Counter>>> get() = _save
+    private val _save = MutableLiveData<State<List<Counter>>>()
+    val save: LiveData<State<List<Counter>>> get() = _save
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> get() = _isLoading
 
     fun saveCounter(title: String) {
-        _save.value = NetworkResult.Loading()
-
         viewModelScope.launch {
-            createCounterUseCase(CreateCounterRequest(title)).let {
-                _save.value = it
+            _save.value = State.Loading
+
+            runCatching {
+                createCounterUseCase(CreateCounterRequest(title))
+            }.onSuccess {
+                val result = it.map { domainModel ->
+                    Counter(
+                        id = domainModel.id,
+                        title = domainModel.title,
+                        count = domainModel.count,
+                        selected = false
+                    )
+                }
+
+                _save.value = State.Success(result)
+            }.onFailure { throwable ->
+                Log.e(this::class.simpleName, "createCounterUseCase: ${throwable.message}")
+                _save.value = State.Error
             }
         }
     }

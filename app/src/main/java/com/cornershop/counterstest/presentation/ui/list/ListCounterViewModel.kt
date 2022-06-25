@@ -5,10 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cornershop.counterstest.data.core.NetworkResult
-import com.cornershop.counterstest.data.request.DecrementCounterRequest
-import com.cornershop.counterstest.data.request.DeleteCounterRequest
-import com.cornershop.counterstest.data.request.IncrementCounterRequest
+import com.cornershop.counterstest.data.model.request.DecrementCounterRequest
+import com.cornershop.counterstest.data.model.request.DeleteCounterRequest
+import com.cornershop.counterstest.data.model.request.IncrementCounterRequest
 import com.cornershop.counterstest.domain.usecases.DecrementCounterUseCase
 import com.cornershop.counterstest.domain.usecases.DeleteCounterUseCase
 import com.cornershop.counterstest.domain.usecases.GetCounterUseCase
@@ -105,25 +104,33 @@ internal class ListCounterViewModel @Inject constructor(
                 Log.e(this::class.simpleName, "incrementCounterUseCase: ${throwable.message}")
                 counter.count = counter.count.inc()
                 _dialogError.value = CounterError(counter)
+                _incCounter.value = State.Error
             }
         }
     }
 
     fun decrementCounter(counter: Counter) {
-        _decCounter.value = State.Loading
-
         viewModelScope.launch {
-            decrementCounterUseCase(DecrementCounterRequest(counter.id)).let {
-                when (it) {
-                    is NetworkResult.Error -> {
-                        counter.count = counter.count.dec()
-                        _dialogError.value = CounterError(counter)
-                    }
-                    is NetworkResult.Success -> {
-//                        _decCounter.value = it.data
-                    }
-                    is NetworkResult.Loading -> {}
+            _decCounter.value = State.Loading
+
+            runCatching {
+                decrementCounterUseCase(DecrementCounterRequest(counter.id))
+            }.onSuccess { response ->
+                val result = response.map { domainModel ->
+                    Counter(
+                        id = domainModel.id,
+                        title = domainModel.title,
+                        count = domainModel.count,
+                        selected = false
+                    )
                 }
+
+                _decCounter.value = State.Success(result)
+            }.onFailure { throwable ->
+                Log.e(this::class.simpleName, "decrementCounterUseCase: ${throwable.message}")
+                counter.count = counter.count.dec()
+                _dialogError.value = CounterError(counter)
+                _decCounter.value = State.Error
             }
         }
     }

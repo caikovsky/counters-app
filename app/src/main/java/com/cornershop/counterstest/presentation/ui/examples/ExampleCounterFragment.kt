@@ -4,14 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.cornershop.counterstest.R
-import com.cornershop.counterstest.data.core.NetworkResult
 import com.cornershop.counterstest.databinding.FragmentExampleCounterBinding
 import com.cornershop.counterstest.presentation.ui.create.CreateCounterViewModel
+import com.cornershop.counterstest.presentation.ui.list.State
 import com.cornershop.counterstest.util.DialogButton
 import com.cornershop.counterstest.util.DialogUtil
 import com.google.android.material.chip.Chip
@@ -51,11 +50,12 @@ class ExampleCounterFragment : Fragment() {
     private fun setObservers() {
         viewModel.save.observe(viewLifecycleOwner) { response ->
             when (response) {
-                is NetworkResult.Success -> {
-                    findNavController().navigate(R.id.action_exampleCounterFragment_to_listCountersFragment2)
-                }
-
-                is NetworkResult.Error -> showErrorDialog()
+                is State.Success -> findNavController()
+                    .navigate(
+                        R.id.action_exampleCounterFragment_to_listCountersFragment2
+                    )
+                is State.Error -> showErrorDialog()
+                else -> {}
             }
         }
     }
@@ -109,5 +109,4 @@ class ExampleCounterFragment : Fragment() {
             binding.drinkExamplesChipGroup.addView(chip)
         }
     }
-
 }

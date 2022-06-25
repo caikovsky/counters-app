@@ -1,23 +1,20 @@
 package com.cornershop.counterstest.domain
 
-import com.cornershop.counterstest.data.model.GetCounterResponse
-import com.cornershop.counterstest.data.model.IncrementCounterResponse
-import com.cornershop.counterstest.data.request.CreateCounterRequest
-import com.cornershop.counterstest.data.request.DecrementCounterRequest
-import com.cornershop.counterstest.data.request.DeleteCounterRequest
-import com.cornershop.counterstest.data.request.IncrementCounterRequest
-import com.cornershop.counterstest.domain.model.Counter
-import retrofit2.Response
+import com.cornershop.counterstest.data.model.*
+import com.cornershop.counterstest.data.model.request.CreateCounterRequest
+import com.cornershop.counterstest.data.model.request.DecrementCounterRequest
+import com.cornershop.counterstest.data.model.request.DeleteCounterRequest
+import com.cornershop.counterstest.data.model.request.IncrementCounterRequest
 
 interface CounterRepository {
 
     suspend fun getCounters(): List<GetCounterResponse>
 
-    suspend fun createCounter(request: CreateCounterRequest): Response<List<Counter>>
+    suspend fun createCounter(request: CreateCounterRequest): List<CreateCounterResponse>
 
-    suspend fun deleteCounter(request: DeleteCounterRequest): Response<List<Counter>>
+    suspend fun deleteCounter(request: DeleteCounterRequest): List<DeleteCounterResponse>
 
     suspend fun incrementCounter(request: IncrementCounterRequest): List<IncrementCounterResponse>
 
-    suspend fun decrementCounter(request: DecrementCounterRequest): Response<List<Counter>>
+    suspend fun decrementCounter(request: DecrementCounterRequest): List<DecrementCounterResponse>
 }
