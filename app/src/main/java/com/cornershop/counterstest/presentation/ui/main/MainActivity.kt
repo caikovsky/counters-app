@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
 
                 NavHost(
                     navController = navController,
-                    startDestination = Routes.CreateCounters.route
+                    startDestination = Routes.ListCounters.route
                 ) {
                     composable(route = Routes.ListCounters.route) {
                         ListCounterScreen(
