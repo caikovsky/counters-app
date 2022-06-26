@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
@@ -66,11 +67,25 @@ internal fun ExampleCounterScreen(
                         foodExamples = foodExamples,
                         miscExamples = miscExamples
                     )
-                is ExampleState.Loading -> CircularProgressIndicator()
+                is ExampleState.Loading -> ExampleLoading(modifier = modifier)
                 is ExampleState.Success -> Log.d("ExampleCounterViewModel", "Success")
                 is ExampleState.Error -> Log.d("ExampleCounterViewModel", "Error")
             }
         }
+    }
+}
+
+@Composable
+private fun ExampleLoading(
+    modifier: Modifier = Modifier
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier.fillMaxSize()
+    ) {
+        CircularProgressIndicator(
+            color = CounterTheme.colors.primary
+        )
     }
 }
 
