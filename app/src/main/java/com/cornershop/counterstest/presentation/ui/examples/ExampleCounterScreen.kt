@@ -1,6 +1,5 @@
 package com.cornershop.counterstest.presentation.ui.examples
 
-import android.util.Log
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -30,6 +29,7 @@ import androidx.navigation.compose.rememberNavController
 import com.cornershop.counterstest.R
 import com.cornershop.counterstest.presentation.ui.examples.ExampleCounterViewModel.ExampleCounterEvent
 import com.cornershop.counterstest.presentation.ui.examples.ExampleCounterViewModel.ExampleState
+import com.cornershop.counterstest.presentation.ui.main.MainActivity.Routes
 import com.cornershop.counterstest.presentation.ui.theme.CounterTheme
 import com.cornershop.counterstest.presentation.ui.widgets.CounterTopAppBar
 
@@ -68,8 +68,10 @@ internal fun ExampleCounterScreen(
                         miscExamples = miscExamples
                     )
                 is ExampleState.Loading -> ExampleLoading(modifier = modifier)
-                is ExampleState.Success -> Log.d("ExampleCounterViewModel", "Success")
-                is ExampleState.Error -> Log.d("ExampleCounterViewModel", "Error")
+                is ExampleState.Success -> navController.navigate(Routes.ListCounters.route)
+                is ExampleState.Error -> {
+                    // add an error dialog
+                }
             }
         }
     }

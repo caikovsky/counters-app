@@ -45,7 +45,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private sealed class Routes(val route: String) {
+    internal sealed class Routes(val route: String) {
         object ListCounters : Routes("list_screen")
         object CreateCounters : Routes("create_screen")
         object ExampleCounter : Routes("example_screen")
