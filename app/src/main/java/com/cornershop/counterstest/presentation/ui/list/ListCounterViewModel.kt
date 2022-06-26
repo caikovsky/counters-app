@@ -116,70 +116,8 @@ internal class ListCounterViewModel @Inject constructor(
     private val _dialogError = MutableLiveData<CounterError>()
     val dialogError: LiveData<CounterError> get() = _dialogError
 
-    private val _counters = MutableLiveData<State<List<Counter>>>()
-    val counters: LiveData<State<List<Counter>>> get() = _counters
-
-    private val _incCounter = MutableLiveData<State<List<Counter>>>()
-    val incCounter: LiveData<State<List<Counter>>> get() = _incCounter
-
-    private val _decCounter = MutableLiveData<State<List<Counter>>>()
-    val decCounter: LiveData<State<List<Counter>>> get() = _decCounter
-
     private val _deleteCounter = MutableLiveData<List<Counter>>()
     val deleteCounter: LiveData<List<Counter>> get() = _deleteCounter
-
-    fun getCounters() {
-        viewModelScope.launch {
-            _counters.value = State.Loading
-
-            runCatching {
-                getCounterUseCase()
-            }.onSuccess { response ->
-                _counters.value = State.Success(response.toPresentationModel())
-            }.onFailure { throwable ->
-                Log.e(this::class.simpleName, "getCounterUseCase: ${throwable.message}")
-                _counters.value = State.Error
-            }
-        }
-    }
-
-    /*fun incrementCounter(counter: Counter) {
-        viewModelScope.launch {
-            _incCounter.value = State.Loading
-
-            runCatching {
-                incrementCounterUseCase(IncrementCounterRequest(counter.id))
-            }.onSuccess { response ->
-                _incCounter.value = State.Success(response.toPresentationModel())
-            }.onFailure { throwable ->
-                Log.e(this::class.simpleName, "incrementCounterUseCase: ${throwable.message}")
-                counter.count = counter.count.inc()
-                _dialogError.value = CounterError(counter)
-                _incCounter.value = State.Error
-            }
-        }
-    }
-
-    fun decrementCounter(counter: Counter) {
-        viewModelScope.launch {
-            _decCounter.value = State.Loading
-
-            runCatching {
-                decrementCounterUseCase(DecrementCounterRequest(counter.id))
-            }.onSuccess { response ->
-                _decCounter.value = State.Success(response.toPresentationModel())
-            }.onFailure { throwable ->
-                Log.e(this::class.simpleName, "decrementCounterUseCase: ${throwable.message}")
-                counter.count = counter.count.dec()
-                _dialogError.value = CounterError(counter)
-                _decCounter.value = State.Error
-            }
-        }
-    }*/
-
-    fun toggleProgressDialog(show: Boolean) {
-        _isLoading.value = show
-    }
 
     fun renderErrorLayout(showLayout: Boolean) {
         _isError.value = showLayout
@@ -198,9 +136,9 @@ internal class ListCounterViewModel @Inject constructor(
     }
 
     fun retryButton() {
-        toggleProgressDialog(true)
+//        toggleProgressDialog(true)
         renderErrorLayout(false)
-        getCounters()
+//        getCounters()
     }
 
     fun calculateCountTimes(list: List<Counter>): Int {
