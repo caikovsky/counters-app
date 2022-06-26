@@ -7,14 +7,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
@@ -32,6 +30,7 @@ import com.cornershop.counterstest.presentation.ui.examples.ExampleCounterViewMo
 import com.cornershop.counterstest.presentation.ui.main.MainActivity.Routes
 import com.cornershop.counterstest.presentation.ui.theme.CounterTheme
 import com.cornershop.counterstest.presentation.ui.widgets.CounterTopAppBar
+import com.cornershop.counterstest.presentation.ui.widgets.LoadingScreen
 
 @Composable
 internal fun ExampleCounterScreen(
@@ -67,27 +66,13 @@ internal fun ExampleCounterScreen(
                         foodExamples = foodExamples,
                         miscExamples = miscExamples
                     )
-                is ExampleState.Loading -> ExampleLoading(modifier = modifier)
+                is ExampleState.Loading -> LoadingScreen(modifier = modifier)
                 is ExampleState.Success -> navController.navigate(Routes.ListCounters.route)
                 is ExampleState.Error -> {
                     // add an error dialog
                 }
             }
         }
-    }
-}
-
-@Composable
-private fun ExampleLoading(
-    modifier: Modifier = Modifier
-) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = modifier.fillMaxSize()
-    ) {
-        CircularProgressIndicator(
-            color = CounterTheme.colors.primary
-        )
     }
 }
 
