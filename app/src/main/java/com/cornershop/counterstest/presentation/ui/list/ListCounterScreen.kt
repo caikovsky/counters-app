@@ -43,32 +43,10 @@ internal fun ListCounterScreen(
         },
         floatingActionButtonPosition = FabPosition.Center,
         floatingActionButton = {
-            FloatingActionButton(
-                backgroundColor = CounterTheme.colors.primary,
-                onClick = { navController.navigate(Routes.CreateCounters.route) }
-            ) {
-                Row(
-                    modifier = modifier.padding(
-                        vertical = 20.dp,
-                        horizontal = 20.dp
-                    ),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_plus),
-                        contentDescription = null,
-                        tint = CounterTheme.colors.secondary
-                    )
-
-                    Spacer(modifier.width(8.dp))
-
-                    Text(
-                        text = stringResource(id = R.string.create_counter),
-                        color = CounterTheme.colors.secondary
-                    )
-                }
-            }
+            CreateCounterFloatingActionButton(
+                navController = navController,
+                modifier = modifier
+            )
         },
     ) { paddingValues ->
         Column(
@@ -94,6 +72,39 @@ internal fun ListCounterScreen(
                         )
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun CreateCounterFloatingActionButton(
+    navController: NavController,
+    modifier: Modifier
+) {
+    FloatingActionButton(
+        backgroundColor = CounterTheme.colors.primary,
+        onClick = { navController.navigate(Routes.CreateCounters.route) }
+    ) {
+        Row(
+            modifier = modifier.padding(
+                vertical = 20.dp,
+                horizontal = 20.dp
+            ),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_plus),
+                contentDescription = null,
+                tint = CounterTheme.colors.secondary
+            )
+
+            Spacer(modifier.width(8.dp))
+
+            Text(
+                text = stringResource(id = R.string.create_counter),
+                color = CounterTheme.colors.secondary
+            )
         }
     }
 }
