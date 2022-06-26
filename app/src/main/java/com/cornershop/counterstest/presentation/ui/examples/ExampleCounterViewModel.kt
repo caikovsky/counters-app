@@ -35,7 +35,9 @@ internal class ExampleCounterViewModel @Inject constructor(
     private fun createExampleCounter(counterName: String) {
         viewModelScope.launch {
             _state.value = ExampleState.Loading
-            delay(4000L)
+
+            delay(2000L) // placeholder delay
+
             runCatching {
                 createCounterUseCase(title = CreateCounterRequest(title = counterName))
             }
