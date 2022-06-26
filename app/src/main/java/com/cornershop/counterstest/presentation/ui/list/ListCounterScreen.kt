@@ -10,6 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -63,9 +64,7 @@ internal fun ListCounterScreen(
                 )
             ) {
                 when (state) {
-                    is State.Error -> {
-                        // show error screen
-                    }
+                    is State.Error -> CounterListErrorScreen(modifier = modifier)
                     is State.Loading -> LoadingScreen(modifier = modifier)
                     is State.Success -> ListCounterContentScreen(
                         modifier = modifier,
@@ -133,6 +132,48 @@ fun CounterListEmptyScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
+fun CounterListErrorScreen(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = stringResource(id = R.string.error_load_counters_title),
+            textAlign = TextAlign.Center,
+            color = CounterTheme.colors.onSecondary,
+            fontSize = 22.sp
+        )
+
+        Spacer(modifier.height(16.dp))
+
+        Text(
+            modifier = modifier.padding(horizontal = 32.dp),
+            text = stringResource(id = R.string.connection_error_description),
+            textAlign = TextAlign.Center,
+            color = CounterTheme.colors.onSecondary,
+            fontSize = 18.sp
+        )
+
+        Spacer(modifier.height(16.dp))
+
+        Button(
+            modifier = modifier,
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color.Transparent
+            ),
+            elevation = null,
+            onClick = {},
+        ) {
+            Text(
+                text = stringResource(id = R.string.retry).uppercase(),
+                color = CounterTheme.colors.primary
+            )
+        }
+    }
+}
+
+@Composable
 private fun CreateCounterFloatingActionButton(
     navController: NavController,
     modifier: Modifier
@@ -143,7 +184,7 @@ private fun CreateCounterFloatingActionButton(
     ) {
         Row(
             modifier = modifier.padding(
-                vertical = 20.dp,
+                vertical = 10.dp,
                 horizontal = 20.dp
             ),
             verticalAlignment = Alignment.CenterVertically,
@@ -158,7 +199,7 @@ private fun CreateCounterFloatingActionButton(
             Spacer(modifier.width(8.dp))
 
             Text(
-                text = stringResource(id = R.string.create_counter),
+                text = stringResource(id = R.string.create_counter).uppercase(),
                 color = CounterTheme.colors.secondary
             )
         }
@@ -248,6 +289,14 @@ internal fun CounterItem(
                 )
             }
         }
+    }
+}
+
+@Preview
+@Composable
+private fun CounterListErrorScreenPreview() {
+    CounterTheme {
+        CounterListErrorScreen()
     }
 }
 
