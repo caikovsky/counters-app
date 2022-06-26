@@ -2,6 +2,7 @@ package com.cornershop.counterstest.presentation.ui.examples
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -69,7 +70,8 @@ internal fun ExampleCounterScreen(
 
                 HorizontalChipGroup(
                     modifier = modifier.fillMaxWidth(),
-                    chipList = drinkExamples
+                    chipList = drinkExamples,
+                    onItemClick = {}
                 )
 
                 Spacer(modifier = modifier.height(48.dp))
@@ -82,7 +84,8 @@ internal fun ExampleCounterScreen(
 
                 HorizontalChipGroup(
                     modifier = modifier.fillMaxWidth(),
-                    chipList = foodExamples
+                    chipList = foodExamples,
+                    onItemClick = {}
                 )
 
                 Spacer(modifier = modifier.height(48.dp))
@@ -95,7 +98,8 @@ internal fun ExampleCounterScreen(
 
                 HorizontalChipGroup(
                     modifier = modifier.fillMaxWidth(),
-                    chipList = miscExamples
+                    chipList = miscExamples,
+                    onItemClick = {}
                 )
             }
         }
@@ -106,7 +110,8 @@ internal fun ExampleCounterScreen(
 private fun HorizontalChipGroup(
     modifier: Modifier = Modifier,
     spaceMargin: Dp = 16.dp,
-    chipList: Array<String>
+    chipList: Array<String>,
+    onItemClick: (String) -> Unit
 ) {
     LazyRow(
         modifier = modifier,
@@ -120,8 +125,9 @@ private fun HorizontalChipGroup(
                         color = CounterTheme.colors.primary,
                         shape = CircleShape
                     )
-                    .padding(all = 10.dp),
-                color = CounterTheme.colors.onPrimary
+                    .padding(all = 10.dp)
+                    .clickable { onItemClick(item) },
+                color = CounterTheme.colors.onPrimary,
             )
         }
     }
