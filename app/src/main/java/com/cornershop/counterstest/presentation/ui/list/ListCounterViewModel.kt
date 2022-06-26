@@ -16,6 +16,10 @@ import com.cornershop.counterstest.presentation.model.Counter
 import com.cornershop.counterstest.presentation.util.toPresentationModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,6 +30,32 @@ internal class ListCounterViewModel @Inject constructor(
     private val deleteCounterUseCase: DeleteCounterUseCase
 ) :
     ViewModel() {
+
+    private val _state: MutableStateFlow<State<List<Counter>>> = MutableStateFlow(State.Loading)
+    val state: StateFlow<State<List<Counter>>> by lazy {
+        _state.stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(),
+            State.Loading
+        ).also {
+            fetchCounters()
+        }
+    }
+
+    private fun fetchCounters() {
+        viewModelScope.launch {
+            _state.value = State.Loading
+
+            runCatching {
+                getCounterUseCase()
+            }.onSuccess { response ->
+                _state.value = State.Success(response.toPresentationModel())
+            }.onFailure { throwable ->
+                Log.e(this::class.simpleName, "getCounterUseCase: ${throwable.message}")
+                _state.value = State.Error
+            }
+        }
+    }
 
     private val _isCreateButton = MutableLiveData<Boolean>()
     val isCreateButton: LiveData<Boolean> get() = _isCreateButton
