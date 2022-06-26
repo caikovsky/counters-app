@@ -8,7 +8,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringArrayResource
@@ -22,6 +21,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.cornershop.counterstest.R
 import com.cornershop.counterstest.presentation.ui.theme.CounterTheme
+import com.cornershop.counterstest.presentation.ui.widgets.CounterTopAppBar
 
 @Composable
 internal fun ExampleCounterScreen(
@@ -35,10 +35,9 @@ internal fun ExampleCounterScreen(
     Scaffold(
         backgroundColor = CounterTheme.colors.background,
         topBar = {
-            TopAppBar(
-                backgroundColor = CounterTheme.colors.secondary,
-                contentColor = CounterTheme.colors.primary,
-                title = { Text(text = stringResource(id = R.string.examples)) }
+            CounterTopAppBar(
+                navController = navController,
+                titleResId = R.string.examples
             )
         }
     ) { paddingValues ->
