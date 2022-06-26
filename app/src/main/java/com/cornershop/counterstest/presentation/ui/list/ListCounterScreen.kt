@@ -172,12 +172,13 @@ internal fun CounterItem(
             horizontalArrangement = Arrangement.End
         ) {
             IconButton(
-                onClick = { decCounter(counter) }
+                onClick = { decCounter(counter) },
+                enabled = counter.count > 0
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_minus),
                     contentDescription = null,
-                    tint = CounterTheme.colors.primary
+                    tint = if (counter.count > 0) CounterTheme.colors.primary else CounterTheme.colors.onSecondary
                 )
             }
 
@@ -192,12 +193,13 @@ internal fun CounterItem(
             Spacer(modifier = modifier.width(8.dp))
 
             IconButton(
-                onClick = { incCounter(counter) }
+                onClick = { incCounter(counter) },
+                enabled = counter.count >= 0
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_plus),
                     contentDescription = null,
-                    tint = CounterTheme.colors.primary
+                    tint = if (counter.count >= 0) CounterTheme.colors.primary else CounterTheme.colors.onSecondary
                 )
             }
         }
