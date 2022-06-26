@@ -71,8 +71,6 @@ internal class ListCounterViewModel @Inject constructor(
 
     private fun incrementCounter(counter: Counter) {
         viewModelScope.launch {
-            _state.value = State.Loading
-
             runCatching {
                 incrementCounterUseCase(IncrementCounterRequest(counter.id))
             }.onSuccess { response ->
@@ -86,8 +84,6 @@ internal class ListCounterViewModel @Inject constructor(
 
     private fun decrementCounter(counter: Counter) {
         viewModelScope.launch {
-            _state.value = State.Loading
-
             runCatching {
                 decrementCounterUseCase(DecrementCounterRequest(counter.id))
             }.onSuccess { response ->
