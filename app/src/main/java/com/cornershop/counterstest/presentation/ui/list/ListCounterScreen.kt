@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -66,24 +67,68 @@ internal fun ListCounterScreen(
                         // show error screen
                     }
                     is State.Loading -> LoadingScreen(modifier = modifier)
-                    is State.Success ->
-                        CounterList(
-                            modifier = modifier,
-                            counters = (state as State.Success).data,
-                            incCounter = { counter ->
-                                viewModel.onEvent(
-                                    ListCounterEvent.OnIncrementClick(counter)
-                                )
-                            },
-                            decCounter = { counter ->
-                                viewModel.onEvent(
-                                    ListCounterEvent.OnDecrementClick(counter)
-                                )
-                            },
-                        )
+                    is State.Success -> ListCounterContentScreen(
+                        modifier = modifier,
+                        state = state,
+                        viewModel = viewModel
+                    )
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun ListCounterContentScreen(
+    modifier: Modifier = Modifier,
+    state: State<List<Counter>>,
+    viewModel: ListCounterViewModel
+) {
+    val counters = (state as State.Success).data
+
+    if (counters.isEmpty()) {
+        CounterListEmptyScreen(modifier = modifier)
+    } else {
+        CounterList(
+            modifier = modifier,
+            counters = counters,
+            incCounter = { counter ->
+                viewModel.onEvent(
+                    ListCounterEvent.OnIncrementClick(counter)
+                )
+            },
+            decCounter = { counter ->
+                viewModel.onEvent(
+                    ListCounterEvent.OnDecrementClick(counter)
+                )
+            },
+        )
+    }
+}
+
+@Composable
+fun CounterListEmptyScreen(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = stringResource(id = R.string.no_counters),
+            textAlign = TextAlign.Center,
+            color = CounterTheme.colors.onSecondary,
+            fontSize = 22.sp
+        )
+
+        Spacer(modifier.height(16.dp))
+
+        Text(
+            modifier = modifier.padding(horizontal = 32.dp),
+            text = stringResource(id = R.string.no_counters_phrase),
+            textAlign = TextAlign.Center,
+            color = CounterTheme.colors.onSecondary,
+            fontSize = 18.sp
+        )
     }
 }
 
@@ -203,6 +248,14 @@ internal fun CounterItem(
                 )
             }
         }
+    }
+}
+
+@Preview
+@Composable
+private fun CounterListEmptyScreenPreview() {
+    CounterTheme {
+        CounterListEmptyScreen()
     }
 }
 
