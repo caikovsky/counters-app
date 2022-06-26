@@ -19,6 +19,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.cornershop.counterstest.R
 import com.cornershop.counterstest.presentation.model.Counter
+import com.cornershop.counterstest.presentation.ui.list.ListCounterViewModel.ListCounterEvent
 import com.cornershop.counterstest.presentation.ui.main.MainActivity.Routes
 import com.cornershop.counterstest.presentation.ui.theme.CounterTheme
 import com.cornershop.counterstest.presentation.ui.widgets.LoadingScreen
@@ -68,7 +69,17 @@ internal fun ListCounterScreen(
                     is State.Success ->
                         CounterList(
                             modifier = modifier,
-                            counters = (state as State.Success).data
+                            counters = (state as State.Success).data,
+                            incCounter = { counter ->
+                                viewModel.onEvent(
+                                    ListCounterEvent.OnIncrementClick(counter)
+                                )
+                            },
+                            decCounter = { counter ->
+                                viewModel.onEvent(
+                                    ListCounterEvent.OnDecrementClick(counter)
+                                )
+                            },
                         )
                 }
             }
@@ -112,7 +123,9 @@ private fun CreateCounterFloatingActionButton(
 @Composable
 private fun CounterList(
     modifier: Modifier = Modifier,
-    counters: List<Counter>
+    counters: List<Counter>,
+    incCounter: (Counter) -> Unit,
+    decCounter: (Counter) -> Unit
 ) {
     LazyColumn(
         modifier = modifier.fillMaxWidth(),
@@ -122,8 +135,8 @@ private fun CounterList(
             CounterItem(
                 modifier = modifier,
                 counter = counter,
-                incCounter = {},
-                decCounter = {}
+                incCounter = incCounter,
+                decCounter = decCounter
             )
         }
     }
@@ -133,8 +146,8 @@ private fun CounterList(
 internal fun CounterItem(
     modifier: Modifier,
     counter: Counter,
-    incCounter: (String) -> Unit,
-    decCounter: (String) -> Unit
+    incCounter: (Counter) -> Unit,
+    decCounter: (Counter) -> Unit
 ) {
     Row(
         modifier = modifier.fillMaxSize(),
@@ -159,7 +172,7 @@ internal fun CounterItem(
             horizontalArrangement = Arrangement.End
         ) {
             IconButton(
-                onClick = { incCounter(counter.id) }
+                onClick = { decCounter(counter) }
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_minus),
@@ -179,7 +192,7 @@ internal fun CounterItem(
             Spacer(modifier = modifier.width(8.dp))
 
             IconButton(
-                onClick = { decCounter(counter.id) }
+                onClick = { incCounter(counter) }
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_plus),
@@ -200,7 +213,9 @@ private fun CounterListPreview() {
                 Counter(id = "1", title = "Test 0", count = 0, selected = false),
                 Counter(id = "2", title = "Test 1", count = 1, selected = false),
                 Counter(id = "3", title = "Test 2", count = 2, selected = false),
-            )
+            ),
+            incCounter = {},
+            decCounter = {}
         )
     }
 }

@@ -57,6 +57,48 @@ internal class ListCounterViewModel @Inject constructor(
         }
     }
 
+    fun onEvent(event: ListCounterEvent) {
+        when (event) {
+            is ListCounterEvent.OnIncrementClick -> incrementCounter(event.counter)
+            is ListCounterEvent.OnDecrementClick -> decrementCounter(event.counter)
+        }
+    }
+
+    sealed class ListCounterEvent {
+        data class OnIncrementClick(val counter: Counter) : ListCounterEvent()
+        data class OnDecrementClick(val counter: Counter) : ListCounterEvent()
+    }
+
+    private fun incrementCounter(counter: Counter) {
+        viewModelScope.launch {
+            _state.value = State.Loading
+
+            runCatching {
+                incrementCounterUseCase(IncrementCounterRequest(counter.id))
+            }.onSuccess { response ->
+                _state.value = State.Success(response.toPresentationModel())
+            }.onFailure { throwable ->
+                Log.e(this::class.simpleName, "incrementCounterUseCase: ${throwable.message}")
+                _state.value = State.Error
+            }
+        }
+    }
+
+    private fun decrementCounter(counter: Counter) {
+        viewModelScope.launch {
+            _state.value = State.Loading
+
+            runCatching {
+                decrementCounterUseCase(DecrementCounterRequest(counter.id))
+            }.onSuccess { response ->
+                _state.value = State.Success(response.toPresentationModel())
+            }.onFailure { throwable ->
+                Log.e(this::class.simpleName, "decrementCounterUseCase: ${throwable.message}")
+                _state.value = State.Error
+            }
+        }
+    }
+
     private val _isCreateButton = MutableLiveData<Boolean>()
     val isCreateButton: LiveData<Boolean> get() = _isCreateButton
 
@@ -105,7 +147,7 @@ internal class ListCounterViewModel @Inject constructor(
         }
     }
 
-    fun incrementCounter(counter: Counter) {
+    /*fun incrementCounter(counter: Counter) {
         viewModelScope.launch {
             _incCounter.value = State.Loading
 
@@ -137,7 +179,7 @@ internal class ListCounterViewModel @Inject constructor(
                 _decCounter.value = State.Error
             }
         }
-    }
+    }*/
 
     fun toggleProgressDialog(show: Boolean) {
         _isLoading.value = show
