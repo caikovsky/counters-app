@@ -8,7 +8,6 @@ import com.cornershop.counterstest.domain.usecases.CreateCounterUseCase
 import com.cornershop.counterstest.presentation.model.Counter
 import com.cornershop.counterstest.presentation.util.toPresentationModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -35,8 +34,6 @@ internal class ExampleCounterViewModel @Inject constructor(
     private fun createExampleCounter(counterName: String) {
         viewModelScope.launch {
             _state.value = ExampleState.Loading
-
-            delay(2000L) // placeholder delay
 
             runCatching {
                 createCounterUseCase(title = CreateCounterRequest(title = counterName))
