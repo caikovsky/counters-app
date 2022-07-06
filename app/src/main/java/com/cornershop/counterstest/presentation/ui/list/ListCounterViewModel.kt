@@ -16,10 +16,7 @@ import com.cornershop.counterstest.presentation.model.Counter
 import com.cornershop.counterstest.presentation.util.toPresentationModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,18 +25,17 @@ internal class ListCounterViewModel @Inject constructor(
     private val incrementCounterUseCase: IncrementCounterUseCase,
     private val decrementCounterUseCase: DecrementCounterUseCase,
     private val deleteCounterUseCase: DeleteCounterUseCase
-) :
-    ViewModel() {
+) : ViewModel() {
 
-    private val _state: MutableStateFlow<State<List<Counter>>> = MutableStateFlow(State.Loading)
-    val state: StateFlow<State<List<Counter>>> by lazy {
-        _state.stateIn(
-            viewModelScope,
-            SharingStarted.WhileSubscribed(),
-            State.Loading
-        ).also {
-            fetchCounters()
-        }
+    private val _state: MutableStateFlow<State<ListCounterState>> = MutableStateFlow(State.Loading)
+    val state: StateFlow<State<ListCounterState>> by lazy {
+        _state
+            .onStart { fetchCounters() }
+            .stateIn(
+                viewModelScope,
+                SharingStarted.WhileSubscribed(),
+                State.Loading
+            )
     }
 
     private fun fetchCounters() {
@@ -49,7 +45,16 @@ internal class ListCounterViewModel @Inject constructor(
             runCatching {
                 getCounterUseCase()
             }.onSuccess { response ->
-                _state.value = State.Success(response.toPresentationModel())
+                val totalAmount = response.size
+                val totalValue = response.sumOf { it.count }
+
+                _state.value = State.Success(
+                    ListCounterState(
+                        counters = response.toPresentationModel(),
+                        totalAmount = totalAmount,
+                        totalValue = totalValue
+                    )
+                )
             }.onFailure { throwable ->
                 Log.e(this::class.simpleName, "getCounterUseCase: ${throwable.message}")
                 _state.value = State.Error
@@ -64,6 +69,12 @@ internal class ListCounterViewModel @Inject constructor(
         }
     }
 
+    data class ListCounterState(
+        val counters: List<Counter>,
+        val totalAmount: Int,
+        val totalValue: Int
+    )
+
     sealed class ListCounterEvent {
         data class OnIncrementClick(val counter: Counter) : ListCounterEvent()
         data class OnDecrementClick(val counter: Counter) : ListCounterEvent()
@@ -74,7 +85,16 @@ internal class ListCounterViewModel @Inject constructor(
             runCatching {
                 incrementCounterUseCase(IncrementCounterRequest(counter.id))
             }.onSuccess { response ->
-                _state.value = State.Success(response.toPresentationModel())
+                val totalAmount = response.size
+                val totalValue = response.sumOf { it.count }
+
+                _state.value = State.Success(
+                    ListCounterState(
+                        counters = response.toPresentationModel(),
+                        totalAmount = totalAmount,
+                        totalValue = totalValue
+                    )
+                )
             }.onFailure { throwable ->
                 Log.e(this::class.simpleName, "incrementCounterUseCase: ${throwable.message}")
                 _state.value = State.Error
@@ -87,7 +107,16 @@ internal class ListCounterViewModel @Inject constructor(
             runCatching {
                 decrementCounterUseCase(DecrementCounterRequest(counter.id))
             }.onSuccess { response ->
-                _state.value = State.Success(response.toPresentationModel())
+                val totalAmount = response.size
+                val totalValue = response.sumOf { it.count }
+
+                _state.value = State.Success(
+                    ListCounterState(
+                        counters = response.toPresentationModel(),
+                        totalAmount = totalAmount,
+                        totalValue = totalValue
+                    )
+                )
             }.onFailure { throwable ->
                 Log.e(this::class.simpleName, "decrementCounterUseCase: ${throwable.message}")
                 _state.value = State.Error

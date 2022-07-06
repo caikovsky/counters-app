@@ -22,6 +22,7 @@ import androidx.navigation.NavController
 import com.cornershop.counterstest.R
 import com.cornershop.counterstest.presentation.model.Counter
 import com.cornershop.counterstest.presentation.ui.list.ListCounterViewModel.ListCounterEvent
+import com.cornershop.counterstest.presentation.ui.list.ListCounterViewModel.ListCounterState
 import com.cornershop.counterstest.presentation.ui.main.MainActivity.Routes
 import com.cornershop.counterstest.presentation.ui.theme.CounterTheme
 import com.cornershop.counterstest.presentation.ui.widgets.LoadingScreen
@@ -50,7 +51,7 @@ internal fun ListCounterScreen(
                 navController = navController,
                 modifier = modifier
             )
-        },
+        }
     ) { paddingValues ->
         Column(
             modifier = modifier
@@ -63,13 +64,13 @@ internal fun ListCounterScreen(
                     horizontal = 21.dp
                 )
             ) {
-                when (state) {
+                when (val currentValue = state) {
                     is State.Error -> CounterListErrorScreen(modifier = modifier)
                     is State.Loading -> LoadingScreen(modifier = modifier)
                     is State.Success -> ListCounterContentScreen(
                         modifier = modifier,
-                        state = state,
-                        viewModel = viewModel
+                        state = currentValue.data,
+                        onEvent = viewModel::onEvent
                     )
                 }
             }
@@ -80,28 +81,42 @@ internal fun ListCounterScreen(
 @Composable
 private fun ListCounterContentScreen(
     modifier: Modifier = Modifier,
-    state: State<List<Counter>>,
-    viewModel: ListCounterViewModel
+    state: ListCounterState,
+    onEvent: (ListCounterEvent) -> Unit
 ) {
-    val counters = (state as State.Success).data
+    val counters = state.counters
 
     if (counters.isEmpty()) {
         CounterListEmptyScreen(modifier = modifier)
     } else {
-        CounterList(
-            modifier = modifier,
-            counters = counters,
-            incCounter = { counter ->
-                viewModel.onEvent(
-                    ListCounterEvent.OnIncrementClick(counter)
+        Column {
+            Row(
+                modifier = modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = stringResource(id = R.string.n_items, state.totalAmount),
+                    color = CounterTheme.colors.onPrimary,
+                    fontSize = 17.sp
                 )
-            },
-            decCounter = { counter ->
-                viewModel.onEvent(
-                    ListCounterEvent.OnDecrementClick(counter)
+
+                Spacer(modifier.height(8.dp))
+
+                Text(
+                    modifier = modifier.padding(start = 7.dp),
+                    text = stringResource(id = R.string.n_times, state.totalValue),
+                    color = CounterTheme.colors.onSecondary,
+                    fontSize = 17.sp
                 )
-            },
-        )
+            }
+
+            Spacer(modifier.height(16.dp))
+
+            CounterList(
+                modifier = modifier,
+                counters = counters,
+                onEvent = onEvent
+            )
+        }
     }
 }
 
@@ -163,7 +178,7 @@ fun CounterListErrorScreen(modifier: Modifier = Modifier) {
                 backgroundColor = Color.Transparent
             ),
             elevation = null,
-            onClick = {},
+            onClick = {}
         ) {
             Text(
                 text = stringResource(id = R.string.retry).uppercase(),
@@ -210,8 +225,7 @@ private fun CreateCounterFloatingActionButton(
 private fun CounterList(
     modifier: Modifier = Modifier,
     counters: List<Counter>,
-    incCounter: (Counter) -> Unit,
-    decCounter: (Counter) -> Unit
+    onEvent: (ListCounterEvent) -> Unit
 ) {
     LazyColumn(
         modifier = modifier.fillMaxWidth(),
@@ -221,8 +235,7 @@ private fun CounterList(
             CounterItem(
                 modifier = modifier,
                 counter = counter,
-                incCounter = incCounter,
-                decCounter = decCounter
+                onEvent = onEvent
             )
         }
     }
@@ -232,8 +245,7 @@ private fun CounterList(
 internal fun CounterItem(
     modifier: Modifier,
     counter: Counter,
-    incCounter: (Counter) -> Unit,
-    decCounter: (Counter) -> Unit
+    onEvent: (ListCounterEvent) -> Unit
 ) {
     Row(
         modifier = modifier.fillMaxSize(),
@@ -258,7 +270,7 @@ internal fun CounterItem(
             horizontalArrangement = Arrangement.End
         ) {
             IconButton(
-                onClick = { decCounter(counter) },
+                onClick = { onEvent(ListCounterEvent.OnDecrementClick(counter)) },
                 enabled = counter.count > 0
             ) {
                 Icon(
@@ -279,7 +291,7 @@ internal fun CounterItem(
             Spacer(modifier = modifier.width(8.dp))
 
             IconButton(
-                onClick = { incCounter(counter) },
+                onClick = { onEvent(ListCounterEvent.OnIncrementClick(counter)) },
                 enabled = counter.count >= 0
             ) {
                 Icon(
@@ -310,26 +322,34 @@ private fun CounterListEmptyScreenPreview() {
 
 @Preview
 @Composable
-private fun CounterListPreview() {
+private fun ListCounterContentScreenPreview() {
     CounterTheme {
-        CounterList(
-            counters = listOf(
-                Counter(id = "1", title = "Test 0", count = 0, selected = false),
-                Counter(id = "2", title = "Test 1", count = 1, selected = false),
-                Counter(id = "3", title = "Test 2", count = 2, selected = false),
+        ListCounterContentScreen(
+            state = ListCounterState(
+                counters = listOf(
+                    Counter(id = "1", title = "Test 1", count = 0, selected = false),
+                    Counter(id = "2", title = "Test 2", count = 1, selected = false),
+                    Counter(id = "3", title = "Test 3", count = 2, selected = false)
+                ),
+                totalAmount = 3,
+                totalValue = 6
             ),
-            incCounter = {},
-            decCounter = {}
+            onEvent = {}
         )
     }
 }
 
-/*@Preview
+@Preview
 @Composable
-private fun ListCounterScreenPreview() {
+private fun CounterListPreview() {
     CounterTheme {
-        ListCounterScreen(
-            navController = rememberNavController()
+        CounterList(
+            counters = listOf(
+                Counter(id = "4", title = "Test 4", count = 0, selected = false),
+                Counter(id = "5", title = "Test 5", count = 1, selected = false),
+                Counter(id = "6", title = "Test 6", count = 2, selected = false)
+            ),
+            onEvent = {}
         )
     }
-}*/
+}
