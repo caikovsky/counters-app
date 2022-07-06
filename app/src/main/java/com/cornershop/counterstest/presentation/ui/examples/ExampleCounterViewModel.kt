@@ -3,7 +3,6 @@ package com.cornershop.counterstest.presentation.ui.examples
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cornershop.counterstest.data.model.request.CreateCounterRequest
 import com.cornershop.counterstest.domain.usecases.CreateCounterUseCase
 import com.cornershop.counterstest.presentation.model.Counter
 import com.cornershop.counterstest.presentation.util.toPresentationModel
@@ -36,7 +35,7 @@ internal class ExampleCounterViewModel @Inject constructor(
             _state.value = ExampleState.Loading
 
             runCatching {
-                createCounterUseCase(title = CreateCounterRequest(title = counterName))
+                createCounterUseCase(title = counterName)
             }
                 .onSuccess {
                     _state.value = ExampleState.Success(it.toPresentationModel())

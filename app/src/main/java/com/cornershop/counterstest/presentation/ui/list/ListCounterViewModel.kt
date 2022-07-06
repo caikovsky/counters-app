@@ -5,9 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cornershop.counterstest.data.model.request.DecrementCounterRequest
-import com.cornershop.counterstest.data.model.request.DeleteCounterRequest
-import com.cornershop.counterstest.data.model.request.IncrementCounterRequest
 import com.cornershop.counterstest.domain.usecases.DecrementCounterUseCase
 import com.cornershop.counterstest.domain.usecases.DeleteCounterUseCase
 import com.cornershop.counterstest.domain.usecases.GetCounterUseCase
@@ -86,7 +83,7 @@ internal class ListCounterViewModel @Inject constructor(
     private fun incrementCounter(counter: Counter) {
         viewModelScope.launch {
             runCatching {
-                incrementCounterUseCase(IncrementCounterRequest(counter.id))
+                incrementCounterUseCase(counter.id)
             }.onSuccess { response ->
                 val totalAmount = response.size
                 val totalValue = response.sumOf { it.count }
@@ -108,7 +105,7 @@ internal class ListCounterViewModel @Inject constructor(
     private fun decrementCounter(counter: Counter) {
         viewModelScope.launch {
             runCatching {
-                decrementCounterUseCase(DecrementCounterRequest(counter.id))
+                decrementCounterUseCase(counter.id)
             }.onSuccess { response ->
                 val totalAmount = response.size
                 val totalValue = response.sumOf { it.count }
@@ -144,7 +141,7 @@ internal class ListCounterViewModel @Inject constructor(
             withContext(Dispatchers.IO) {
                 val runningTasks = counters.map { counter ->
                     async {
-                        val apiResponse = deleteCounterUseCase(DeleteCounterRequest(counter.id))
+                        val apiResponse = deleteCounterUseCase(counter.id)
                         counter.id to apiResponse
                     }
                 }

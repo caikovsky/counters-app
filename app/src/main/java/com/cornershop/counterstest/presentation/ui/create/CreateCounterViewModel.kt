@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cornershop.counterstest.data.model.request.CreateCounterRequest
 import com.cornershop.counterstest.domain.usecases.CreateCounterUseCase
 import com.cornershop.counterstest.presentation.model.Counter
 import com.cornershop.counterstest.presentation.ui.list.State
@@ -30,7 +29,7 @@ internal class CreateCounterViewModel @Inject constructor(
             _save.value = State.Loading
 
             runCatching {
-                createCounterUseCase(CreateCounterRequest(title))
+                createCounterUseCase(title)
             }.onSuccess { response ->
                 _save.value = State.Success(response.toPresentationModel())
             }.onFailure { throwable ->
