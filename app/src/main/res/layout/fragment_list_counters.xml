@@ -54,26 +54,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar">
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:measureAllChildren="true">
-
-                <include
-                    android:id="@+id/listContent"
-                    layout="@layout/layout_counter_list_content"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:viewModel="@{listViewModel}" />
-
-                <include
-                    android:id="@+id/emptyList"
-                    layout="@layout/layout_empty_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="@{listViewModel.isListEmpty ? View.VISIBLE : View.GONE}" />
-            </FrameLayout>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

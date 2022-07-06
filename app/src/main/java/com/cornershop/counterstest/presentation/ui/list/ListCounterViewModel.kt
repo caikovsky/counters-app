@@ -13,6 +13,7 @@ import com.cornershop.counterstest.domain.usecases.DeleteCounterUseCase
 import com.cornershop.counterstest.domain.usecases.GetCounterUseCase
 import com.cornershop.counterstest.domain.usecases.IncrementCounterUseCase
 import com.cornershop.counterstest.presentation.model.Counter
+import com.cornershop.counterstest.presentation.ui.list.ListCounterViewModel.ListCounterEvent.*
 import com.cornershop.counterstest.presentation.util.toPresentationModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
@@ -64,8 +65,9 @@ internal class ListCounterViewModel @Inject constructor(
 
     fun onEvent(event: ListCounterEvent) {
         when (event) {
-            is ListCounterEvent.OnIncrementClick -> incrementCounter(event.counter)
-            is ListCounterEvent.OnDecrementClick -> decrementCounter(event.counter)
+            is OnIncrementClick -> incrementCounter(event.counter)
+            is OnDecrementClick -> decrementCounter(event.counter)
+            is OnRetryClick -> fetchCounters()
         }
     }
 
@@ -78,6 +80,7 @@ internal class ListCounterViewModel @Inject constructor(
     sealed class ListCounterEvent {
         data class OnIncrementClick(val counter: Counter) : ListCounterEvent()
         data class OnDecrementClick(val counter: Counter) : ListCounterEvent()
+        object OnRetryClick : ListCounterEvent()
     }
 
     private fun incrementCounter(counter: Counter) {
@@ -124,60 +127,14 @@ internal class ListCounterViewModel @Inject constructor(
         }
     }
 
-    private val _isCreateButton = MutableLiveData<Boolean>()
-    val isCreateButton: LiveData<Boolean> get() = _isCreateButton
-
     val _showToolbar = MutableLiveData<Boolean>()
     val showToolbar: LiveData<Boolean> get() = _showToolbar
-
-    private val _isLoading = MutableLiveData<Boolean>()
-    val isLoading: LiveData<Boolean> get() = _isLoading
-
-    private val _isListEmpty = MutableLiveData<Boolean>()
-    val isListEmpty: LiveData<Boolean> get() = _isListEmpty
-
-    private val _isError = MutableLiveData<Boolean>()
-    val isError: LiveData<Boolean> get() = _isError
-
-    private val _noResults = MutableLiveData<Boolean>()
-    val noResults: LiveData<Boolean> get() = _noResults
 
     private val _dialogError = MutableLiveData<CounterError>()
     val dialogError: LiveData<CounterError> get() = _dialogError
 
-    private val _deleteCounter = MutableLiveData<List<Counter>>()
-    val deleteCounter: LiveData<List<Counter>> get() = _deleteCounter
-
-    fun renderErrorLayout(showLayout: Boolean) {
-        _isError.value = showLayout
-    }
-
-    fun renderNoResultsLayout(show: Boolean) {
-        _noResults.value = show
-    }
-
-    fun renderEmptyLayout(show: Boolean) {
-        _isListEmpty.value = show
-    }
-
     fun toggleSearchToolbar(show: Boolean) {
         _showToolbar.value = show
-    }
-
-    fun retryButton() {
-//        toggleProgressDialog(true)
-        renderErrorLayout(false)
-//        getCounters()
-    }
-
-    fun calculateCountTimes(list: List<Counter>): Int {
-        var total = 0
-
-        for (counter in list) {
-            total += counter.count
-        }
-
-        return total
     }
 
     fun deleteCounter(counters: List<Counter>) {
@@ -198,12 +155,8 @@ internal class ListCounterViewModel @Inject constructor(
                 content.addAll(responses.last().second.toPresentationModel())
             }
 
-            _deleteCounter.value = content
+//            _deleteCounter.value = content
         }
-    }
-
-    fun renderCreateButton(show: Boolean) {
-        _isCreateButton.value = show
     }
 }
 

@@ -33,7 +33,7 @@ internal fun ListCounterScreen(
     navController: NavController,
     viewModel: ListCounterViewModel = hiltViewModel()
 ) {
-    val state by remember { viewModel }.state.collectAsState()
+    val state by remember { viewModel.state }.collectAsState()
 
     Scaffold(
         backgroundColor = CounterTheme.colors.background,
@@ -65,7 +65,10 @@ internal fun ListCounterScreen(
                 )
             ) {
                 when (val currentValue = state) {
-                    is State.Error -> CounterListErrorScreen(modifier = modifier)
+                    is State.Error -> CounterListErrorScreen(
+                        modifier = modifier,
+                        onEvent = viewModel::onEvent
+                    )
                     is State.Loading -> LoadingScreen(modifier = modifier)
                     is State.Success -> ListCounterContentScreen(
                         modifier = modifier,
@@ -84,9 +87,7 @@ private fun ListCounterContentScreen(
     state: ListCounterState,
     onEvent: (ListCounterEvent) -> Unit
 ) {
-    val counters = state.counters
-
-    if (counters.isEmpty()) {
+    if (state.counters.isEmpty()) {
         CounterListEmptyScreen(modifier = modifier)
     } else {
         Column {
@@ -113,7 +114,7 @@ private fun ListCounterContentScreen(
 
             CounterList(
                 modifier = modifier,
-                counters = counters,
+                counters = state.counters,
                 onEvent = onEvent
             )
         }
@@ -121,7 +122,7 @@ private fun ListCounterContentScreen(
 }
 
 @Composable
-fun CounterListEmptyScreen(modifier: Modifier = Modifier) {
+private fun CounterListEmptyScreen(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -147,7 +148,10 @@ fun CounterListEmptyScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun CounterListErrorScreen(modifier: Modifier = Modifier) {
+private fun CounterListErrorScreen(
+    modifier: Modifier = Modifier,
+    onEvent: (ListCounterEvent) -> Unit
+) {
     Column(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -178,7 +182,7 @@ fun CounterListErrorScreen(modifier: Modifier = Modifier) {
                 backgroundColor = Color.Transparent
             ),
             elevation = null,
-            onClick = {}
+            onClick = { onEvent(ListCounterEvent.OnRetryClick) }
         ) {
             Text(
                 text = stringResource(id = R.string.retry).uppercase(),
@@ -308,7 +312,9 @@ internal fun CounterItem(
 @Composable
 private fun CounterListErrorScreenPreview() {
     CounterTheme {
-        CounterListErrorScreen()
+        CounterListErrorScreen(
+            onEvent = {}
+        )
     }
 }
 
