@@ -7,7 +7,9 @@ import com.cornershop.counterstest.domain.usecases.CreateCounterUseCase
 import com.cornershop.counterstest.presentation.model.Counter
 import com.cornershop.counterstest.presentation.util.toPresentationModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,11 +20,7 @@ internal class ExampleCounterViewModel @Inject constructor(
 
     private val _state: MutableStateFlow<ExampleState<List<Counter>>> =
         MutableStateFlow(ExampleState.Uninitialized)
-    val state: StateFlow<ExampleState<List<Counter>>> = _state.asStateFlow().stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(),
-        ExampleState.Uninitialized
-    )
+    val state: StateFlow<ExampleState<List<Counter>>> = _state.asStateFlow()
 
     fun onEvent(event: ExampleCounterEvent) {
         when (event) {
@@ -36,14 +34,12 @@ internal class ExampleCounterViewModel @Inject constructor(
 
             runCatching {
                 createCounterUseCase(title = counterName)
+            }.onSuccess { response ->
+                _state.value = ExampleState.Success(response.toPresentationModel())
+            }.onFailure { throwable ->
+                Log.e(this::class.simpleName, "createExampleCounter: ${throwable.message}")
+                _state.value = ExampleState.Error
             }
-                .onSuccess {
-                    _state.value = ExampleState.Success(it.toPresentationModel())
-                }
-                .onFailure { throwable ->
-                    Log.e(this::class.simpleName, "createExampleCounter: ${throwable.message}")
-                    _state.value = ExampleState.Error
-                }
         }
     }
 
