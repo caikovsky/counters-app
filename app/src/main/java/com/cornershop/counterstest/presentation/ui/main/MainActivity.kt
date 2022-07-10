@@ -26,19 +26,13 @@ class MainActivity : ComponentActivity() {
                     startDestination = Routes.ListCounters.route
                 ) {
                     composable(route = Routes.ListCounters.route) {
-                        ListCounterScreen(
-                            navController = navController
-                        )
+                        ListCounterScreen(navController = navController)
                     }
                     composable(route = Routes.CreateCounters.route) {
-                        CreateCounterScreen(
-                            navController = navController
-                        )
+                        CreateCounterScreen(navController = navController)
                     }
                     composable(route = Routes.ExampleCounter.route) {
-                        ExampleCounterScreen(
-                            navController = navController
-                        )
+                        ExampleCounterScreen(navController = navController)
                     }
                 }
             }

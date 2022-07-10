@@ -6,7 +6,7 @@ interface CounterRepository {
 
     suspend fun getCounters(): List<CounterResponse>
 
-    suspend fun createCounter(request: String): List<CounterResponse>
+    suspend fun createCounter(title: String): List<CounterResponse>
 
     suspend fun deleteCounter(request: String): List<CounterResponse>
 
